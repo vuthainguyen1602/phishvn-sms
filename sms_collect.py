@@ -42,7 +42,11 @@ PROTOCOL = _doc("PROTOCOL_sms_corpus.md")
 CONSENT = _doc("CONSENT_vi.md")          # the operative document; contributors read this one
 CONSENT_EN = _doc("CONSENT_en.md")       # a translation, for reviewers who do not read Vietnamese
 OUT = os.path.join(ROOT, "data", "raw", "sms_corpus")
-FIELDS = ["submission_token", "text", "sender", "received_at", "label_student", "label_author"]
+# The submission schema of SCHEMA_raw.md §1 -- what leaves a contributor's device, and no more.
+# It carried label_author before the design was written, which put the author's own label in the
+# file contributors produce; the author labels at the annotation stage, in the working file.
+FIELDS = ["submission_token", "text", "sender", "sender_type", "received_at",
+          "label_contributor", "redaction_reviewed"]
 
 
 def gates() -> list:
@@ -105,9 +109,23 @@ def main() -> int:
         raise SystemExit("[!] pass --ingest <dir>")
 
     os.makedirs(OUT, exist_ok=True)
-    rows = []
+    rows, unreviewed, personal = [], 0, 0
     for f in sorted(glob.glob(os.path.join(a.ingest, "*.csv"))):
-        rows += list(csv.DictReader(open(f, newline="", encoding="utf-8")))
+        for r in csv.DictReader(open(f, newline="", encoding="utf-8")):
+            # SCHEMA_raw.md §1: the contributor confirms they read the redacted text before
+            # sending. A row that says otherwise was not reviewed by the one person who could
+            # see what the redactor missed, and no later step can substitute for that.
+            if str(r.get("redaction_reviewed", "")).strip() not in ("1", "true", "True"):
+                unreviewed += 1
+                continue
+            # A personal number is not collected, whatever the message says: the sender did not
+            # consent and cannot be asked. The rule is in the consent form in this form too.
+            if str(r.get("sender_type", "")).strip() not in ("brandname", "shortcode", "unknown"):
+                personal += 1
+                continue
+            rows.append(r)
+    if unreviewed or personal:
+        print(f"[i] skipped {unreviewed} unreviewed and {personal} non-brandname row(s)")
     out = os.path.join(OUT, "submissions.csv")
     new = not os.path.exists(out)
     with open(out, "a", newline="", encoding="utf-8") as fh:
