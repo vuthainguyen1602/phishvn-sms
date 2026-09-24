@@ -47,8 +47,10 @@ def load_rules(page: str = PAGE) -> dict:
         raise SystemExit(f"[!] no rules block in {page}")
     r = json.loads(m.group(1))
     tagged = lambda xs: [(x["tag"], re.compile(x["re"], re.I)) for x in xs]
-    return {"before": tagged(r["before"]), "links": [re.compile(x, re.I) for x in r["links"]],
-            "in_links": tagged(r["in_links"]), "text": tagged(r["text"])}
+    plain = lambda xs: [re.compile(x, re.I) for x in xs]
+    return {"before": tagged(r["before"]), "links": plain(r["links"]), "in_links": tagged(r["in_links"]),
+            "private_amounts": tagged(r["private_amounts"]), "amounts": plain(r["amounts"]),
+            "text": tagged(r["text"])}
 
 
 def _apply(text: str, rules: list) -> str:
@@ -57,41 +59,52 @@ def _apply(text: str, rules: list) -> str:
     return text
 
 
-def _protect(text: str, rules: dict, fn=None):
-    """Core.protect in redact.html: set each link aside behind a marker no text rule can match."""
-    links = []
-
+def _protect(text: str, patterns: list, kept: list, fn=None) -> str:
+    """Core.protect in redact.html: set each span aside behind a marker no text rule can match."""
     def keep(m):
         pre = m.group(1) or ""
-        link = m.group(0)[len(pre):]
-        links.append(fn(link) if fn else link)
-        return pre + "\x01" + chr(0xE000 + len(links) - 1) + "\x01"
-    for rx in rules["links"]:
+        span = m.group(0)[len(pre):]
+        kept.append(fn(span) if fn else span)
+        return pre + "\x01" + chr(0xE000 + len(kept) - 1) + "\x01"
+    for rx in patterns:
         text = rx.sub(keep, text)
-    return text, links
+    return text
 
 
 def redact(text: str, rules: dict) -> str:
-    """Core.redact in redact.html: links are kept, with only personal data inside them masked;
-    everything outside the links goes through the text rules."""
-    text, links = _protect(_apply(text, rules["before"]), rules, lambda l: _apply(l, rules["in_links"]))
+    """Core.redact in redact.html: links and broadcast amounts are kept, personal data inside a
+    link and the contributor's own balance and movements are masked, the rest goes through the
+    text rules."""
+    kept = []
+    text = _protect(_apply(text, rules["before"]), rules["links"], kept, lambda l: _apply(l, rules["in_links"]))
+    text = _protect(_apply(text, rules["private_amounts"]), rules["amounts"], kept)
     text = _apply(text, rules["text"])
-    return re.sub("\x01([\ue000-\uf8ff])\x01", lambda m: links[ord(m.group(1)) - 0xE000], text)
+    return re.sub("\x01([\ue000-\uf8ff])\x01", lambda m: kept[ord(m.group(1)) - 0xE000], text)
+
+
+def _outside(text: str, rules: dict):
+    links, amounts = [], []
+    text = _protect(_protect(text, rules["links"], links), rules["amounts"], amounts)
+    return text, len(links), len(amounts)
 
 
 def problems(text: str, rules: dict) -> list:
-    """SCHEMA.md rule 2, as Core.problems checks it: outside the links a text keeps."""
-    outside = re.sub(r"<[A-Z_]+>", "", _protect(text, rules)[0])
+    """SCHEMA.md rule 2, as Core.problems checks it: outside the links and amounts a text keeps."""
+    rest = re.sub(r"<[A-Z_]+>", "", _outside(text, rules)[0])
     p = []
-    if re.search(r"\d{4,}", outside):
-        p.append("a digit run of four or more outside a link")
+    if re.search(r"\d{4,}", rest):
+        p.append("a digit run of four or more outside a link or an amount")
     if "@" in re.sub(r"<[A-Z_]+>", "", text):
         p.append("an @")
     return p
 
 
 def has_link(text: str, rules: dict) -> bool:
-    return bool(_protect(text, rules)[1])
+    return _outside(text, rules)[1] > 0
+
+
+def has_money(text: str, rules: dict) -> bool:
+    return "<AMOUNT>" in text or _outside(text, rules)[2] > 0
 
 
 def ocr(path: str) -> str:

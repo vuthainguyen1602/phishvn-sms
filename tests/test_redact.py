@@ -59,6 +59,15 @@ class Redaction(unittest.TestCase):
         self.assertTrue(T.has_link("Truy cap vcb-xacminh.top ngay", rules))
         self.assertFalse(T.has_link("Tai khoan bi khoa.Xac minh ngay", rules))
 
+    def test_broadcast_amounts_are_kept_own_money_is_masked(self):
+        rules = T.load_rules()
+        self.assertEqual(T.redact("Trung thuong 100.000.000d", rules), "Trung thuong 100.000.000d")
+        self.assertEqual(T.redact("So du 12.345.678VND", rules), "So du <AMOUNT>")
+        self.assertTrue(T.has_money("Trung thuong 100.000.000d", rules))
+        self.assertTrue(T.has_money("So du <AMOUNT>", rules))
+        self.assertFalse(T.has_money("Diem thi da co", rules))
+        self.assertEqual(T.problems("Nap 20000d nhan qua", rules), [])
+
 
 class Transcribe(unittest.TestCase):
     def setUp(self):

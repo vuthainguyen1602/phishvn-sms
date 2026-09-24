@@ -76,8 +76,9 @@ ngày và giờ cộng với tên người gửi có thể giúp người quen �
 
 ## 4. Xem lại bản đã che — bước quan trọng nhất
 
-Trang tự động thay số điện thoại, e-mail và các dãy số dài (số tài khoản, số thẻ, mã OTP) bằng các
-thẻ như `<PHONE>`, `<EMAIL>`, `<ACCOUNT>`, `<OTP>`. **Đường link được giữ nguyên**, vì đó là thứ quan
+Trang tự động thay số điện thoại, e-mail, các dãy số dài (số tài khoản, số thẻ, mã OTP), **số dư và
+tiền vào/ra tài khoản của bạn** bằng các thẻ như `<PHONE>`, `<EMAIL>`, `<ACCOUNT>`, `<OTP>`, `<AMOUNT>`.
+Số tiền trong tin quảng cáo hay lừa đảo (tiền thưởng, phí, giá) được giữ nguyên. **Đường link được giữ nguyên**, vì đó là thứ quan
 trọng nhất để nhận ra tin lừa đảo; trang chỉ che số điện thoại, e-mail hay tên nằm bên trong link. Tên người và địa chỉ thì trang
 không tự nhận ra được: **bạn bôi chọn và bấm nút che**.
 
@@ -92,6 +93,7 @@ Sau:   Chao <NAME>, tai khoan <ACCOUNT> cua ban se bi khoa. Xac minh tai http://
 
 - tên của bạn hoặc người thân;
 - số tài khoản, số thẻ, mã sinh viên, số CCCD, biển số xe;
+- **số dư** hay số tiền giao dịch của bạn mà trang chưa che;
 - địa chỉ nhà, phòng trọ, ký túc xá;
 - **trong đường link**: tên, số điện thoại, mã khách hàng của bạn (ví dụ `…?ma_kh=…`) — che phần đó,
   hoặc bỏ tin nếu không chắc đoạn nào là của bạn;

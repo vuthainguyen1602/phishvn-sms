@@ -71,6 +71,12 @@ segment that identifies the recipient without saying so (`/x7K9q`) cannot be rec
 the contributor is asked to check each link, and to drop a message whose link carries their own
 details.
 
+**Amounts are kept too, except the contributor's own.** A prize, a fee or a price in a scam or an
+advert was broadcast to strangers, and the size of a lure is a signal; it stays. A balance, a signed
+account movement (`+1.500.000VND`) and an amount beside a transaction (`GD`) are the contributor's
+own money, which is sensitive personal data, and are masked as `<AMOUNT>`. An amount the rules cannot
+place is kept, and the contributor is asked to check for their balance on review.
+
 **Normalisation stops there.** Odd punctuation, capitalisation, missing diacritics, typos, unusual
 Unicode and filter-evading spellings are *kept exactly*. They are among the strongest signals a
 smishing message carries, and a corpus that tidies them away has removed the thing it exists to

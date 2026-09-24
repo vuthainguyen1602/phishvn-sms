@@ -52,7 +52,7 @@
   <textarea id="raw" placeholder="Dán nguyên văn tin nhắn vào đây" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 
   <h2>2. Xem lại bản đã che</h2>
-  <p class="muted">Số điện thoại, e-mail, số tiền, mã OTP, số tài khoản được che tự động. <b>Đường link được giữ nguyên</b>, chỉ che số điện thoại, e-mail hay tên nằm trong link. <b>Tên người và địa chỉ thì bạn tự che:</b> bôi chọn chữ trong ô dưới, rồi bấm nút tương ứng. Link có chứa tên, số điện thoại hay mã khách hàng của bạn thì che phần đó, hoặc bỏ tin.</p>
+  <p class="muted">Số điện thoại, e-mail, mã OTP, số tài khoản, <b>số dư và tiền vào/ra tài khoản của bạn</b> được che tự động. Số tiền trong tin quảng cáo hay lừa đảo (tiền thưởng, phí…) được giữ nguyên. <b>Đường link được giữ nguyên</b>, chỉ che số điện thoại, e-mail hay tên nằm trong link. <b>Tên người và địa chỉ thì bạn tự che:</b> bôi chọn chữ trong ô dưới, rồi bấm nút tương ứng. Link có chứa tên, số điện thoại hay mã khách hàng của bạn thì che phần đó, hoặc bỏ tin.</p>
   <textarea id="red" readonly spellcheck="false"></textarea>
   <div class="row">
     <button type="button" data-tag="NAME">Che tên</button>
@@ -100,10 +100,14 @@
                  of fraud. It is set aside so that the digit rules below cannot mangle it;
        in_links  run inside each link, and mask only personal data a link can carry: a phone
                  number, an e-mail address, a name or an account in its query string;
-       text      run on everything outside the links.
+       private_amounts  mask the contributor's own money: a balance, a signed account movement
+                 (+1.500.000VND), an amount beside "GD". Nobody else's, so masked;
+       amounts   find every other amount and KEEP it, set aside like a link: a prize, a fee or a
+                 price in a scam or an advert was broadcast to strangers and is a signal;
+       text      run on everything outside the links and the kept amounts.
      A rule replaces its match with <TAG>, keeping the text of every capture group in front of it:
-     groups carry context that must survive ("Tk 0123..." -> "Tk <ACCOUNT>"). In `links`, group 1
-     is the character before the link and is not part of it. No lookbehind, which iPhones before
+     groups carry context that must survive ("Tk 0123..." -> "Tk <ACCOUNT>"). In `links` and
+     `amounts`, group 1 is the character before the span and is not part of it. No lookbehind, which iPhones before
      iOS 16.4 cannot parse. -->
 <script type="application/json" id="rules">
 {
@@ -123,14 +127,21 @@
     {"tag": "EMAIL", "re": "(^|[^A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+%40[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"},
     {"tag": "PHONE", "re": "(^|[^0-9])(?:%2B84|\\+84|84|0)\\d{9,10}(?![0-9])"}
   ],
+  "private_amounts": [
+    {"tag": "AMOUNT", "re": "(^|[^A-Za-z])((?:s[oố] d[uư]|SDC|SD)[\\s:.]*)(?:\\d{1,3}(?:[.,]\\d{3})+(?:[.,]\\d{1,2})?|\\d{4,})\\s?(?:VND|VNĐ|đồng|dong|đ|d)?(?![A-Za-z0-9])"},
+    {"tag": "AMOUNT", "re": "(^|[^A-Za-z0-9])([+-])(?:\\d{1,3}(?:[.,]\\d{3})+(?:[.,]\\d{1,2})?\\s?(?:VND|VNĐ|đồng|dong|đ|d)?|\\d{4,}\\s?(?:VND|VNĐ|đồng|dong|đ|d))(?![A-Za-z0-9])"},
+    {"tag": "AMOUNT", "re": "(^|[^A-Za-z])((?:GD|MGD|giao d[iị]ch)[^0-9\\n]{0,20})(?:\\d{1,3}(?:[.,]\\d{3})+(?:[.,]\\d{1,2})?|\\d{4,})\\s?(?:VND|VNĐ|đồng|dong|đ|d)(?![A-Za-z0-9])"}
+  ],
+  "amounts": [
+    "(^|[^A-Za-z0-9.,])\\d{1,3}(?:[.,]\\d{3})+(?:[.,]\\d{1,2})?\\s?(?:VND|VNĐ|đồng|dong|đ|d|k|tr|trieu|triệu|ty|tỷ)?(?![A-Za-z0-9])",
+    "(^|[^A-Za-z0-9.,])\\d{4,}\\s?(?:VND|VNĐ|đồng|dong|đ|d|k|tr|trieu|triệu|ty|tỷ)(?![A-Za-z0-9])"
+  ],
   "text": [
     {"tag": "OTP", "re": "(^|[^A-Za-z0-9])((?:OTP|m[aã] x[aá]c th[uự]c|m[aã] x[aá]c nh[aậ]n|code)[^0-9\\n]{0,40})\\d{4,8}(?![0-9])"},
     {"tag": "ACCOUNT", "re": "(^|[^A-Za-z])((?:t[aà]i kho[aả]n|STK|TK|s[oố] th[eẻ])[\\s:.#]*)\\d(?:[\\s.-]?\\d){5,18}(?![0-9])"},
     {"tag": "ACCOUNT", "re": "(^|[^0-9])\\d{4}(?:[ -]\\d{4}){2,4}(?![0-9])"},
     {"tag": "PHONE", "re": "(^|[^A-Za-z0-9])(?:\\+84|0)(?:[\\s.-]?\\d){9,10}(?![0-9])"},
     {"tag": "PHONE", "re": "(^|[^A-Za-z0-9])1[89]00(?:[\\s.-]?\\d){4,6}(?![0-9])"},
-    {"tag": "AMOUNT", "re": "(^|[^A-Za-z0-9])([+-]?)\\d{1,3}(?:[.,]\\d{3})+(?:[.,]\\d{1,2})?\\s?(?:VND|VNĐ|đồng|dong|đ|d)?(?![A-Za-z0-9])"},
-    {"tag": "AMOUNT", "re": "(^|[^A-Za-z0-9])([+-]?)\\d{4,}\\s?(?:VND|VNĐ|đồng|dong|đ|d)(?![A-Za-z0-9])"},
     {"tag": "TRANSACTION_ID", "re": "(^|[^A-Za-z])((?:m[aã] GD|MGD|m[aã] giao d[iị]ch|m[aã] đ[oơ]n|m[aã] don|đ[oơ]n h[aà]ng|don hang|Ref|m[aã] tham chi[eế]u)[\\s:.#]*)[A-Za-z0-9-]*\\d[A-Za-z0-9-]*"},
     {"tag": "TRANSACTION_ID", "re": "(^|[^A-Za-z0-9])(?=[A-Za-z0-9]*[A-Za-z])(?=[A-Za-z0-9]*\\d{4})[A-Za-z0-9]{6,}(?![A-Za-z0-9])"},
     {"tag": "DATE", "re": "(^|[^0-9])\\d{1,2}[/-]\\d{1,2}(?:[/-]\\d{2,4})?(?![0-9])"},
@@ -153,8 +164,9 @@ var Core = (function () {
     });
   }
   function compile(rules) {
-    return { before: tagged(rules.before), links: rules.links.map(rx),
-             in_links: tagged(rules.in_links), text: tagged(rules.text) };
+    return { before: tagged(rules.before), links: rules.links.map(rx), in_links: tagged(rules.in_links),
+             private_amounts: tagged(rules.private_amounts), amounts: rules.amounts.map(rx),
+             text: tagged(rules.text) };
   }
   function apply(text, list) {
     list.forEach(function (r) {
@@ -166,39 +178,48 @@ var Core = (function () {
     });
     return text;
   }
-  // Set every link aside behind a marker with no digit or letter in it, so no text rule can
-  // reach into it. `fn` may rewrite each link on the way.
-  function protect(text, c, fn) {
-    var links = [];
-    c.links.forEach(function (re) {
+  // Set every span a pattern finds aside behind a marker with no digit or letter in it, so no
+  // text rule can reach into it; `kept` collects the spans. `fn` may rewrite each span on the way.
+  function protect(text, patterns, kept, fn) {
+    patterns.forEach(function (re) {
       text = text.replace(re, function (m, pre) {
-        links.push(fn ? fn(m.slice(pre.length)) : m.slice(pre.length));
-        return pre + "\u0001" + String.fromCharCode(0xE000 + links.length - 1) + "\u0001";
+        kept.push(fn ? fn(m.slice(pre.length)) : m.slice(pre.length));
+        return pre + "\u0001" + String.fromCharCode(0xE000 + kept.length - 1) + "\u0001";
       });
     });
-    return { text: text, links: links };
+    return text;
   }
   function restore(text, links) {
     return text.replace(/\u0001([-])\u0001/g, function (m, k) { return links[k.charCodeAt(0) - 0xE000]; });
   }
   function redact(text, c) {
-    var p = protect(apply(text, c.before), c, function (l) { return apply(l, c.in_links); });
-    return restore(apply(p.text, c.text), p.links);
+    var kept = [];
+    text = protect(apply(text, c.before), c.links, kept, function (l) { return apply(l, c.in_links); });
+    text = protect(apply(text, c.private_amounts), c.amounts, kept);
+    return restore(apply(text, c.text), kept);
   }
-  // What SCHEMA.md rule 2 forbids in a published text, outside the links a text keeps. Returned in
+  // The text with its links and kept amounts set aside, and how many of each there were.
+  function outside(text, c) {
+    var links = [], amounts = [];
+    text = protect(protect(text, c.links, links), c.amounts, amounts);
+    return { text: text, links: links.length, amounts: amounts.length };
+  }
+  // What SCHEMA.md rule 2 forbids in a published text, outside the links and amounts it keeps. Returned in
   // Vietnamese: the contributor reads it, and a row that fails it is not saved.
   function problems(text, c) {
-    var p = [], outside = protect(text, c).text.replace(/<[A-Z_]+>/g, "");
-    if (/\d{4,}/.test(outside)) p.push("Còn một dãy từ 4 chữ số trở lên chưa được che.");
+    var p = [], rest = outside(text, c).text.replace(/<[A-Z_]+>/g, "");
+    if (/\d{4,}/.test(rest)) p.push("Còn một dãy từ 4 chữ số trở lên chưa được che.");
     if (/@/.test(text.replace(/<[A-Z_]+>/g, ""))) p.push("Còn ký tự @ (có thể là e-mail) chưa được che.");
     return p;
   }
-  function hasLink(text, c) { return protect(text, c).links.length > 0; }
+  function hasLink(text, c) { return outside(text, c).links > 0; }
+  function hasMoney(text, c) { return /<AMOUNT>/.test(text) || outside(text, c).amounts > 0; }
   function csvCell(v) {
     v = String(v == null ? "" : v);
     return /[",\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
   }
-  return { compile: compile, redact: redact, problems: problems, hasLink: hasLink, csvCell: csvCell };
+  return { compile: compile, redact: redact, problems: problems, hasLink: hasLink, hasMoney: hasMoney,
+           csvCell: csvCell };
 })();
 if (typeof module !== "undefined") module.exports = Core;
 </script>

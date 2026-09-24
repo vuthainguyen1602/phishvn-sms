@@ -37,7 +37,7 @@ Có hai cách gửi. Bạn chọn cách nào cũng được, và dùng cả hai 
 **Cách 1 — sao chép và dán (nên dùng).**
 
 1. Bạn chạy một công cụ **trên máy của bạn**. Nó tự động che số điện thoại, địa chỉ e-mail, dãy số
-   dài giống số tài khoản, và tên riêng mà bạn đánh dấu. **Đường link trong tin được giữ nguyên và
+   dài giống số tài khoản, số dư và tiền vào/ra tài khoản của bạn, và tên riêng mà bạn đánh dấu. **Đường link trong tin được giữ nguyên và
    công bố**, vì đó là dấu vết quan trọng nhất của tin lừa đảo; chỉ số điện thoại, e-mail hay tên
    nằm bên trong link là bị che.
 2. Bạn **xem lại từng tin sau khi che** rồi mới quyết định gửi. Tin nào bạn còn phân vân thì bỏ.

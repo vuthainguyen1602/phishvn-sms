@@ -11,7 +11,7 @@
   ["Xem tai www.khuyenmai.com.vn/uu-dai ngay hom nay", "Xem tai www.khuyenmai.com.vn/uu-dai ngay hom nay"],
   ["Gui ho so ve tuyendung.hn@gmail.com truoc thu 6", "Gui ho so ve <EMAIL> truoc thu 6"],
   ["Vay nhanh 50 trieu, khong the chap. Lai 0.8%/thang", "Vay nhanh 50 trieu, khong the chap. Lai 0.8%/thang"],
-  ["KHUYEN MAI 50% don tu 20000d", "KHUYEN MAI 50% don tu <AMOUNT>"],
+  ["KHUYEN MAI 50% don tu 20000d", "KHUYEN MAI 50% don tu 20000d"],
   ["Ma GD FT2306512345 thanh cong", "Ma GD <TRANSACTION_ID> thanh cong"],
   ["Don hang SPX12345678 dang duoc giao", "Don hang <TRANSACTION_ID> dang duoc giao"],
   ["The 4111 1111 1111 1111 cua ban het han", "The <ACCOUNT> cua ban het han"],
@@ -20,10 +20,15 @@
   ["Tai khoan cua quy khach se bi khoa.Xac minh ngay", "Tai khoan cua quy khach se bi khoa.Xac minh ngay"],
   ["Diem thi hoc ky da co tren cong thong tin sinh vien.", "Diem thi hoc ky da co tren cong thong tin sinh vien."],
   ["D.u.a.n can ho gia goc, chiet khau 10%. Goi 0987654321", "D.u.a.n can ho gia goc, chiet khau 10%. Goi <PHONE>"],
-  ["Ban da trung thuong 100.000.000d. Goi ngay 0901234567 de nhan.", "Ban da trung thuong <AMOUNT>. Goi ngay <PHONE> de nhan."],
+  ["Ban da trung thuong 100.000.000d. Goi ngay 0901234567 de nhan.", "Ban da trung thuong 100.000.000d. Goi ngay <PHONE> de nhan."],
   ["Xac minh tai http://vcb-xacminh.top/x7K9q?u=0912345678&ten=NguyenVanA ngay", "Xac minh tai http://vcb-xacminh.top/x7K9q?u=<PHONE>&ten=<NAME> ngay"],
   ["Nhan qua tai https://qua-tang.top/2027/05/nhan?id=88213", "Nhan qua tai https://qua-tang.top/2027/05/nhan?id=88213"],
   ["Cap nhat tai abc.top/verify?email=hoa%40gmail.com&sdt=84912345678", "Cap nhat tai abc.top/verify?email=<EMAIL>&sdt=<PHONE>"],
   ["Truy cap https://x.top/ref/2027 truoc 12/05, LH 0912345678", "Truy cap https://x.top/ref/2027 truoc <DATE>, LH <PHONE>"],
-  ["Nhan uu dai tai https://km.example/u?ma_kh=KH00123&uid=a9f3", "Nhan uu dai tai https://km.example/u?ma_kh=<ID>&uid=<ID>"]
+  ["Nhan uu dai tai https://km.example/u?ma_kh=KH00123&uid=a9f3", "Nhan uu dai tai https://km.example/u?ma_kh=<ID>&uid=<ID>"],
+  ["GD: -250,000VND tai CIRCLE K luc 21:05", "GD: -<AMOUNT> tai CIRCLE K luc <TIME>"],
+  ["SD: 5000000", "SD: <AMOUNT>"],
+  ["Phi van chuyen 35.000d, chuyen vao TK 0123456789", "Phi van chuyen 35.000d, chuyen vao TK <ACCOUNT>"],
+  ["Nap 5000k nhan x2, lai 30 trieu/thang", "Nap 5000k nhan x2, lai 30 trieu/thang"],
+  ["Giao dich 1.200.000VND tai SHOPEE. Ma OTP 482913", "Giao dich <AMOUNT> tai SHOPEE. Ma OTP <OTP>"]
 ]

@@ -82,8 +82,10 @@ independently.
 
 ## 4. Reviewing the redacted text — the most important step
 
-The page automatically replaces phone numbers, e-mail addresses and long digit runs (account and
-card numbers, one-time codes) with tags such as `<PHONE>`, `<EMAIL>`, `<ACCOUNT>`, `<OTP>`. **Links
+The page automatically replaces phone numbers, e-mail addresses, long digit runs (account and card
+numbers, one-time codes) and **your balance and account movements** with tags such as `<PHONE>`,
+`<EMAIL>`, `<ACCOUNT>`, `<OTP>`, `<AMOUNT>`. Amounts in adverts and scams (prizes, fees, prices) are
+kept as they are. **Links
 are kept as they are**, because they matter most for recognising a scam; the page masks only a phone
 number, e-mail address or name inside a link. It cannot recognise people's names or addresses by itself: **you select them and tap the
 mask button**.
@@ -100,6 +102,7 @@ particular:
 
 - your name or a relative's;
 - account, card, student, ID card or vehicle numbers;
+- **your balance** or a transaction amount of yours that the page missed;
 - a home, rented room or dormitory address;
 - **inside a link**: your name, phone number or customer code (e.g. `…?ma_kh=…`) — mask that part,
   or leave the message out if you cannot tell which part is yours;

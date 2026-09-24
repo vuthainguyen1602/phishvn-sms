@@ -43,7 +43,7 @@ There are two ways to send. You may use either, or both.
 **Way 1 — copy and paste (preferred).**
 
 1. You run a tool **on your own device**. It automatically masks phone numbers, e-mail addresses,
-   long account-like digit runs, and names you mark. **Links in a message are kept and published**,
+   long account-like digit runs, your balance and account movements, and names you mark. **Links in a message are kept and published**,
    because they are the most important trace a scam message leaves; only a phone number, e-mail
    address or name inside a link is masked.
 2. You **review each message after masking** and then decide whether to send it. If you are unsure
