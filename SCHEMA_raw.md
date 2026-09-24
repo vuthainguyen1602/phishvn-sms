@@ -79,9 +79,12 @@ knows the group could use it to work out whose messages they are reading.
 
 ## 4. Example rows
 
-Invented, as in `SCHEMA.md`. Nobody sent these.
+Invented, as in `SCHEMA.md`. Nobody sent these. They are the same six messages as
+`EXAMPLE_synthetic.csv`, one stage earlier: `EXAMPLE_submission_synthetic.csv` and
+`EXAMPLE_working_synthetic.csv` hold them as files, and dropping the columns of §3 from the working
+file gives the published example exactly.
 
-**A submission file:**
+**A submission file** (first two rows):
 
 ```
 submission_token,text,sender,sender_type,received_at,label_contributor,redaction_reviewed
@@ -89,12 +92,12 @@ s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,VCB,bran
 s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,VCB-Bank,brandname,2027-03-04,phishing,1
 ```
 
-**The working file, after annotation and adjudication:**
+**The working file, after annotation and adjudication** (first two rows):
 
 ```
-message_id,participant_id,text,sender,sender_type,received_at,label_contributor,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
-SMS_00001,P001,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,VCB,brandname,2027-03-04,legitimate,legitimate,legitimate,,,legitimate,T001,train
-SMS_00002,P001,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,VCB-Bank,brandname,2027-03-04,phishing,phishing,phishing,,,phishing,T017,test
+message_id,participant_id,submission_token,text,sender,sender_type,received_at,label_contributor,redaction_reviewed,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
+SMS_00001,P001,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,VCB,brandname,2027-03-04,legitimate,1,legitimate,legitimate,,,legitimate,T001,train
+SMS_00002,P001,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,VCB-Bank,brandname,2027-03-04,phishing,1,phishing,phishing,,,phishing,T017,test
 ```
 
 Note the second row's sender: `VCB-Bank` against the real `VCB`. That is the kind of detail

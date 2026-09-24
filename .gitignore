@@ -1,0 +1,4 @@
+# Everything under data/ is private until deposit: the submission files, the working file with
+# participant_id and sender, and the raw exports. SCHEMA_raw.md relies on this rule.
+data/*
+!data/README.md

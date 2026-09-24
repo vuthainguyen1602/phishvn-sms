@@ -65,7 +65,8 @@ no signature: a signature would turn an anonymous submission into an identified 
 | `SCHEMA.md` | the published file's fields, the rules a valid file satisfies, and what is withheld |
 | `SCHEMA_raw.md` | the two files that come before it and never ship, and the exact columns dropped to produce the published one |
 | `EXAMPLE_synthetic.csv` | six invented rows showing the shape; not collected data, nobody sent them |
-| `data/` | empty, and stays empty until there is approval |
+| `EXAMPLE_submission_synthetic.csv`, `EXAMPLE_working_synthetic.csv` | the same six messages at the two private stages; also invented |
+| `data/` | empty, and stays empty until there is approval; `.gitignore` keeps everything but its README out of git |
 | `LICENSE-CODE` | MIT, for the code |
 | `LICENSE` | where the corpus licence will go; not one yet, and says why |
 
