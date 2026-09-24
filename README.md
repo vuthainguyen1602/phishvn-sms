@@ -62,6 +62,8 @@ no signature: a signature would turn an anonymous submission into an identified 
 | `CONSENT_vi.md` | the participant consent form, in Vietnamese |
 | `sms_collect.py` | the collector; refuses everything but `--check` until both documents are real |
 | `data/` | empty, and stays empty until there is approval |
+| `LICENSE-CODE` | MIT, for the code |
+| `LICENSE` | where the corpus licence will go; not one yet, and says why |
 
 ## Related
 
@@ -72,4 +74,10 @@ analysis code), [`phishvn-infra`](https://github.com/vuthainguyen1602/phishvn-in
 
 ## Licence
 
-Code: MIT (`LICENSE`). The corpus licence is decided at deposit and is not settled here.
+Code: MIT, in `LICENSE-CODE`, the same file name the sibling repositories use for it.
+
+`LICENSE` is where those repositories keep the **data** licence, and here it is deliberately not
+one yet. No corpus exists, and a licence granted now would be a grant over messages nobody has
+been asked about. The terms contributors agree to belong in the consent form *before* it is handed
+out, not chosen afterwards to fit what was gathered. The corpus licence is settled at deposit,
+written into `CONSENT_vi.md` first, and replaces that file then.
