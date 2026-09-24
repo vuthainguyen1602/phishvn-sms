@@ -9,9 +9,17 @@ Chúng tôi đang xây dựng một bộ dữ liệu **tin nhắn lừa đảo t
 hiện lừa đảo qua SMS. Chúng tôi mời bạn gửi cho chúng tôi **những tin nhắn lừa đảo, quảng cáo rác
 hoặc mạo danh** mà bạn nhận được.
 
-**Chúng tôi KHÔNG xin tin nhắn cá nhân của bạn.** Không xin tin của bạn bè, gia đình, ngân hàng,
-mã OTP, hay bất cứ tin nào do người thật gửi cho riêng bạn. Nếu bạn phân vân một tin có thuộc loại
-chúng tôi xin hay không — **đừng gửi tin đó**.
+Chúng tôi cũng xin **tin nhắn hợp lệ do hệ thống gửi tự động** — mã OTP, thông báo ngân hàng, nhà
+mạng, trường học, ứng dụng — để bộ dữ liệu có cả tin thật lẫn tin lừa đảo mà so sánh.
+
+**Chúng tôi KHÔNG xin tin nhắn do người thật gửi cho bạn.** Không xin tin của bạn bè, gia đình,
+đồng nghiệp, hay bất cứ ai nhắn riêng cho bạn — kể cả khi bạn sẵn lòng cho. Lý do: tin đó do
+**người khác viết**, và chúng tôi không thể hỏi ý họ được.
+
+Quy tắc đơn giản để bạn khỏi phải cân nhắc: **tin đến từ một số điện thoại cá nhân thì không gửi,
+dù nội dung là gì.** Chỉ gửi tin đến từ tên thương hiệu hoặc đầu số dịch vụ.
+
+Nếu bạn phân vân một tin có thuộc loại chúng tôi xin hay không — **đừng gửi tin đó**.
 
 ## Bạn hoàn toàn tự do
 
@@ -31,6 +39,10 @@ chúng tôi xin hay không — **đừng gửi tin đó**.
 
 Chúng tôi lưu: nội dung tin **đã che**, tên/đầu số người gửi như hiển thị, ngày nhận, và nhãn bạn
 gán. Chúng tôi **không** lưu số máy bạn, tên bạn, lớp bạn, hay bất cứ thứ gì chỉ ra đó là bạn.
+
+Bộ dữ liệu công bố cũng **không có cột nào cho biết tin nào là của ai**. Vì nhóm tham gia rất nhỏ,
+một cột như vậy tuy ghi mã số thay cho tên nhưng người quen vẫn có thể đoán ra — nên chúng tôi
+không phát hành nó.
 
 ## Dữ liệu này sẽ đi đâu
 
