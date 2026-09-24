@@ -101,7 +101,7 @@ file gives the published example exactly.
 ```
 submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed
 s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1
-s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,paste,VCB-Bank,brandname,2027-03,phishing,1
+s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,paste,VCB-Bank,brandname,2027-03,phishing,1
 ```
 
 **The working file, after annotation and adjudication** (first two rows):
@@ -109,7 +109,7 @@ s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,paste,VCB-Bank,b
 ```
 message_id,participant_id,submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
 SMS_00001,P001,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1,legitimate,legitimate,,,legitimate,T001,train
-SMS_00002,P001,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,paste,VCB-Bank,brandname,2027-03,phishing,1,phishing,phishing,,,phishing,T017,test
+SMS_00002,P001,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,paste,VCB-Bank,brandname,2027-03,phishing,1,phishing,phishing,,,phishing,T017,test
 ```
 
 Note the second row's sender: `VCB-Bank` against the real `VCB`. That is the kind of detail

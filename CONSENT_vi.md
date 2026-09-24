@@ -37,7 +37,9 @@ Có hai cách gửi. Bạn chọn cách nào cũng được, và dùng cả hai 
 **Cách 1 — sao chép và dán (nên dùng).**
 
 1. Bạn chạy một công cụ **trên máy của bạn**. Nó tự động che số điện thoại, địa chỉ e-mail, dãy số
-   dài giống số tài khoản, và tên riêng mà bạn đánh dấu.
+   dài giống số tài khoản, và tên riêng mà bạn đánh dấu. **Đường link trong tin được giữ nguyên và
+   công bố**, vì đó là dấu vết quan trọng nhất của tin lừa đảo; chỉ số điện thoại, e-mail hay tên
+   nằm bên trong link là bị che.
 2. Bạn **xem lại từng tin sau khi che** rồi mới quyết định gửi. Tin nào bạn còn phân vân thì bỏ.
 3. Bản gốc chưa che **không bao giờ rời khỏi máy bạn**.
 
@@ -72,6 +74,9 @@ Ngày dự kiến công bố: `[…]`
 Rủi ro chính là một tin nhắn chứa thông tin cá nhân mà bộ lọc bỏ sót và bạn không nhận ra khi xem
 lại. Vì vậy bước xem lại là quan trọng nhất, và vì vậy chúng tôi chỉ xin tin lừa đảo và tin hệ
 thống — loại tin vốn không chứa gì riêng tư của bạn.
+
+Một số link chứa một đoạn mã riêng cho từng người nhận. Nếu một link có tên, số điện thoại hay mã
+khách hàng của bạn, hãy che phần đó hoặc bỏ tin.
 
 Nếu bạn gửi ảnh (cách 2), có thêm một rủi ro: nghiên cứu viên nhìn thấy mọi thứ trong ảnh mà bạn
 chưa tô. Nếu điều đó làm bạn không yên tâm, hãy dùng cách 1, hoặc bỏ tin đó.

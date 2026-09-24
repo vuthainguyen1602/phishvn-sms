@@ -22,7 +22,7 @@ const m = { exports: {} };
 new Function("module", pick("core"))(m);
 const Core = m.exports, rules = Core.compile(JSON.parse(pick("rules")));
 const cases = JSON.parse(fs.readFileSync(0, "utf8"));
-process.stdout.write(JSON.stringify(cases.map(t => [Core.redact(t, rules), Core.problems(Core.redact(t, rules)).length])));
+process.stdout.write(JSON.stringify(cases.map(t => [Core.redact(t, rules), Core.problems(Core.redact(t, rules), rules).length])));
 """
 
 
@@ -33,7 +33,7 @@ class Redaction(unittest.TestCase):
             with self.subTest(raw=raw):
                 got = T.redact(raw, rules)
                 self.assertEqual(got, want)
-                self.assertEqual(T.problems(got), [], "an expected output must satisfy SCHEMA.md rule 2")
+                self.assertEqual(T.problems(got, rules), [], "an expected output must satisfy SCHEMA.md rule 2")
 
     @unittest.skipUnless(shutil.which("node"), "node is not installed")
     def test_page_matches_python(self):
@@ -46,10 +46,18 @@ class Redaction(unittest.TestCase):
                 self.assertEqual(nprob, 0)
 
     def test_problems_catches_what_rule_2_forbids(self):
-        self.assertTrue(T.problems("so 12345"))
-        self.assertTrue(T.problems("a@b"))
-        self.assertTrue(T.problems("vao http:"))
-        self.assertEqual(T.problems("Tk <ACCOUNT> luc <TIME>"), [])
+        rules = T.load_rules()
+        self.assertTrue(T.problems("so 12345", rules))
+        self.assertTrue(T.problems("a@b", rules))
+        self.assertEqual(T.problems("Tk <ACCOUNT> luc <TIME>", rules), [])
+        # Digits inside a kept link are the link's, not a leak.
+        self.assertEqual(T.problems("Xem https://x.top/2027/05/nhan?id=88213", rules), [])
+        self.assertTrue(T.problems("Xem https://x.top/a va goi 0912345678", rules))
+
+    def test_links_are_kept(self):
+        rules = T.load_rules()
+        self.assertTrue(T.has_link("Truy cap vcb-xacminh.top ngay", rules))
+        self.assertFalse(T.has_link("Tai khoan bi khoa.Xac minh ngay", rules))
 
 
 class Transcribe(unittest.TestCase):
@@ -111,7 +119,7 @@ class Transcribe(unittest.TestCase):
         (out,) = os.listdir(os.path.join(self.priv, "ingest"))
         with open(os.path.join(self.priv, "ingest", out), encoding="utf-8") as fh:
             got = list(csv.DictReader(fh))
-        self.assertEqual(got[0]["text"], "Tai khoan <ACCOUNT> se bi khoa. Xac minh tai <URL>")
+        self.assertEqual(got[0]["text"], "Tai khoan <ACCOUNT> se bi khoa. Xac minh tai abc.top")
         self.assertEqual(list(got[0]), T.FIELDS)
 
     def test_refuses_before_approval(self):

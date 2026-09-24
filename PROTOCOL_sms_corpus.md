@@ -52,13 +52,29 @@ asymmetry rather than documenting it:
 ## 3. Redaction, on the contributor's device
 
 On the primary route what leaves the phone is already redacted, and the raw text never reaches the
-author. The redaction
-tool is a single offline web page opened in the phone's own browser: the contributor copies a
-message in their messaging app and pastes it in, so the text arrives character for character and
-no screenshot or OCR is involved. The page makes no network request and works in airplane mode.
-It replaces each of these with its placeholder, and the contributor reviews every message after
+author. The redaction tool is a single offline web page opened in the phone's own browser: the
+contributor copies a message in their messaging app and pastes it in, so the text arrives
+character for character and no screenshot or OCR is involved. The page makes no network request
+and works in airplane mode. It replaces each of these with its placeholder, and the contributor reviews every message after
 redaction and before sending. A message they are unsure about is not sent. `CONTRIBUTE_vi.md`
 tells contributors how, step by step.
+
+```
+<NAME> <PHONE> <ACCOUNT> <OTP> <EMAIL> <AMOUNT> <ADDRESS> <ID> <DATE> <TIME> <TRANSACTION_ID>
+```
+
+**Links are kept.** The domain and path of a link are the strongest evidence a smishing message
+carries, and what the sibling `phishvn-infra` study collects; a link is not personal data, since
+it was broadcast to strangers. Only personal data *inside* a link is masked: a phone number, an
+e-mail address, or a name or account in its query string (`?sdt=`, `?ten=`, `?stk=`…). A path
+segment that identifies the recipient without saying so (`/x7K9q`) cannot be recognised by rule;
+the contributor is asked to check each link, and to drop a message whose link carries their own
+details.
+
+**Normalisation stops there.** Odd punctuation, capitalisation, missing diacritics, typos, unusual
+Unicode and filter-evading spellings are *kept exactly*. They are among the strongest signals a
+smishing message carries, and a corpus that tidies them away has removed the thing it exists to
+measure.
 
 **The alternative route, screenshots.** A message that cannot be copied may be sent as a
 screenshot, cropped to the sender and the message, with the contributor's own details blacked out
@@ -69,15 +85,6 @@ OCR and checked by hand, the text is redacted as above, and the image is deleted
 before publication. Every row records its route in `capture`, because OCR can normalise the
 obfuscating spellings this section keeps on purpose, and a reader studying them needs to exclude
 the transcribed rows.
-
-```
-<NAME> <PHONE> <ACCOUNT> <OTP> <EMAIL> <URL> <AMOUNT> <ADDRESS> <ID> <DATE> <TIME> <TRANSACTION_ID>
-```
-
-**Normalisation stops there.** Odd punctuation, capitalisation, missing diacritics, typos, unusual
-Unicode and filter-evading spellings are *kept exactly*. They are among the strongest signals a
-smishing message carries, and a corpus that tidies them away has removed the thing it exists to
-measure.
 
 ## 4. Labels
 

@@ -43,7 +43,9 @@ There are two ways to send. You may use either, or both.
 **Way 1 — copy and paste (preferred).**
 
 1. You run a tool **on your own device**. It automatically masks phone numbers, e-mail addresses,
-   long account-like digit runs, and names you mark.
+   long account-like digit runs, and names you mark. **Links in a message are kept and published**,
+   because they are the most important trace a scam message leaves; only a phone number, e-mail
+   address or name inside a link is masked.
 2. You **review each message after masking** and then decide whether to send it. If you are unsure
    about a message, drop it.
 3. The unmasked original **never leaves your device**.
@@ -83,6 +85,9 @@ Planned publication date: `[…]`
 The main risk is a message containing personal information that the filter misses and that you do
 not notice on review. That is why the review step matters most, and why we ask only for scam and
 system messages — kinds of message that hold nothing private of yours.
+
+Some links carry a code specific to each recipient. If a link holds your name, phone number or
+customer code, mask that part or leave the message out.
 
 If you send screenshots (way 2), there is one more risk: the researcher sees everything in the image
 that you did not black out. If that makes you uneasy, use way 1, or leave the message out.

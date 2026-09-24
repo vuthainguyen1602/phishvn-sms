@@ -15,7 +15,7 @@ project keeps privately are listed at the end, with the reason each is withheld.
 | `label_annotator_2` | enum | + `uncertain` | second annotator, independent |
 | `template_id` | string | `T0031` | computed template group; every message of one template shares it |
 | `sender_type` | enum | `brandname` `shortcode` `unknown` | how the sender appeared on the handset |
-| `has_url` | 0/1 | | the redacted text contains `<URL>` |
+| `has_url` | 0/1 | | the text contains a link, as found by the link patterns in `redact.html`; the link itself is kept in `text` |
 | `has_phone` | 0/1 | | contains `<PHONE>` |
 | `has_otp` | 0/1 | | contains `<OTP>` |
 | `has_money` | 0/1 | | contains `<AMOUNT>` |
@@ -28,12 +28,14 @@ them, and the agreement the paper reports can be checked rather than believed.
 ## Rules a valid file satisfies
 
 1. `message_id` is unique.
-2. `text` contains no digit run of four or more outside a placeholder, no `@`, and no `http`.
-   Redaction failures are the one defect that cannot be repaired after publication.
+2. `text` contains no digit run of four or more outside a placeholder or a link, and no `@`.
+   Links are kept, with personal data inside them masked (PROTOCOL §3). Redaction failures are
+   the one defect that cannot be repaired after publication.
 3. `final_label` is never `uncertain`.
 4. Every message sharing a `template_id` shares a `split`. **This is the rule the corpus exists
    to keep**, and it is checked rather than assumed.
-5. `has_*` equals the presence of its placeholder in `text`; they are derived, not typed.
+5. `has_*` are derived, not typed: `has_url` from the link patterns in `redact.html`, the others
+   from the presence of their placeholder in `text`.
 6. `sender_type` is never a phone number: messages from personal numbers are not collected.
 
 ## Withheld
@@ -52,7 +54,7 @@ them, and they exist to show the shape. `EXAMPLE_synthetic.csv` holds the same r
 ```
 message_id,text,capture,final_label,label_annotator_1,label_annotator_2,template_id,sender_type,has_url,has_phone,has_otp,has_money,split
 SMS_00001,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,legitimate,legitimate,legitimate,T001,brandname,0,0,1,0,train
-SMS_00002,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,paste,phishing,phishing,phishing,T017,brandname,1,0,0,0,test
+SMS_00002,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,paste,phishing,phishing,phishing,T017,brandname,1,0,0,0,test
 SMS_00003,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,screenshot,spam,spam,spam,T029,shortcode,0,1,0,0,train
 SMS_00004,Ban da trung thuong <AMOUNT>. Goi ngay <PHONE> de nhan.,paste,phishing,phishing,spam,T041,unknown,0,1,0,1,validation
 SMS_00005,Diem thi hoc ky da co tren cong thong tin sinh vien.,paste,legitimate,legitimate,legitimate,T006,brandname,0,0,0,0,train

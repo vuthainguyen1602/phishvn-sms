@@ -38,35 +38,60 @@ IMAGE_EXT = (".png", ".jpg", ".jpeg", ".heic", ".webp")
 LABEL_HINT = {"that": "legitimate", "rac": "spam", "luadao": "phishing"}
 
 
-def load_rules(page: str = PAGE) -> list:
+def load_rules(page: str = PAGE) -> dict:
     """The rules block of redact.html. One copy of the rules, so the two routes cannot drift."""
     with open(page, encoding="utf-8") as fh:
         html = fh.read()
     m = re.search(r'<script type="application/json" id="rules">(.*?)</script>', html, re.S)
     if not m:
         raise SystemExit(f"[!] no rules block in {page}")
-    return [(r["tag"], re.compile(r["re"], re.I)) for r in json.loads(m.group(1))]
+    r = json.loads(m.group(1))
+    tagged = lambda xs: [(x["tag"], re.compile(x["re"], re.I)) for x in xs]
+    return {"before": tagged(r["before"]), "links": [re.compile(x, re.I) for x in r["links"]],
+            "in_links": tagged(r["in_links"]), "text": tagged(r["text"])}
 
 
-def redact(text: str, rules: list) -> str:
-    """The same semantics as Core.redact in redact.html: every capture group is kept in front of
-    the tag, the rest of the match becomes the tag."""
+def _apply(text: str, rules: list) -> str:
     for tag, rx in rules:
         text = rx.sub(lambda m, t=tag: "".join(g or "" for g in m.groups()) + f"<{t}>", text)
     return text
 
 
-def problems(text: str) -> list:
-    """SCHEMA.md rule 2, as Core.problems checks it."""
-    s = re.sub(r"<[A-Z_]+>", "", text)
+def _protect(text: str, rules: dict, fn=None):
+    """Core.protect in redact.html: set each link aside behind a marker no text rule can match."""
+    links = []
+
+    def keep(m):
+        pre = m.group(1) or ""
+        link = m.group(0)[len(pre):]
+        links.append(fn(link) if fn else link)
+        return pre + "\x01" + chr(0xE000 + len(links) - 1) + "\x01"
+    for rx in rules["links"]:
+        text = rx.sub(keep, text)
+    return text, links
+
+
+def redact(text: str, rules: dict) -> str:
+    """Core.redact in redact.html: links are kept, with only personal data inside them masked;
+    everything outside the links goes through the text rules."""
+    text, links = _protect(_apply(text, rules["before"]), rules, lambda l: _apply(l, rules["in_links"]))
+    text = _apply(text, rules["text"])
+    return re.sub("\x01([\ue000-\uf8ff])\x01", lambda m: links[ord(m.group(1)) - 0xE000], text)
+
+
+def problems(text: str, rules: dict) -> list:
+    """SCHEMA.md rule 2, as Core.problems checks it: outside the links a text keeps."""
+    outside = re.sub(r"<[A-Z_]+>", "", _protect(text, rules)[0])
     p = []
-    if re.search(r"\d{4,}", s):
-        p.append("a digit run of four or more")
-    if "@" in s:
+    if re.search(r"\d{4,}", outside):
+        p.append("a digit run of four or more outside a link")
+    if "@" in re.sub(r"<[A-Z_]+>", "", text):
         p.append("an @")
-    if re.search(r"https?:|www\.", s, re.I):
-        p.append("a link")
     return p
+
+
+def has_link(text: str, rules: dict) -> bool:
+    return bool(_protect(text, rules)[1])
 
 
 def ocr(path: str) -> str:
@@ -131,7 +156,7 @@ def finalize(folder: str) -> int:
         draft_rows = list(csv.DictReader(fh))
     for r in draft_rows:
         r["text"] = redact(r["text"].strip(), rules)
-        why = problems(r["text"])
+        why = problems(r["text"], rules)
         if r["sender_type"] not in ("brandname", "shortcode", "unknown"):
             why.append("no sender_type (brandname, shortcode or unknown)")
         if r["received_month"] and not MONTH.fullmatch(r["received_month"]):

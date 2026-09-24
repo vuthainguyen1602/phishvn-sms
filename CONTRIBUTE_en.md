@@ -82,16 +82,17 @@ independently.
 
 ## 4. Reviewing the redacted text — the most important step
 
-The page automatically replaces phone numbers, e-mail addresses, links and long digit runs (account
-and card numbers, one-time codes) with tags such as `<PHONE>`, `<EMAIL>`, `<URL>`, `<ACCOUNT>`,
-`<OTP>`. It cannot recognise people's names or addresses by itself: **you select them and tap the
+The page automatically replaces phone numbers, e-mail addresses and long digit runs (account and
+card numbers, one-time codes) with tags such as `<PHONE>`, `<EMAIL>`, `<ACCOUNT>`, `<OTP>`. **Links
+are kept as they are**, because they matter most for recognising a scam; the page masks only a phone
+number, e-mail address or name inside a link. It cannot recognise people's names or addresses by itself: **you select them and tap the
 mask button**.
 
 An example, before and after redaction:
 
 ```
-Before: Chao Nguyen Van A, tai khoan 0123456789 cua ban se bi khoa. Xac minh tai http://xacminh-taikhoan.example
-After:  Chao <NAME>, tai khoan <ACCOUNT> cua ban se bi khoa. Xac minh tai <URL>
+Before: Chao Nguyen Van A, tai khoan 0123456789 cua ban se bi khoa. Xac minh tai http://xacminh-taikhoan.example/k?sdt=0912345678
+After:  Chao <NAME>, tai khoan <ACCOUNT> cua ban se bi khoa. Xac minh tai http://xacminh-taikhoan.example/k?sdt=<PHONE>
 ```
 
 Read the redacted text and ask yourself: **is anything left that shows this message is mine?** In
@@ -100,6 +101,8 @@ particular:
 - your name or a relative's;
 - account, card, student, ID card or vehicle numbers;
 - a home, rented room or dormitory address;
+- **inside a link**: your name, phone number or customer code (e.g. `…?ma_kh=…`) — mask that part,
+  or leave the message out if you cannot tell which part is yours;
 - any detail you would not want others to read about you.
 
 Mask anything left over. If you cannot, or still feel uneasy, **leave the message out**. The page
