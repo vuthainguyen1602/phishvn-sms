@@ -39,7 +39,8 @@ def _doc(name: str) -> str:
 
 
 PROTOCOL = _doc("PROTOCOL_sms_corpus.md")
-CONSENT = _doc("CONSENT_vi.md")
+CONSENT = _doc("CONSENT_vi.md")          # the operative document; contributors read this one
+CONSENT_EN = _doc("CONSENT_en.md")       # a translation, for reviewers who do not read Vietnamese
 OUT = os.path.join(ROOT, "data", "raw", "sms_corpus")
 FIELDS = ["submission_token", "text", "sender", "received_at", "label_student", "label_author"]
 
@@ -66,6 +67,21 @@ def gates() -> list:
         if holes:
             bad.append(f"the consent form has {holes} unfilled placeholder(s): the researcher, "
                        "the ethics contact, the approval number and the publication date")
+    # The English text is a translation, and a translation drifts silently: the operative form
+    # gets filled in and the copy a reviewer reads keeps the blanks, or vice versa. Nobody would
+    # notice, because the two are read by different people. Hold them to the same count.
+    if not os.path.exists(CONSENT_EN):
+        bad.append(f"{os.path.relpath(CONSENT_EN, ROOT)} does not exist: an ethics committee or a "
+                   "reviewer who does not read Vietnamese cannot check what contributors were told")
+    elif os.path.exists(CONSENT):
+        e = open(CONSENT_EN, encoding="utf-8").read()
+        v = open(CONSENT, encoding="utf-8").read()
+        if "NOT IN USE" in e.upper() and "BẢN NHÁP" not in v:
+            bad.append("the English translation still says DRAFT while the Vietnamese form does not")
+        he, hv = e.count("[…]"), v.count("[…]")
+        if he != hv:
+            bad.append(f"the two consent forms disagree: {hv} placeholder(s) left in the "
+                       f"Vietnamese, {he} in the English translation")
     return bad
 
 

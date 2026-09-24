@@ -59,7 +59,8 @@ no signature: a signature would turn an anonymous submission into an identified 
 | file | what it is |
 |---|---|
 | `PROTOCOL_sms_corpus.md` | the collection protocol; carries its DRAFT status line until approved |
-| `CONSENT_vi.md` | the participant consent form, in Vietnamese |
+| `CONSENT_vi.md` | the participant consent form, in Vietnamese — the operative document |
+| `CONSENT_en.md` | its English translation, so a reviewer who does not read Vietnamese can check what contributors were told; the Vietnamese governs |
 | `sms_collect.py` | the collector; refuses everything but `--check` until both documents are real |
 | `data/` | empty, and stays empty until there is approval |
 | `LICENSE-CODE` | MIT, for the code |
