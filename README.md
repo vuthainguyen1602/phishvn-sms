@@ -62,6 +62,8 @@ no signature: a signature would turn an anonymous submission into an identified 
 | `CONSENT_vi.md` | the participant consent form, in Vietnamese — the operative document |
 | `CONSENT_en.md` | its English translation, so a reviewer who does not read Vietnamese can check what contributors were told; the Vietnamese governs |
 | `sms_collect.py` | the collector; refuses everything but `--check` until both documents are real |
+| `SCHEMA.md` | the published file's fields, the rules a valid file satisfies, and what is withheld |
+| `EXAMPLE_synthetic.csv` | six invented rows showing the shape; not collected data, nobody sent them |
 | `data/` | empty, and stays empty until there is approval |
 | `LICENSE-CODE` | MIT, for the code |
 | `LICENSE` | where the corpus licence will go; not one yet, and says why |
