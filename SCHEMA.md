@@ -8,7 +8,8 @@ project keeps privately are listed at the end, with the reason each is withheld.
 | field | type | values | meaning |
 |---|---|---|---|
 | `message_id` | string | `SMS_00001` | stable identifier, assigned in ingest order and never reused |
-| `text` | string | free text | the message **after redaction**, otherwise byte-for-byte as received |
+| `text` | string | free text | the message **after redaction**; otherwise byte-for-byte as received where `capture` is `paste`, and a hand-checked OCR transcription where it is `screenshot` |
+| `capture` | enum | `paste` `screenshot` | how the text was obtained. A study of obfuscating spellings or Unicode should use the `paste` rows only, since OCR may normalise exactly those |
 | `final_label` | enum | `legitimate` `spam` `phishing` | the adjudicated label; the only label an experiment should train on |
 | `label_annotator_1` | enum | + `uncertain` | first annotator, independent |
 | `label_annotator_2` | enum | + `uncertain` | second annotator, independent |
@@ -40,7 +41,7 @@ them, and the agreement the paper reports can be checked rather than believed.
 | field | why |
 |---|---|
 | `participant_id` | with a handful of contributors it is pseudonymisation, not anonymisation: someone who knows the group could read off which bank or school each uses. Kept privately so leave-one-contributor-out can be computed; the paper reports that result without the mapping. |
-| raw text | deleted once the redacted corpus is fixed. It never reaches the author in the first place: redaction runs on the contributor's device. |
+| raw text, screenshots | for `paste` rows the raw text never reaches the author: redaction runs on the contributor's device. For `screenshot` rows the author holds the image until its transcription is checked, then deletes it, before publication. Neither ever ships. |
 | handset or SIM identifiers, dates of birth, contact names | never collected. |
 
 ## Example rows
@@ -49,13 +50,13 @@ them, and the agreement the paper reports can be checked rather than believed.
 them, and they exist to show the shape. `EXAMPLE_synthetic.csv` holds the same rows as a file.
 
 ```
-message_id,text,final_label,label_annotator_1,label_annotator_2,template_id,sender_type,has_url,has_phone,has_otp,has_money,split
-SMS_00001,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,legitimate,legitimate,legitimate,T001,brandname,0,0,1,0,train
-SMS_00002,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,phishing,phishing,phishing,T017,brandname,1,0,0,0,test
-SMS_00003,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,spam,spam,spam,T029,shortcode,0,1,0,0,train
-SMS_00004,Ban da trung thuong <AMOUNT>. Goi ngay <PHONE> de nhan.,phishing,phishing,spam,T041,unknown,0,1,0,1,validation
-SMS_00005,Diem thi hoc ky da co tren cong thong tin sinh vien.,legitimate,legitimate,legitimate,T006,brandname,0,0,0,0,train
-SMS_00006,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,legitimate,legitimate,legitimate,T002,brandname,0,0,0,1,train
+message_id,text,capture,final_label,label_annotator_1,label_annotator_2,template_id,sender_type,has_url,has_phone,has_otp,has_money,split
+SMS_00001,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,legitimate,legitimate,legitimate,T001,brandname,0,0,1,0,train
+SMS_00002,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,paste,phishing,phishing,phishing,T017,brandname,1,0,0,0,test
+SMS_00003,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,screenshot,spam,spam,spam,T029,shortcode,0,1,0,0,train
+SMS_00004,Ban da trung thuong <AMOUNT>. Goi ngay <PHONE> de nhan.,paste,phishing,phishing,spam,T041,unknown,0,1,0,1,validation
+SMS_00005,Diem thi hoc ky da co tren cong thong tin sinh vien.,paste,legitimate,legitimate,legitimate,T006,brandname,0,0,0,0,train
+SMS_00006,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,paste,legitimate,legitimate,legitimate,T002,brandname,0,0,0,1,train
 ```
 
 `SMS_00004` is deliberately a disagreement: one annotator read a prize lure as `phishing`, the

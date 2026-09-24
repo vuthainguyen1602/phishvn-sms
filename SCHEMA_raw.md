@@ -12,19 +12,30 @@ deposited or attached to the article.
 
 ## 1. The submission file — what leaves the contributor's device
 
-One file per submission, written by the redaction tool on the contributor's own phone or laptop.
-This is the first thing the author ever sees; the unredacted message does not exist outside the
-contributor's device.
+One file per submission. A message arrives by one of two routes (`CONTRIBUTE_vi.md`), and the
+`capture` field records which:
+
+- **`paste`** — the contributor copied the message into the redaction page on their own phone,
+  reviewed the redacted text, and the page wrote this row. The unredacted message does not exist
+  outside the contributor's device.
+- **`screenshot`** — for a message that cannot be copied, the contributor cropped a screenshot to
+  the sender and the message, blacked out their own details on the image, and sent the images in a
+  `.zip`. **The author sees the image as sent**, including anything not blacked out; the consent
+  form says so. The author strips file names and image metadata on receipt, transcribes each image
+  by OCR, corrects the transcription by hand against the image, applies the same redaction as the
+  page, and writes this row. `received_month` comes from the image where it shows a date, and is
+  left empty otherwise.
 
 | field | type | meaning |
 |---|---|---|
 | `submission_token` | string | random, generated per submission. **Not per person**: a contributor who sends twice produces two unrelated tokens, so submissions cannot be joined into a profile. |
-| `text` | string | the message after redaction, reviewed and approved by the contributor |
+| `text` | string | the message after redaction. For `paste`, reviewed and approved by the contributor, character for character as received. For `screenshot`, a hand-checked OCR transcription: obfuscating spellings, homoglyphs and spacing may not survive it. |
+| `capture` | enum | `paste` `screenshot` — how the text was obtained, and so how far it can be trusted character by character |
 | `sender` | string | the sender name or shortcode as displayed on the handset |
 | `sender_type` | enum | `brandname` `shortcode` `unknown` — never a personal number, which is not collected |
-| `received_at` | date | the date only, no time: a timestamp plus a sender narrows who a contributor is |
+| `received_month` | `YYYY-MM` or empty | the month only: a date, and still more a time, plus a sender narrows who a contributor is. The month is enough to state the collection window, and it is what a contributor can recall without looking the message up. |
 | `label_contributor` | enum | `legitimate` `spam` `phishing` — what the contributor thought it was |
-| `redaction_reviewed` | 0/1 | the contributor confirmed they read the redacted text before sending. A row with `0` is not ingested. |
+| `redaction_reviewed` | 0/1 | the contributor confirmed they reviewed what they sent: the redacted text for `paste`, the cropped and blacked-out image for `screenshot`. A row with `0` is not ingested. |
 
 The contributor's own label is **not** one of the two annotator labels. It is kept as a third
 opinion and reported only as a rate of agreement with the adjudicated label — a contributor
@@ -61,12 +72,13 @@ text                                  →  text
 final_label                           →  final_label
 label_annotator_1, label_annotator_2  →  (both, unchanged)
 template_id, sender_type, split       →  (unchanged)
+capture                               →  (unchanged)
 has_url, has_phone, has_otp, has_money   derived from text
 ──────────────────────────────────────   ───────────────
 participant_id                        ✗  pseudonymisation with few contributors
 submission_token                      ✗  links a contributor's submissions to each other
 sender                                ✗  a rare brandname narrows who receives it
-received_at                           ✗  a date plus a sender narrows it further
+received_month                        ✗  a month plus a sender still narrows it
 label_contributor                     ✗  the contributor's own reading of their own inbox
 adjudicated_by, adjudication_note     ✗  quotes messages, reasons about senders
 redaction_reviewed                    ✗  a process flag, not data
@@ -87,17 +99,17 @@ file gives the published example exactly.
 **A submission file** (first two rows):
 
 ```
-submission_token,text,sender,sender_type,received_at,label_contributor,redaction_reviewed
-s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,VCB,brandname,2027-03-04,legitimate,1
-s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,VCB-Bank,brandname,2027-03-04,phishing,1
+submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed
+s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1
+s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,paste,VCB-Bank,brandname,2027-03,phishing,1
 ```
 
 **The working file, after annotation and adjudication** (first two rows):
 
 ```
-message_id,participant_id,submission_token,text,sender,sender_type,received_at,label_contributor,redaction_reviewed,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
-SMS_00001,P001,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,VCB,brandname,2027-03-04,legitimate,1,legitimate,legitimate,,,legitimate,T001,train
-SMS_00002,P001,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,VCB-Bank,brandname,2027-03-04,phishing,1,phishing,phishing,,,phishing,T017,test
+message_id,participant_id,submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
+SMS_00001,P001,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1,legitimate,legitimate,,,legitimate,T001,train
+SMS_00002,P001,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,paste,VCB-Bank,brandname,2027-03,phishing,1,phishing,phishing,,,phishing,T017,test
 ```
 
 Note the second row's sender: `VCB-Bank` against the real `VCB`. That is the kind of detail
@@ -106,6 +118,8 @@ narrowing field once it is public.
 
 ## 5. What happens to these files
 
-The submission files are deleted once ingest is verified. The working file is kept by the author
+The screenshots are deleted as soon as each transcription has been checked against its image, and
+in any case before the publication date the consent form gives; they are never copied off the
+machine they are transcribed on. The submission files are deleted once ingest is verified. The working file is kept by the author
 for as long as the article is under review, so a reviewer's question about a label can be
 answered, and is deleted when the article is published. Neither is deposited.

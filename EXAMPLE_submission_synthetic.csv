@@ -1,7 +1,7 @@
-submission_token,text,sender,sender_type,received_at,label_contributor,redaction_reviewed
-s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,VCB,brandname,2027-03-04,legitimate,1
-s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,VCB-Bank,brandname,2027-03-04,phishing,1
-s2c84e07,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,8079,shortcode,2027-03-06,spam,1
-s2c84e07,Ban da trung thuong <AMOUNT>. Goi ngay <PHONE> de nhan.,TB-QUA,unknown,2027-03-06,phishing,1
-s91d5b2a,Diem thi hoc ky da co tren cong thong tin sinh vien.,DAIHOC-X,brandname,2027-03-09,legitimate,1
-s91d5b2a,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,VCB,brandname,2027-03-09,legitimate,1
+submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed
+s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1
+s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,paste,VCB-Bank,brandname,2027-03,phishing,1
+s2c84e07,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,screenshot,8079,shortcode,2027-03,spam,1
+s2c84e07,Ban da trung thuong <AMOUNT>. Goi ngay <PHONE> de nhan.,paste,TB-QUA,unknown,2027-03,phishing,1
+s91d5b2a,Diem thi hoc ky da co tren cong thong tin sinh vien.,paste,DAIHOC-X,brandname,2027-03,legitimate,1
+s91d5b2a,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,paste,VCB,brandname,2027-03,legitimate,1

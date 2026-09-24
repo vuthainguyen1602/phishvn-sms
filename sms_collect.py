@@ -24,8 +24,11 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(_HERE))
 try:
     from _path import ROOT
-except ImportError:                                   # flat public-mirror layout
-    ROOT = os.path.dirname(_HERE)
+except ImportError:
+    # Flat public-mirror layout: the script sits at the repository root, so data/ is beside it.
+    # dirname(_HERE) here would be the folder the repository was cloned into, and the private
+    # files would land outside the repository, its .gitignore and SCHEMA_raw.md's account of them.
+    ROOT = _HERE
 
 # The documents sit under papers/ in this repository and beside the script in the public
 # mirror, which is flat. Resolve both rather than carry two copies of the file: the gate has to
@@ -45,7 +48,8 @@ OUT = os.path.join(ROOT, "data", "raw", "sms_corpus")
 # The submission schema of SCHEMA_raw.md §1 -- what leaves a contributor's device, and no more.
 # It carried label_author before the design was written, which put the author's own label in the
 # file contributors produce; the author labels at the annotation stage, in the working file.
-FIELDS = ["submission_token", "text", "sender", "sender_type", "received_at",
+MONTH = re.compile(r"\d{4}-(0[1-9]|1[0-2])")
+FIELDS = ["submission_token", "text", "capture", "sender", "sender_type", "received_month",
           "label_contributor", "redaction_reviewed"]
 
 
@@ -109,7 +113,7 @@ def main() -> int:
         raise SystemExit("[!] pass --ingest <dir>")
 
     os.makedirs(OUT, exist_ok=True)
-    rows, unreviewed, personal = [], 0, 0
+    rows, unreviewed, personal, badmonth, nocapture = [], 0, 0, 0, 0
     for f in sorted(glob.glob(os.path.join(a.ingest, "*.csv"))):
         for r in csv.DictReader(open(f, newline="", encoding="utf-8")):
             # SCHEMA_raw.md §1: the contributor confirms they read the redacted text before
@@ -123,9 +127,22 @@ def main() -> int:
             if str(r.get("sender_type", "")).strip() not in ("brandname", "shortcode", "unknown"):
                 personal += 1
                 continue
+            # SCHEMA_raw.md §1: the month only. A full date is not trimmed here, because trimming
+            # would mean the author had already seen it; the row is refused instead.
+            # Empty is allowed for a screenshot that shows no date.
+            m = str(r.get("received_month", "")).strip()
+            if m and not MONTH.fullmatch(m):
+                badmonth += 1
+                continue
+            # Every row says how its text was obtained; SCHEMA.md tells readers to trust only
+            # `paste` rows character by character, which is meaningless if the field can be blank.
+            if str(r.get("capture", "")).strip() not in ("paste", "screenshot"):
+                nocapture += 1
+                continue
             rows.append(r)
-    if unreviewed or personal:
-        print(f"[i] skipped {unreviewed} unreviewed and {personal} non-brandname row(s)")
+    if unreviewed or personal or badmonth or nocapture:
+        print(f"[i] skipped {unreviewed} unreviewed, {personal} non-brandname, {badmonth} "
+              f"not-a-month and {nocapture} no-capture row(s)")
     out = os.path.join(OUT, "submissions.csv")
     new = not os.path.exists(out)
     with open(out, "a", newline="", encoding="utf-8") as fh:

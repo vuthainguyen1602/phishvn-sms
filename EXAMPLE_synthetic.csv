@@ -1,7 +1,7 @@
-message_id,text,final_label,label_annotator_1,label_annotator_2,template_id,sender_type,has_url,has_phone,has_otp,has_money,split
-SMS_00001,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,legitimate,legitimate,legitimate,T001,brandname,0,0,1,0,train
-SMS_00002,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,phishing,phishing,phishing,T017,brandname,1,0,0,0,test
-SMS_00003,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,spam,spam,spam,T029,shortcode,0,1,0,0,train
-SMS_00004,Ban da trung thuong <AMOUNT>. Goi ngay <PHONE> de nhan.,phishing,phishing,spam,T041,unknown,0,1,0,1,validation
-SMS_00005,Diem thi hoc ky da co tren cong thong tin sinh vien.,legitimate,legitimate,legitimate,T006,brandname,0,0,0,0,train
-SMS_00006,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,legitimate,legitimate,legitimate,T002,brandname,0,0,0,1,train
+message_id,text,capture,final_label,label_annotator_1,label_annotator_2,template_id,sender_type,has_url,has_phone,has_otp,has_money,split
+SMS_00001,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,legitimate,legitimate,legitimate,T001,brandname,0,0,1,0,train
+SMS_00002,Tai khoan cua quy khach se bi khoa. Xac minh tai <URL>,paste,phishing,phishing,phishing,T017,brandname,1,0,0,0,test
+SMS_00003,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,screenshot,spam,spam,spam,T029,shortcode,0,1,0,0,train
+SMS_00004,Ban da trung thuong <AMOUNT>. Goi ngay <PHONE> de nhan.,paste,phishing,phishing,spam,T041,unknown,0,1,0,1,validation
+SMS_00005,Diem thi hoc ky da co tren cong thong tin sinh vien.,paste,legitimate,legitimate,legitimate,T006,brandname,0,0,0,0,train
+SMS_00006,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,paste,legitimate,legitimate,legitimate,T002,brandname,0,0,0,1,train

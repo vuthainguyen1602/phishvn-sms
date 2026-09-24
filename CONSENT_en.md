@@ -38,13 +38,27 @@ If you are unsure whether a message is one we are asking for — **do not send i
 
 ## How your messages are handled
 
+There are two ways to send. You may use either, or both.
+
+**Way 1 — copy and paste (preferred).**
+
 1. You run a tool **on your own device**. It automatically masks phone numbers, e-mail addresses,
    long account-like digit runs, and names you mark.
 2. You **review each message after masking** and then decide whether to send it. If you are unsure
    about a message, drop it.
 3. The unmasked original **never leaves your device**.
 
-We store the **masked** message text, the sender name or shortcode as displayed, the date
+**Way 2 — send screenshots**, compressed into one `.zip` file, for messages you cannot copy.
+
+1. You crop each image down to the message and the sender's name, and **black out** on the image
+   anything that points to you.
+2. You review each image before sending it. If you are unsure about an image, drop it.
+3. **With this way, the researcher sees the image exactly as you sent it**, including anything you
+   did not black out. The researcher turns the image into text, masks the text, and **deletes the
+   image** as soon as it has been checked, before the publication date. Images are never published
+   or shared.
+
+We store the **masked** message text, the sender name or shortcode as displayed, the month
 received, and the label you assign. We do **not** store your number, your name, your class, or
 anything identifying you.
 
@@ -67,8 +81,11 @@ Planned publication date: `[…]`
 ## Risks
 
 The main risk is a message containing personal information that the filter misses and that you do
-not notice on review. That is why the review step above matters most, and why we ask only for
-scam messages — a kind of message that holds nothing private of yours.
+not notice on review. That is why the review step matters most, and why we ask only for scam and
+system messages — kinds of message that hold nothing private of yours.
+
+If you send screenshots (way 2), there is one more risk: the researcher sees everything in the image
+that you did not black out. If that makes you uneasy, use way 1, or leave the message out.
 
 ## Contact and complaints
 

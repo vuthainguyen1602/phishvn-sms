@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The page may run scripts and styles written inline here, and nothing else: no request of any
+     kind can leave it. That is the promise CONTRIBUTE_vi.md makes, enforced by the browser. -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Che thông tin tin nhắn</title>
+<style>
+  :root { --fg: #111; --bg: #fff; --muted: #555; --line: #bbb; --soft: #f3f3f3; }
+  @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #111; --muted: #aaa; --line: #555; --soft: #1d1d1d; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.45 -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 16px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 28px 0 8px; }
+  p { margin: 6px 0; }
+  .muted { color: var(--muted); font-size: .92rem; }
+  .status { border: 1px solid var(--line); padding: 8px 10px; margin: 12px 0; font-size: .92rem; }
+  textarea, input[type=text], input[type=month], select {
+    width: 100%; font: inherit; color: var(--fg); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 4px; padding: 8px; }
+  textarea { min-height: 110px; resize: vertical; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 15px; }
+  #red { background: var(--soft); }
+  label { display: block; margin: 10px 0 4px; font-weight: 600; }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  button { font: inherit; padding: 8px 12px; border: 1px solid var(--fg); border-radius: 4px; background: var(--bg); color: var(--fg); }
+  button.primary { background: var(--fg); color: var(--bg); font-weight: 600; }
+  button:disabled { opacity: .4; }
+  .radio { display: flex; gap: 14px; flex-wrap: wrap; font-weight: normal; }
+  .radio label, .check { font-weight: normal; display: flex; gap: 6px; align-items: flex-start; margin: 6px 0; }
+  .problems { border-left: 3px solid var(--fg); padding: 4px 10px; margin: 8px 0; font-size: .92rem; }
+  .problems:empty { display: none; }
+  .error { font-weight: 600; margin: 8px 0; }
+  .error:empty { display: none; }
+  ol.saved { padding-left: 22px; }
+  ol.saved li { margin: 8px 0; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 14px; word-break: break-word; }
+  ol.saved li small { display: block; font-family: inherit; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Che thông tin tin nhắn</h1>
+  <p class="muted">Trang này chạy hoàn toàn trên điện thoại của bạn. Nó không gửi hay nhận gì qua mạng. Đọc <b>Hướng dẫn gửi tin nhắn</b> trước khi dùng.</p>
+  <div class="status" id="net"></div>
+
+  <h2>1. Dán tin nhắn</h2>
+  <p class="muted">Trong ứng dụng tin nhắn: nhấn giữ tin → <i>Sao chép</i>. Rồi dán vào ô dưới đây. Đừng sửa chính tả.</p>
+  <textarea id="raw" placeholder="Dán nguyên văn tin nhắn vào đây" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+
+  <h2>2. Xem lại bản đã che</h2>
+  <p class="muted">Số điện thoại, e-mail, liên kết, số tiền, mã OTP, số tài khoản được che tự động. <b>Tên người và địa chỉ thì bạn tự che:</b> bôi chọn chữ trong ô dưới, rồi bấm nút tương ứng.</p>
+  <textarea id="red" readonly spellcheck="false"></textarea>
+  <div class="row">
+    <button type="button" data-tag="NAME">Che tên</button>
+    <button type="button" data-tag="ADDRESS">Che địa chỉ</button>
+    <button type="button" data-tag="ID">Che mã số khác</button>
+    <button type="button" id="undo">Hoàn tác</button>
+  </div>
+  <div class="problems" id="problems"></div>
+
+  <h2>3. Thông tin về tin nhắn</h2>
+  <label for="sender">Người gửi (đúng như hiển thị)</label>
+  <input type="text" id="sender" placeholder="ví dụ: VCB-Bank, 8079" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <label for="stype">Loại người gửi</label>
+  <select id="stype">
+    <option value="">— chọn —</option>
+    <option value="brandname">Tên thương hiệu (chữ)</option>
+    <option value="shortcode">Đầu số ngắn (3–5 chữ số)</option>
+    <option value="unknown">Không rõ</option>
+    <option value="personal">Số điện thoại cá nhân</option>
+  </select>
+  <label for="month">Tháng nhận (không cần ngày)</label>
+  <input type="month" id="month">
+  <label>Bạn nghĩ tin này là</label>
+  <div class="radio">
+    <label><input type="radio" name="lab" value="legitimate"> Tin thật</label>
+    <label><input type="radio" name="lab" value="spam"> Quảng cáo rác</label>
+    <label><input type="radio" name="lab" value="phishing"> Lừa đảo</label>
+  </div>
+
+  <label class="check"><input type="checkbox" id="reviewed"> <span>Tôi đã đọc kỹ bản đã che ở mục 2, và trong đó không còn gì chỉ ra tôi.</span></label>
+  <div class="error" id="err"></div>
+  <div class="row"><button type="button" class="primary" id="save">Lưu tin này</button></div>
+
+  <h2>Đã lưu: <span id="count">0</span> tin</h2>
+  <ol class="saved" id="saved"></ol>
+  <div class="row"><button type="button" class="primary" id="download" disabled>Tải file</button></div>
+  <p class="muted" id="after"></p>
+</main>
+
+<!-- The redaction rules. sms_transcribe.py reads this same block, so a screenshot is redacted by
+     exactly the rules a pasted message is, and tests/test_redact.py runs both against one set of
+     cases. Each rule replaces its whole match with <TAG>, keeping the text of every capture group
+     in front of it: groups are for context that must survive ("Tk 0123..." -> "Tk <ACCOUNT>").
+     No lookbehind, which iPhones before iOS 16.4 cannot parse. -->
+<script type="application/json" id="rules">
+[
+  {"tag": "EMAIL", "re": "(^|[^A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"},
+  {"tag": "URL", "re": "(^|[^A-Za-z0-9])(?:https?://|www\\.)[^\\s]*[^\\s.,;:!?)\\]]"},
+  {"tag": "URL", "re": "(^|[^A-Za-z0-9.-])[A-Za-z0-9-]+(?:\\.[A-Za-z0-9-]+)*\\.(?:com|net|org|info|biz|vn|top|xyz|site|online|shop|store|club|live|vip|me|cc|io|co|ly|app|link|click|icu|pro|asia|tk|ml|ga|cf|gq|cn|ru|website|space|fun|work)(?:\\.vn)?(?![A-Za-z0-9-])(?:/[^\\s]*[^\\s.,;:!?)\\]])?"},
+  {"tag": "OTP", "re": "(^|[^A-Za-z0-9])((?:OTP|m[aã] x[aá]c th[uự]c|m[aã] x[aá]c nh[aậ]n|code)[^0-9\\n]{0,40})\\d{4,8}(?![0-9])"},
+  {"tag": "ACCOUNT", "re": "(^|[^A-Za-z])((?:t[aà]i kho[aả]n|STK|TK|s[oố] th[eẻ])[\\s:.#]*)\\d(?:[\\s.-]?\\d){5,18}(?![0-9])"},
+  {"tag": "ACCOUNT", "re": "(^|[^0-9])\\d{4}(?:[ -]\\d{4}){2,4}(?![0-9])"},
+  {"tag": "PHONE", "re": "(^|[^A-Za-z0-9])(?:\\+84|0)(?:[\\s.-]?\\d){9,10}(?![0-9])"},
+  {"tag": "PHONE", "re": "(^|[^A-Za-z0-9])1[89]00(?:[\\s.-]?\\d){4,6}(?![0-9])"},
+  {"tag": "AMOUNT", "re": "(^|[^A-Za-z0-9])([+-]?)\\d{1,3}(?:[.,]\\d{3})+(?:[.,]\\d{1,2})?\\s?(?:VND|VNĐ|đồng|dong|đ|d)?(?![A-Za-z0-9])"},
+  {"tag": "AMOUNT", "re": "(^|[^A-Za-z0-9])([+-]?)\\d{4,}\\s?(?:VND|VNĐ|đồng|dong|đ|d)(?![A-Za-z0-9])"},
+  {"tag": "TRANSACTION_ID", "re": "(^|[^A-Za-z])((?:m[aã] GD|MGD|m[aã] giao d[iị]ch|m[aã] đ[oơ]n|m[aã] don|đ[oơ]n h[aà]ng|don hang|Ref|m[aã] tham chi[eế]u)[\\s:.#]*)[A-Za-z0-9-]*\\d[A-Za-z0-9-]*"},
+  {"tag": "TRANSACTION_ID", "re": "(^|[^A-Za-z0-9])(?=[A-Za-z0-9]*[A-Za-z])(?=[A-Za-z0-9]*\\d{4})[A-Za-z0-9]{6,}(?![A-Za-z0-9])"},
+  {"tag": "DATE", "re": "(^|[^0-9])\\d{1,2}[/-]\\d{1,2}(?:[/-]\\d{2,4})?(?![0-9])"},
+  {"tag": "DATE", "re": "(^|[^0-9])(?:19|20)\\d{2}(?![0-9])"},
+  {"tag": "TIME", "re": "(^|[^0-9])\\d{1,2}[:h]\\d{2}(?::\\d{2})?(?![0-9])"},
+  {"tag": "ACCOUNT", "re": "(^|[^0-9])\\d{6,}(?![0-9])"},
+  {"tag": "ID", "re": "(^|[^0-9])\\d{4,5}(?![0-9])"}
+]
+</script>
+
+<script id="core">
+// Redaction and the checks SCHEMA.md rule 2 makes of a published text. Pure functions: the test
+// suite loads this block under node without the page around it.
+var Core = (function () {
+  function compile(rules) {
+    return rules.map(function (r) {
+      var re = new RegExp(r.re, "gi");
+      var groups = new RegExp(r.re + "|").exec("").length - 1;
+      return { tag: r.tag, re: re, groups: groups };
+    });
+  }
+  function redact(text, compiled) {
+    var out = text;
+    compiled.forEach(function (r) {
+      out = out.replace(r.re, function () {
+        var kept = "";
+        for (var i = 1; i <= r.groups; i++) kept += arguments[i] || "";
+        return kept + "<" + r.tag + ">";
+      });
+    });
+    return out;
+  }
+  // What SCHEMA.md rule 2 forbids in a published text. Returned in Vietnamese: the contributor
+  // reads it, and a row that fails it is not saved.
+  function problems(text) {
+    var p = [];
+    var stripped = text.replace(/<[A-Z_]+>/g, "");
+    if (/\d{4,}/.test(stripped)) p.push("Còn một dãy từ 4 chữ số trở lên chưa được che.");
+    if (/@/.test(stripped)) p.push("Còn ký tự @ (có thể là e-mail) chưa được che.");
+    if (/https?:|www\./i.test(stripped)) p.push("Còn một liên kết chưa được che.");
+    return p;
+  }
+  function csvCell(v) {
+    v = String(v == null ? "" : v);
+    return /[",\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  }
+  return { compile: compile, redact: redact, problems: problems, csvCell: csvCell };
+})();
+if (typeof module !== "undefined") module.exports = Core;
+</script>
+
+<script>
+(function () {
+  if (typeof document === "undefined") return;
+  var $ = function (id) { return document.getElementById(id); };
+  var RULES = Core.compile(JSON.parse($("rules").textContent));
+  // SCHEMA_raw.md §1: submission_token is per submission, not per person. A new one every time the
+  // page is opened, so two sittings by one contributor cannot be joined.
+  var bytes = new Uint8Array(6); crypto.getRandomValues(bytes);
+  var TOKEN = "s" + Array.prototype.map.call(bytes, function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+  var FIELDS = ["submission_token", "text", "capture", "sender", "sender_type", "received_month",
+                "label_contributor", "redaction_reviewed"];
+  var saved = [], history = [], sel = null, downloaded = true;
+
+  function net() {
+    $("net").textContent = navigator.onLine
+      ? "Điện thoại đang có mạng. Nên bật chế độ máy bay trước khi dán tin: trang vẫn chạy bình thường."
+      : "Đang ở chế độ máy bay / không có mạng. Tốt: bạn có thể thấy trang không cần mạng.";
+  }
+  window.addEventListener("online", net); window.addEventListener("offline", net); net();
+
+  var now = new Date();
+  $("month").value = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
+
+  function showProblems() {
+    var p = Core.problems($("red").value);
+    $("problems").innerHTML = "";
+    p.forEach(function (s) { var d = document.createElement("div"); d.textContent = s; $("problems").appendChild(d); });
+    if (p.length) {
+      var d = document.createElement("div");
+      d.textContent = "Bôi chọn phần đó ở ô trên rồi bấm \"Che mã số khác\". Không che được thì bỏ tin này.";
+      $("problems").appendChild(d);
+    }
+  }
+  $("raw").addEventListener("input", function () {
+    $("red").value = Core.redact($("raw").value, RULES);
+    history = []; $("reviewed").checked = false; $("err").textContent = ""; showProblems();
+  });
+
+  // A readonly textarea keeps its selection on iOS only until a button takes focus, so remember it.
+  document.addEventListener("selectionchange", function () {
+    var r = $("red");
+    if (document.activeElement === r && r.selectionEnd > r.selectionStart) sel = [r.selectionStart, r.selectionEnd];
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("button[data-tag]"), function (b) {
+    b.addEventListener("pointerdown", function (e) { e.preventDefault(); });
+    b.addEventListener("click", function () {
+      var r = $("red"), s = r.selectionEnd > r.selectionStart ? [r.selectionStart, r.selectionEnd] : sel;
+      if (!s) { $("err").textContent = "Hãy bôi chọn phần cần che trong ô ở mục 2 trước."; return; }
+      history.push(r.value);
+      r.value = r.value.slice(0, s[0]) + "<" + b.dataset.tag + ">" + r.value.slice(s[1]);
+      sel = null; $("err").textContent = ""; $("reviewed").checked = false; showProblems();
+    });
+  });
+  $("undo").addEventListener("click", function () {
+    if (history.length) { $("red").value = history.pop(); $("reviewed").checked = false; showProblems(); }
+  });
+
+  function label() {
+    var c = document.querySelector("input[name=lab]:checked");
+    return c ? c.value : "";
+  }
+  $("save").addEventListener("click", function () {
+    var text = $("red").value.trim(), sender = $("sender").value.trim(), st = $("stype").value;
+    var err = "";
+    if (!text) err = "Chưa có tin nhắn nào ở mục 1.";
+    else if (Core.problems(text).length) err = "Bản đã che còn thông tin chưa được che (xem mục 2).";
+    else if (!sender) err = "Hãy điền người gửi.";
+    else if (st === "personal" || /^\+?\d[\d\s.]{7,}$/.test(sender))
+      err = "Tin từ số điện thoại cá nhân thì không gửi, dù nội dung là gì. Hãy bỏ tin này.";
+    else if (!st) err = "Hãy chọn loại người gửi.";
+    else if (!/^\d{4}-(0[1-9]|1[0-2])$/.test($("month").value)) err = "Hãy chọn tháng nhận.";
+    else if (!label()) err = "Hãy chọn bạn nghĩ tin này là gì (không cần chắc chắn).";
+    else if (!$("reviewed").checked) err = "Hãy đánh dấu là bạn đã đọc kỹ bản đã che.";
+    $("err").textContent = err;
+    if (err) return;
+    saved.push({ submission_token: TOKEN, text: text, capture: "paste", sender: sender, sender_type: st,
+                 received_month: $("month").value, label_contributor: label(), redaction_reviewed: 1 });
+    downloaded = false;
+    // The unredacted text is dropped from the page as soon as the redacted one is saved.
+    $("raw").value = ""; $("red").value = ""; $("sender").value = ""; $("stype").value = "";
+    $("reviewed").checked = false; history = []; sel = null; showProblems();
+    Array.prototype.forEach.call(document.querySelectorAll("input[name=lab]"), function (i) { i.checked = false; });
+    render(); $("raw").focus();
+  });
+
+  function render() {
+    var ol = $("saved"); ol.innerHTML = "";
+    saved.forEach(function (m, i) {
+      var li = document.createElement("li");
+      li.appendChild(document.createTextNode(m.text));
+      var small = document.createElement("small");
+      small.textContent = m.sender + " · " + m.received_month + " ";
+      var del = document.createElement("button"); del.type = "button"; del.textContent = "Xoá";
+      del.addEventListener("click", function () { saved.splice(i, 1); render(); });
+      small.appendChild(del); li.appendChild(small); ol.appendChild(li);
+    });
+    $("count").textContent = saved.length;
+    $("download").disabled = !saved.length;
+  }
+
+  $("download").addEventListener("click", function () {
+    var lines = [FIELDS.join(",")].concat(saved.map(function (m) {
+      return FIELDS.map(function (f) { return Core.csvCell(m[f]); }).join(",");
+    }));
+    // No byte-order mark: sms_collect.py reads the header as plain UTF-8.
+    var blob = new Blob([lines.join("\n") + "\n"], { type: "text/csv;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "tin_nhan_da_che.csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    downloaded = true;
+    $("after").textContent = "Đã tải file tin_nhan_da_che.csv. Tắt chế độ máy bay, gửi file theo hướng dẫn, rồi xoá file khỏi điện thoại.";
+  });
+
+  window.addEventListener("beforeunload", function (e) {
+    if (saved.length && !downloaded) { e.preventDefault(); e.returnValue = ""; }
+  });
+})();
+</script>
+</body>
+</html>

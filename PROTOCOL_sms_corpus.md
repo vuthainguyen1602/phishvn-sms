@@ -51,9 +51,24 @@ asymmetry rather than documenting it:
 
 ## 3. Redaction, on the contributor's device
 
-What leaves the phone is already redacted; the raw text never reaches the author. `sms_redact.py`
-runs locally and replaces each of these with its placeholder, and the contributor reviews every
-message after redaction and before sending. A message they are unsure about is not sent.
+On the primary route what leaves the phone is already redacted, and the raw text never reaches the
+author. The redaction
+tool is a single offline web page opened in the phone's own browser: the contributor copies a
+message in their messaging app and pastes it in, so the text arrives character for character and
+no screenshot or OCR is involved. The page makes no network request and works in airplane mode.
+It replaces each of these with its placeholder, and the contributor reviews every message after
+redaction and before sending. A message they are unsure about is not sent. `CONTRIBUTE_vi.md`
+tells contributors how, step by step.
+
+**The alternative route, screenshots.** A message that cannot be copied may be sent as a
+screenshot, cropped to the sender and the message, with the contributor's own details blacked out
+on the image, in a `.zip` file. On this route the author does see an unredacted image, and the
+consent form says so in those words rather than promising otherwise. The author takes responsibility
+for these images: file names and metadata are stripped on receipt, each image is transcribed by
+OCR and checked by hand, the text is redacted as above, and the image is deleted once checked and
+before publication. Every row records its route in `capture`, because OCR can normalise the
+obfuscating spellings this section keeps on purpose, and a reader studying them needs to exclude
+the transcribed rows.
 
 ```
 <NAME> <PHONE> <ACCOUNT> <OTP> <EMAIL> <URL> <AMOUNT> <ADDRESS> <ID> <DATE> <TIME> <TRANSACTION_ID>
@@ -125,7 +140,7 @@ has not seen" qualitatively, and estimates nothing.
 
 ## 8. What ships, and what does not
 
-`sms_dataset.csv`: `message_id`, `text` (redacted), `final_label`, `label_annotator_1`,
+`sms_dataset.csv`: `message_id`, `text` (redacted), `capture`, `final_label`, `label_annotator_1`,
 `label_annotator_2`, `template_id`, `sender_type`, `has_url`, `has_phone`, `has_otp`,
 `has_money`, `split`. The derived flags are produced by a published regular expression, not by eye.
 
@@ -134,7 +149,8 @@ than anonymisation: anyone who knows the group could read off which bank or whic
 them uses. It is kept privately so the leave-one-contributor-out result can be computed, and the
 paper reports that result without the mapping.
 
-Raw, unredacted text never ships and is deleted once the redacted corpus is fixed.
+Raw, unredacted text and screenshots never ship. Screenshots are deleted once transcribed and
+checked; everything else unredacted is deleted once the redacted corpus is fixed.
 
 ## 9. What the paper may claim
 

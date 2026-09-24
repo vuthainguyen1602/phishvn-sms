@@ -32,12 +32,24 @@ Nếu bạn phân vân một tin có thuộc loại chúng tôi xin hay không �
 
 ## Tin nhắn của bạn được xử lý thế nào
 
+Có hai cách gửi. Bạn chọn cách nào cũng được, và dùng cả hai cũng được.
+
+**Cách 1 — sao chép và dán (nên dùng).**
+
 1. Bạn chạy một công cụ **trên máy của bạn**. Nó tự động che số điện thoại, địa chỉ e-mail, dãy số
    dài giống số tài khoản, và tên riêng mà bạn đánh dấu.
 2. Bạn **xem lại từng tin sau khi che** rồi mới quyết định gửi. Tin nào bạn còn phân vân thì bỏ.
 3. Bản gốc chưa che **không bao giờ rời khỏi máy bạn**.
 
-Chúng tôi lưu: nội dung tin **đã che**, tên/đầu số người gửi như hiển thị, ngày nhận, và nhãn bạn
+**Cách 2 — gửi ảnh chụp màn hình**, nén thành một file `.zip`, dành cho tin bạn không sao chép được.
+
+1. Bạn cắt ảnh chỉ còn tin nhắn và tên người gửi, rồi **tô đen** trên ảnh những gì chỉ ra bạn.
+2. Bạn xem lại từng ảnh rồi mới gửi. Ảnh nào còn phân vân thì bỏ.
+3. **Với cách này, nghiên cứu viên sẽ nhìn thấy ảnh đúng như bạn gửi**, kể cả những gì bạn chưa tô
+   hết. Nghiên cứu viên chuyển ảnh thành chữ, che thông tin trên phần chữ, và **xoá ảnh** ngay sau
+   khi kiểm tra xong, trước ngày công bố. Ảnh không bao giờ được công bố hay chia sẻ.
+
+Chúng tôi lưu: nội dung tin **đã che**, tên/đầu số người gửi như hiển thị, tháng nhận, và nhãn bạn
 gán. Chúng tôi **không** lưu số máy bạn, tên bạn, lớp bạn, hay bất cứ thứ gì chỉ ra đó là bạn.
 
 Bộ dữ liệu công bố cũng **không có cột nào cho biết tin nào là của ai**. Vì nhóm tham gia rất nhỏ,
@@ -58,8 +70,11 @@ Ngày dự kiến công bố: `[…]`
 ## Rủi ro
 
 Rủi ro chính là một tin nhắn chứa thông tin cá nhân mà bộ lọc bỏ sót và bạn không nhận ra khi xem
-lại. Vì vậy bước xem lại ở mục 2 là quan trọng nhất, và vì vậy chúng tôi chỉ xin tin lừa đảo —
-loại tin vốn không chứa gì riêng tư của bạn.
+lại. Vì vậy bước xem lại là quan trọng nhất, và vì vậy chúng tôi chỉ xin tin lừa đảo và tin hệ
+thống — loại tin vốn không chứa gì riêng tư của bạn.
+
+Nếu bạn gửi ảnh (cách 2), có thêm một rủi ro: nghiên cứu viên nhìn thấy mọi thứ trong ảnh mà bạn
+chưa tô. Nếu điều đó làm bạn không yên tâm, hãy dùng cách 1, hoặc bỏ tin đó.
 
 ## Liên hệ và khiếu nại
 

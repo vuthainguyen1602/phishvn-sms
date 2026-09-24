@@ -40,8 +40,11 @@ broadcast to strangers by someone with no privacy interest in it.
 The negative class therefore comes from a SIM honeypot, a line with no personal traffic, or from
 the ham half of an already published corpus under its licence. Never from a personal inbox.
 
-**Redaction happens on the contributor's device.** What leaves the phone is already redacted, and
-the contributor reviews each message before sending it. The raw text never reaches the researcher.
+**Redaction happens on the contributor's device.** The contributor copies each message into an
+offline page on their own phone, reviews the redacted text, and sends only that; the raw text never
+reaches the researcher. A message that cannot be copied may instead be sent as a cropped,
+blacked-out screenshot. On that route the researcher does see the image, the consent form says so,
+and the image is deleted once transcribed. Every row records which route it came by.
 
 ## The consent design
 
@@ -60,7 +63,12 @@ no signature: a signature would turn an anonymous submission into an identified 
 |---|---|
 | `PROTOCOL_sms_corpus.md` | the collection protocol; carries its DRAFT status line until approved |
 | `CONSENT_vi.md` | the participant consent form, in Vietnamese — the operative document |
+| `CONTRIBUTE_vi.md` | how a contributor sends messages, step by step: copy and paste, or screenshots in a `.zip` |
+| `CONTRIBUTE_en.md` | its English translation, for the same reason as the consent form's; the Vietnamese governs |
 | `CONSENT_en.md` | its English translation, so a reviewer who does not read Vietnamese can check what contributors were told; the Vietnamese governs |
+| `redact.html` | the redaction page contributors open on their phone; one offline file, no network access, holds the redaction rules |
+| `sms_transcribe.py` | the author's side of the screenshot route: re-encodes images, OCRs them, redacts by the page's rules, deletes the images |
+| `tests/` | the page and `sms_transcribe.py` held to one list of redaction cases, and the screenshot route end to end: `python3 -m unittest discover tests` |
 | `sms_collect.py` | the collector; refuses everything but `--check` until both documents are real |
 | `SCHEMA.md` | the published file's fields, the rules a valid file satisfies, and what is withheld |
 | `SCHEMA_raw.md` | the two files that come before it and never ship, and the exact columns dropped to produce the published one |
