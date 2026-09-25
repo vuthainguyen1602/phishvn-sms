@@ -3,7 +3,7 @@
 **STATUS: DRAFT, NOT APPROVED.** Written 2026-09-24, before a single message was collected and
 before anyone was asked to take part. It becomes a protocol when the author obtains written
 ethics approval, fills the consent form, removes this status line and commits;
-`sms_collect.py` refuses everything except `--check` until then, and `tests/test_sms_corpus.py`
+`sms_collect.py` refuses everything except `--check` until then, and `tests/test_redact.py`
 checks that it does.
 
 Nothing here can be repaired afterwards. Consent cannot be obtained retroactively, and a corpus

@@ -14,8 +14,8 @@ Three conditions, all read from the files rather than from a flag:
      has no process covering this -- an absent process is not an absent question.
 
 RUN:
-  python scripts/studies/sms_corpus/sms_collect.py --check
-  python scripts/studies/sms_corpus/sms_collect.py --ingest <dir of submissions>
+  python3 sms_collect.py --check
+  python3 sms_collect.py --ingest <dir of submissions>
 """
 from __future__ import annotations
 import argparse, csv, glob, json, os, re, sys
