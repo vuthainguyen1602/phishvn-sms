@@ -9,15 +9,15 @@ by hand, redacted by the same rules as redact.html, and deleted.
 
 Two steps, because the hand check sits between them:
 
-  python3 sms_transcribe.py extract <submission.zip>
+  python3 scripts/sms_transcribe.py extract <submission.zip>
       Re-encodes every image into data/private/screenshots/<token>/, OCRs it (tesseract, Vietnamese),
       and writes draft.csv there with the raw OCR text. Open each image beside draft.csv, correct
       `text` to what the image shows (spelling as in the image, not as it should be), and fill
       `sender`, `sender_type` and, where the image shows a date, `received_month`.
 
-  python3 sms_transcribe.py finalize data/private/screenshots/<token>
+  python3 scripts/sms_transcribe.py finalize data/private/screenshots/<token>
       Redacts `text`, refuses any row that still fails SCHEMA.md rule 2 or lacks a sender type,
-      writes data/private/ingest/<token>.csv for `sms_collect.py --ingest data/private/ingest`,
+      writes data/private/ingest/<token>.csv for `scripts/sms_collect.py --ingest data/private/ingest`,
       and deletes the images and the draft.
 
 Refuses everything, as sms_collect.py does, until the protocol is approved: receiving screenshots
@@ -156,7 +156,7 @@ def extract(zpath: str) -> int:
         w.writeheader()
         w.writerows(rows)
     print(f"[+] {len(rows)} image(s) -> {os.path.relpath(out, ROOT)}")
-    print(f"    Correct draft.csv against each image, then: sms_transcribe.py finalize {os.path.relpath(out, ROOT)}")
+    print(f"    Correct draft.csv against each image, then: python3 scripts/sms_transcribe.py finalize {os.path.relpath(out, ROOT)}")
     print(f"    Delete {zpath} now: its contents exist re-encoded, and the original is not needed.")
     return 0
 

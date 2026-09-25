@@ -50,7 +50,7 @@ them, and the agreement the paper reports can be checked rather than believed.
 ## Example rows
 
 **These messages are invented for this file.** They are not collected data, no contributor sent
-them, and they exist to show the shape. `EXAMPLE_synthetic.csv` holds the same rows as a file.
+them, and they exist to show the shape. `examples/EXAMPLE_synthetic.csv` holds the same rows as a file.
 
 ```
 message_id,text,capture,final_label,label_annotator_1,label_annotator_2,template_id,sender_type,has_url,has_phone,has_otp,has_money,split

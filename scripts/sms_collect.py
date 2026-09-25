@@ -14,8 +14,8 @@ Three conditions, all read from the files rather than from a flag:
      has no process covering this -- an absent process is not an absent question.
 
 RUN:
-  python3 sms_collect.py --check
-  python3 sms_collect.py --ingest <dir of submissions>
+  python3 scripts/sms_collect.py --check
+  python3 scripts/sms_collect.py --ingest <dir of submissions>
 """
 from __future__ import annotations
 import argparse, csv, glob, json, os, re, sys
@@ -25,20 +25,20 @@ sys.path.insert(0, os.path.dirname(_HERE))
 try:
     from _path import ROOT
 except ImportError:
-    # Flat public-mirror layout: the script sits at the repository root, so data/ is beside it.
-    # dirname(_HERE) here would be the folder the repository was cloned into, and the private
-    # files would land outside the repository, its .gitignore and SCHEMA_raw.md's account of them.
-    ROOT = _HERE
+    # Public-mirror layout: this script lives in scripts/, so the repository root -- where data/
+    # and docs/ sit -- is its parent. OUT and _doc() resolve against it, so the private files land
+    # inside the repository, under its .gitignore and SCHEMA_raw.md's account of them.
+    ROOT = os.path.dirname(_HERE)
 
-# The documents sit under papers/ in this repository and beside the script in the public
-# mirror, which is flat. Resolve both rather than carry two copies of the file: the gate has to
-# read the real documents wherever they are, and a mirror whose gate cannot find them would pass.
+# The documents sit under papers/ in the monorepo and under docs/ in the public mirror. Resolve
+# both rather than carry two copies of the file: the gate has to read the real documents wherever
+# they are, and a mirror whose gate cannot find them would refuse rather than pass.
 def _doc(name: str) -> str:
-    for c in (os.path.join(ROOT, "papers", "sms_corpus", name), os.path.join(_HERE, name),
+    for c in (os.path.join(ROOT, "papers", "sms_corpus", name), os.path.join(ROOT, "docs", name),
               os.path.join(ROOT, name)):
         if os.path.exists(c):
             return c
-    return os.path.join(ROOT, "papers", "sms_corpus", name)
+    return os.path.join(ROOT, "docs", name)
 
 
 PROTOCOL = _doc("PROTOCOL_sms_corpus.md")

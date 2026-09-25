@@ -7,7 +7,8 @@ from unittest import mock
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-sys.path.insert(0, REPO)
+SCRIPTS = os.path.join(REPO, "scripts")
+sys.path.insert(0, SCRIPTS)
 import sms_transcribe as T  # noqa: E402
 
 with open(os.path.join(HERE, "redact_cases.json"), encoding="utf-8") as _fh:
@@ -37,7 +38,7 @@ class Redaction(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("node"), "node is not installed")
     def test_page_matches_python(self):
-        out = subprocess.run(["node", "-e", NODE, os.path.join(REPO, "redact.html")],
+        out = subprocess.run(["node", "-e", NODE, os.path.join(SCRIPTS, "redact.html")],
                              input=json.dumps([c[0] for c in CASES]), capture_output=True,
                              text=True, check=True).stdout
         for (raw, want), (got, nprob) in zip(CASES, json.loads(out)):
@@ -132,7 +133,7 @@ class Transcribe(unittest.TestCase):
         self.assertEqual(list(got[0]), T.FIELDS)
 
     def test_refuses_before_approval(self):
-        r = subprocess.run([sys.executable, os.path.join(REPO, "sms_transcribe.py"), "extract", "x.zip"],
+        r = subprocess.run([sys.executable, os.path.join(SCRIPTS, "sms_transcribe.py"), "extract", "x.zip"],
                            capture_output=True, text=True)
         self.assertNotEqual(r.returncode, 0)
         self.assertIn("not permitted", r.stderr)

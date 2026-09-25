@@ -92,8 +92,8 @@ knows the group could use it to work out whose messages they are reading.
 ## 4. Example rows
 
 Invented, as in `SCHEMA.md`. Nobody sent these. They are the same six messages as
-`EXAMPLE_synthetic.csv`, one stage earlier: `EXAMPLE_submission_synthetic.csv` and
-`EXAMPLE_working_synthetic.csv` hold them as files, and dropping the columns of §3 from the working
+`examples/EXAMPLE_synthetic.csv`, one stage earlier: `examples/EXAMPLE_submission_synthetic.csv` and
+`examples/EXAMPLE_working_synthetic.csv` hold them as files, and dropping the columns of §3 from the working
 file gives the published example exactly.
 
 **A submission file** (first two rows):

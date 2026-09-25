@@ -10,7 +10,7 @@ blanks in it. `sms_collect.py` reads those two documents and refuses to collect 
 is true; `--check` prints what is missing.
 
 ```
-$ python3 sms_collect.py --check
+$ python3 scripts/sms_collect.py --check
 {
   "ready_to_collect": false,
   "missing": [
@@ -59,21 +59,24 @@ no signature: a signature would turn an anonymous submission into an identified 
 
 ## Files
 
+The written documents live in `docs/`, the code in `scripts/`, and the invented sample rows in
+`examples/`.
+
 | file | what it is |
 |---|---|
-| `PROTOCOL_sms_corpus.md` | the collection protocol; carries its DRAFT status line until approved |
-| `CONSENT_vi.md` | the participant consent form, in Vietnamese — the operative document |
-| `CONTRIBUTE_vi.md` | how a contributor sends messages, step by step: copy and paste, or screenshots in a `.zip` |
-| `CONTRIBUTE_en.md` | its English translation, for the same reason as the consent form's; the Vietnamese governs |
-| `CONSENT_en.md` | its English translation, so a reviewer who does not read Vietnamese can check what contributors were told; the Vietnamese governs |
-| `redact.html` | the redaction page contributors open on their phone; one offline file, no network access, holds the redaction rules |
-| `sms_transcribe.py` | the author's side of the screenshot route: re-encodes images, OCRs them, redacts by the page's rules, deletes the images |
+| `docs/PROTOCOL_sms_corpus.md` | the collection protocol; carries its DRAFT status line until approved |
+| `docs/CONSENT_vi.md` | the participant consent form, in Vietnamese — the operative document |
+| `docs/CONTRIBUTE_vi.md` | how a contributor sends messages, step by step: copy and paste, or screenshots in a `.zip` |
+| `docs/CONTRIBUTE_en.md` | its English translation, for the same reason as the consent form's; the Vietnamese governs |
+| `docs/CONSENT_en.md` | its English translation, so a reviewer who does not read Vietnamese can check what contributors were told; the Vietnamese governs |
+| `docs/SCHEMA.md` | the published file's fields, the rules a valid file satisfies, and what is withheld |
+| `docs/SCHEMA_raw.md` | the two files that come before it and never ship, and the exact columns dropped to produce the published one |
+| `scripts/redact.html` | the redaction page contributors open on their phone; one offline file, no network access, holds the redaction rules |
+| `scripts/sms_transcribe.py` | the author's side of the screenshot route: re-encodes images, OCRs them, redacts by the page's rules, deletes the images |
+| `scripts/sms_collect.py` | the collector; refuses everything but `--check` until both documents are real |
 | `tests/` | the page and `sms_transcribe.py` held to one list of redaction cases, and the screenshot route end to end: `python3 -m unittest discover tests` |
-| `sms_collect.py` | the collector; refuses everything but `--check` until both documents are real |
-| `SCHEMA.md` | the published file's fields, the rules a valid file satisfies, and what is withheld |
-| `SCHEMA_raw.md` | the two files that come before it and never ship, and the exact columns dropped to produce the published one |
-| `EXAMPLE_synthetic.csv` | six invented rows showing the shape; not collected data, nobody sent them |
-| `EXAMPLE_submission_synthetic.csv`, `EXAMPLE_working_synthetic.csv` | the same six messages at the two private stages; also invented |
+| `examples/EXAMPLE_synthetic.csv` | six invented rows showing the shape; not collected data, nobody sent them |
+| `examples/EXAMPLE_submission_synthetic.csv`, `examples/EXAMPLE_working_synthetic.csv` | the same six messages at the two private stages; also invented |
 | `data/` | empty, and stays empty until there is approval; `.gitignore` keeps everything but its README out of git |
 | `LICENSE-CODE` | MIT, for the code |
 | `LICENSE` | where the corpus licence will go; not one yet, and says why |
