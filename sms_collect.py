@@ -53,6 +53,14 @@ FIELDS = ["submission_token", "text", "capture", "sender", "sender_type", "recei
           "label_contributor", "redaction_reviewed"]
 
 
+def _blanks(text: str) -> int:
+    """Unfilled [...] placeholders left in a consent form. The draft banner is a blockquote whose
+    own `[…]` names the placeholders rather than being one to fill, so blockquote lines are excluded:
+    counting it would keep the gate one short forever, even once every real blank was filled."""
+    body = "\n".join(l for l in text.splitlines() if not l.lstrip().startswith(">"))
+    return body.count("[…]") + len(re.findall(r"\[\.\.\.\]", body))
+
+
 def gates() -> list:
     """Every unmet condition, in the order a reader should fix them. Empty means collection may
     begin. Read from the documents: a flag would let somebody skip the part that matters."""
@@ -69,7 +77,7 @@ def gates() -> list:
         bad.append(f"{os.path.relpath(CONSENT, ROOT)} does not exist")
     else:
         c = open(CONSENT, encoding="utf-8").read()
-        holes = c.count("[…]") + len(re.findall(r"\[\.\.\.\]", c))
+        holes = _blanks(c)
         if "BẢN NHÁP" in c:
             bad.append("the consent form still carries its draft banner")
         if holes:
@@ -86,7 +94,7 @@ def gates() -> list:
         v = open(CONSENT, encoding="utf-8").read()
         if "NOT IN USE" in e.upper() and "BẢN NHÁP" not in v:
             bad.append("the English translation still says DRAFT while the Vietnamese form does not")
-        he, hv = e.count("[…]"), v.count("[…]")
+        he, hv = _blanks(e), _blanks(v)
         if he != hv:
             bad.append(f"the two consent forms disagree: {hv} placeholder(s) left in the "
                        f"Vietnamese, {he} in the English translation")
