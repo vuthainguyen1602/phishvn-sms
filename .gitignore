@@ -2,3 +2,7 @@
 # participant_id and sender, and the raw exports. SCHEMA_raw.md relies on this rule.
 data/*
 !data/README.md
+
+# Python bytecode cache, a build artefact of running the scripts and the tests.
+__pycache__/
+*.pyc
