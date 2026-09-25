@@ -15,9 +15,17 @@ exists before the first message rather than beside the first draft.
 ## 1. What this corpus is, and what it deliberately is not
 
 A **pilot** corpus of Vietnamese SMS, contributed by a small number of consenting adults. It is
-called a pilot in the data article's abstract, not only in its limitations: **TO SET** contributors
-at **TO SET** messages each is a few hundred to about fifteen hundred messages, which is enough to
+called a pilot in the data article's abstract, not only in its limitations: **30** contributors
+at **around 100** messages each is about three thousand messages, which is enough to
 study labelling, templates and splitting, and not enough to describe Vietnamese smishing.
+
+The target mix is roughly **800 phishing, 450 spam and 1,800 legitimate** — a designed 1:2
+malicious-to-legitimate ratio, not the prevalence of any inbox, and the paper reports per-class
+metrics rather than anything that depends on this base rate. Messages are what is collected, but
+templates are what the evaluation counts (§6–7): the figure that decides what the corpus can say
+is **at least 100 distinct malicious templates**, because another copy of a template already held
+adds nothing a template-disjoint split can use. Collection watches the template count as it goes,
+and stops adding a contributor's near-duplicates before stopping their novel messages.
 
 **Only two kinds of message are collected.**
 
@@ -147,7 +155,7 @@ test half holds too few phishing messages to carry a conclusion, and the paper s
 reports it.
 
 **Leave-one-contributor-out** is reported beside it: train on all contributors but one, test on
-the one. With **TO SET** contributors that is as many folds, each a single person, so the folds
+the one. With **30** contributors that is as many folds, each a single person, so the folds
 are reported **individually and never averaged** — it answers "does this transfer to an inbox it
 has not seen" qualitatively, and estimates nothing.
 
