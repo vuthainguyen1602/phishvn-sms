@@ -94,7 +94,7 @@ that you did not black out. If that makes you uneasy, use way 1, or leave the me
 
 ## Contact and complaints
 
-Researcher: `[…]`
+Researcher: Thai Nguyen — nvthai1602@gmail.com
 Research ethics contact: `[…]`
 Ethics approval reference: `[…]`
 

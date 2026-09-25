@@ -83,7 +83,7 @@ chưa tô. Nếu điều đó làm bạn không yên tâm, hãy dùng cách 1, h
 
 ## Liên hệ và khiếu nại
 
-Nghiên cứu viên: `[…]`
+Nghiên cứu viên: Thai Nguyen — nvthai1602@gmail.com
 Phụ trách đạo đức nghiên cứu: `[…]`
 Mã chấp thuận đạo đức: `[…]`
 
