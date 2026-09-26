@@ -6,3 +6,7 @@ data/*
 # Python bytecode cache, a build artefact of running the scripts and the tests.
 __pycache__/
 *.pyc
+
+# Dated backups of the private files, wherever they get made: a backup of private data is as
+# private as the original, and data/* alone would not catch one made outside data/.
+*.backup-*.csv
