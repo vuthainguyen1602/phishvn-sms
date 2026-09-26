@@ -17,6 +17,7 @@ screenshots in a .zip ──────────────→  sms_transcr
                                        sms_annotate.py adjudicate --by <name> → final_label
                                        sms_templates.py --assign → template_id
                                        sms_split.py --assign → split
+                                       sms_publish.py → data/sms_dataset.csv (at deposit)
 ```
 
 | script | what it does, and the rule it enforces |
@@ -27,10 +28,13 @@ screenshots in a .zip ──────────────→  sms_transcr
 | `sms_annotate.py` | `init` builds the working file (message_id, participant_id — the reason `data/` is private); `label` shows an annotator **the text and nothing else**, so the two annotators and the contributor stay independent; `adjudicate` finalizes agreements without an adjudicator and decides the rest with a recorded name and a one-line note; `report` prints Cohen's kappa, disagreements per class pair and the share adjudicated — whatever they show. |
 | `sms_templates.py` | groups messages into templates on a normalized view (URLs and amounts tokenized for grouping only), word 4-shingles, Jaccard τ = 0.8, connected components; reports τ = 0.7/0.9 beside it so chaining is visible. `--assign` writes `template_id`. |
 | `sms_split.py` | the fixed 70/15/15 split, assigned **per template, never per message**; greedy over seeded restarts, scored on size and label mix; seed and restart count are constants in the file, so the split reproduces from the working file alone. `--assign` writes `split`. |
+| `sms_publish.py` | the projection of SCHEMA_raw §3, mechanical because a promise about a manual step is worth nothing: keeps SCHEMA.md's columns, derives the four `has_*` flags from redact.html's patterns and the placeholders, and refuses a working file with holes — `uncertain` never ships, and neither does a row without a template or a split. |
 
 `label` and `adjudicate` are interactive and run in a terminal; everything else is batch. The
 report modes (`sms_templates.py`, `sms_split.py`, `sms_annotate.py report`) write nothing and are
 safe to run at any point.
 
 Tests: `python3 -m unittest discover tests` — the page and `sms_transcribe.py` held to one list
-of redaction cases, and the screenshot route end to end.
+of redaction cases, the screenshot route end to end, and the later stages to their invariants:
+rotated slots group as one template, no template crosses a split, agreements finalize without an
+adjudicator, and the projection ships exactly SCHEMA.md's columns.

@@ -4,7 +4,7 @@ A Vietnamese SMS corpus of scam messages, contributed by consenting students.
 
 ## Nothing has been collected
 
-**No message exists in this repository, and none has been collected anywhere else.** There is no
+**No message exists in this repository, and no contributor has been asked for one.** There is no
 ethics approval yet, the collection protocol is still a draft, and the consent form still has
 blanks in it. `sms_collect.py` reads those two documents and refuses to collect while any of that
 is true; `--check` prints what is missing.
@@ -15,12 +15,17 @@ $ python3 scripts/sms_collect.py --check
   "ready_to_collect": false,
   "missing": [
     "the protocol still carries its DRAFT status line",
-    "the protocol has 2 unfilled 'TO SET' field(s) ...",
+    "the protocol has 1 unfilled 'TO SET' field(s) ...",
     "the consent form still carries its draft banner",
-    "the consent form has 5 unfilled placeholder(s) ..."
+    "the consent form has 3 unfilled placeholder(s) ..."
   ]
 }
 ```
+
+The author's own inbox supplied a small pilot batch, held only on the author's machine and never
+committed, used to exercise the pipeline end to end. It is not the corpus: whether any of it may
+enter the corpus is a question the ethics application asks explicitly, and until then it counts
+for nothing but the pipeline having been run.
 
 ## Why the documents are public before the data
 
@@ -77,8 +82,9 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `scripts/sms_annotate.py` | the working file and its labels: blind labelling by two annotators, adjudication with a recorded note, and the agreement report |
 | `scripts/sms_templates.py` | template grouping on a normalized view of the text, per protocol §6 |
 | `scripts/sms_split.py` | the fixed template-disjoint 70/15/15 split, per protocol §7 |
+| `scripts/sms_publish.py` | the projection of SCHEMA_raw §3: the published file from the working file, by dropping columns; refuses a working file with holes |
 | `scripts/README.md` | the pipeline in the order it runs, and what each stage refuses |
-| `tests/` | the page and `sms_transcribe.py` held to one list of redaction cases, and the screenshot route end to end: `python3 -m unittest discover tests` |
+| `tests/` | the redaction routes held to one list of cases, and the later stages to their invariants — template-disjointness, seeded reproducibility, the projection's exact columns: `python3 -m unittest discover tests` |
 | `examples/EXAMPLE_synthetic.csv` | six invented rows showing the shape; not collected data, nobody sent them |
 | `examples/EXAMPLE_submission_synthetic.csv`, `examples/EXAMPLE_working_synthetic.csv` | the same six messages at the two private stages; also invented |
 | `data/` | empty, and stays empty until there is approval; `.gitignore` keeps everything but its README out of git |
