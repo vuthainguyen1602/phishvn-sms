@@ -86,9 +86,14 @@ def main() -> int:
     cols = [c for c in ("final_label", "label_contributor", "label_source") if c in fields]
     label = lambda r: next((r[c].strip() for c in cols if r[c].strip()), "")
 
+    # Rows already marked split=external are the held-out benchmark (PROTOCOL §7): they are not
+    # part of the train/validation/test split and keep their split untouched.
+    external = [i for i, r in enumerate(rows) if r.get("split", "").strip() == "external"]
+
     by_tpl = defaultdict(list)
     for i, r in enumerate(rows):
-        by_tpl[r["template_id"]].append(i)
+        if i not in set(external):
+            by_tpl[r["template_id"]].append(i)
     sizes = {t: len(m) for t, m in by_tpl.items()}
     labels_of = {t: Counter(x for x in (label(rows[i]) for i in m) if x)
                  for t, m in by_tpl.items()}
@@ -100,13 +105,16 @@ def main() -> int:
         if best_err is None or err < best_err:
             best, best_err = cand, err
 
-    total = len(rows)
+    total = sum(len(m) for m in by_tpl.values())
     print(f"{'split':6} {'tin':>4} {'%':>6} {'template':>9}  labels")
     for s in FRACTIONS:
         tpls = sorted(t for t in best if best[t] == s)
         idx = [i for t in tpls for i in by_tpl[t]]
         mix = dict(Counter(x for x in (label(rows[i]) for i in idx) if x))
         print(f"{s:6} {len(idx):>4} {100 * len(idx) / total:>5.1f} {len(tpls):>9}  {mix}")
+    if external:
+        mix = dict(Counter(x for x in (label(rows[i]) for i in external) if x))
+        print(f"{'external':6} {len(external):>4} {'':>6} {'':>9}  {mix}  (held out, PROTOCOL §7)")
 
     if not a.assign:
         return 0

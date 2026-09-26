@@ -41,16 +41,18 @@ nobody can consent on a sender's behalf. This is also the right line for the pro
 from a friend teaches a smishing detector nothing. The rule the guideline states is mechanical —
 **a message from a personal phone number is not collected, whatever it says.**
 
-**The corpus has two subsets, and every row says which it is in `source`.** Beside the
-contributed subset above sits an **imported subset**: the rows of the *Quality-Assured
-Vietnamese SMS Phishing Dataset* (CC BY 4.0, credited), taken under its licence and
-**re-annotated here** by the same two annotators, blind, under §4's three classes. Importing
-published rows is not collection and needs no consent chain of its own; what it needs is honesty
-about provenance, so imported rows carry `capture = imported`, no participant, the source's own
-placeholder tokens mapped mechanically to this corpus's, and the source's binary label kept in
-`label_source` for §5's comparison — never shown to an annotator. Rows that fail SCHEMA.md
-rule 2 after mapping are dropped and counted, not repaired: in the event, 314 of 2,991, most
-carrying a one-time code the source's anonymisation missed.
+**Beside the contributed corpus sits an external benchmark, and `source` says which a row is.**
+The rows of the *Quality-Assured Vietnamese SMS Phishing Dataset* (CC BY 4.0, credited) are taken
+under its licence as a **held-out external test set** (§7): a model trained on the contributed
+corpus is evaluated on them, and they are **not merged** into it. They keep the source's own
+binary labels — this project does **not** re-annotate them, and does not treat its three-class
+scheme as a correction of the source's two-class one; where the two schemes diverge is measured
+(§7), not adjudicated. Using published rows this way is not collection and needs no consent chain
+of its own; what it needs is honesty about provenance, so external rows carry `source = qavn`,
+`capture = imported`, `split = external`, no participant, and the source's placeholder tokens
+mapped mechanically to this corpus's. Rows that fail SCHEMA.md rule 2 after mapping are dropped
+and counted, not repaired: in the event, 315 of 2,991, most carrying a one-time code the source's
+anonymisation missed.
 
 ## 2. The consent design
 
@@ -131,41 +133,17 @@ Evidence of deceptive intent is required, and where it is absent the message is 
 
 ## 5. Annotation, and what is reported about it
 
-Two annotators label every message **independently**, neither seeing the other's labels nor the
-contributor's own. **Both annotators are people.** Disagreements and every `uncertain` go to an
-adjudicator, whose decision is `final_label`.
+**This section is about the contributed corpus only.** The external benchmark (§1, §7) keeps the
+source corpus's own labels and is not annotated here.
 
-An optional column `label_ai` may hold a **machine pre-annotation** — a language model's guess at
-the label, produced from the text alone. It exists to speed a human's pass, not to stand in for
-one: it is **never** written to `label_annotator_1` or `label_annotator_2`, is hidden from the
-annotators exactly as every other opinion is, and reaches only the adjudicator, as a third
-opinion beside the contributor's and the source's. The reported kappa is agreement between the
-two **human** annotators; a model's labels are not counted in it, and the corpus does not claim
-two annotators where one of them was a model. Where the whole queue is pre-annotated by a model,
-`label_ai` is populated in one pass and disclosed as such, with the model named; the human
-annotators still label independently, and their labels — not the model's — are what adjudication
-and kappa are built from. `label_ai` is a working-file column and does not ship (§8).
+Two annotators, **both people**, label every contributed message **independently**, neither
+seeing the other's labels nor the contributor's own. Disagreements and every `uncertain` go to an
+adjudicator, whose decision is `final_label`.
 
 Three things are reported whatever they show: **Cohen's kappa** between the two annotators before
 adjudication, the **disagreement rate per class pair**, and the share adjudicated. A low kappa is
 a result about how separable these classes are in practice, and it is published as one rather
 than repaired by relabelling until the annotators agree.
-
-Imported rows are labelled the same way, by the same annotators, equally blind. A fourth number
-is reported for them: **how often `final_label` disagrees with the source corpus's own binary
-label** — per direction, since a benign row re-labelled `spam` (an operator's advert) and a scam
-row re-labelled `legitimate` are different findings. That number is the empirical case for three
-classes, or against them; either way it is reported.
-
-**Not every imported row is annotated, and the queue is mechanical.** Two annotators cannot
-re-label an import of thousands honestly; pretending otherwise buys coverage with rushed labels.
-The queue is: every contributed row, every imported row the source called scam, and a **seeded
-random sample of 500** of its benign rows — sample size and seed are constants in
-`sms_import.py`, so the queue is a property of the file, chosen by no one's eye. An imported
-benign row outside the sample keeps an empty `final_label`, is left out of the published file
-and counted there (§8), and stays in the working file, where it still serves template grouping
-(§6). The flip rate for the benign direction is therefore an estimate from a random sample, and
-the paper reports it with its denominator, not as a census.
 
 ## 6. Templates
 
@@ -209,17 +187,33 @@ reports it.
 **Leave-one-contributor-out** is reported beside it: train on all contributors but one, test on
 the one. With **30** contributors that is as many folds, each a single person, so the folds
 are reported **individually and never averaged** — it answers "does this transfer to an inbox it
-has not seen" qualitatively, and estimates nothing. Imported rows have no contributor and sit in
-every LOCO training set, never in a held-out fold.
+has not seen" qualitatively, and estimates nothing.
+
+**The external benchmark is a third evaluation, on data collected by no one here.** The
+*Quality-Assured Vietnamese SMS Phishing Dataset* (§1) is held out entirely — `split = external`,
+never train, validation or test — and a model trained on the contributed corpus is scored on it.
+Because its labels are binary (`benign`/`scam`) and this corpus's are three classes, the model's
+prediction is collapsed to the source's two classes (`legitimate` → benign, `spam`/`phishing` →
+scam) before scoring; the paper reports performance against the source's own labels and does not
+relabel them. It also reports, once, **how far the two label schemes diverge** — with a
+model-assisted pass, about half the source's benign rows fall under `spam` in the three-class
+sense (the operator promotions of §9), while its scam rows almost never read as `legitimate`.
+That divergence is the reason the two are kept apart rather than merged: a single pooled label
+column would bury it. A template-grouping check confirms **no external template coincides with a
+training template**, so the benchmark is genuinely unseen.
 
 ## 8. What ships, and what does not
 
-`sms_dataset.csv`: `message_id`, `text` (redacted), `source`, `capture`, `final_label`,
-`label_annotator_1`, `label_annotator_2`, `label_source`, `template_id`, `sender_type`,
-`has_url`, `has_phone`, `has_otp`, `has_money`, `split`. The derived flags are produced by a
-published regular expression, not by eye. Only annotated rows ship: an imported benign row
-outside §5's sample never gets a label, and the projection leaves it out and says how many it
-left out.
+`sms_dataset.csv` (the contributed corpus): `message_id`, `text` (redacted), `source`, `capture`,
+`final_label`, `label_annotator_1`, `label_annotator_2`, `template_id`, `sender_type`, `has_url`,
+`has_phone`, `has_otp`, `has_money`, `split`. The derived flags are produced by a published
+regular expression, not by eye.
+
+`sms_external_qavn.csv` (the external benchmark) ships **separately**, with the source corpus's
+own label and nothing this project added to it: `message_id` (a `QAV_` id that traces to the
+original), `text` (tokens remapped), `label_source`, `template_id`, `sender_type` and the derived
+flags. It carries no `final_label`, no annotator columns and no train split, because none of
+those were produced for it (§5, §7).
 
 **`participant_id` does not ship.** With a handful of contributors it is pseudonymisation rather
 than anonymisation: anyone who knows the group could read off which bank or which school each of
@@ -238,19 +232,20 @@ stated computation, and a split no template crosses.
 
 The claim is made against what actually exists, stated precisely because a reviewer will check:
 
-- The public corpus this project audits — the *Quality-Assured Vietnamese SMS Phishing Dataset*
-  (CC BY 4.0, 2,991 messages, binary labels) — **keeps URLs**, including live phishing domains,
-  and the paper must not claim otherwise. What it does not have is verifiable labelling — a
-  shared rulebook, applied by a team, with no inter-annotator agreement reported — or a
-  leakage-free split (§7: 7.9% of its test rows repeat a training text). Its binary boundary is
-  also a different question from §4's: it separates *genuine sender* from *scam*, so its benign
-  class carries the operators' own promotional messages — a sample audit found `[QC]` data
-  bundles, prize draws and a fast-loan advert labelled benign — where §4 would call every one of
-  them `spam` whoever sent it. A binary corpus cannot express that difference; this one can, and
-  reports it. Its anonymisation also missed what a mechanical check catches: importing it here
-  (§1) dropped 314 of 2,991 rows for SCHEMA.md rule 2, most carrying an unmasked one-time code
-  in a bank message its README declares clean. The paper states this as measurement, not blame:
-  it is what "quality-assured by hand" looks like beside a rule a script can hold.
+- The external benchmark — the *Quality-Assured Vietnamese SMS Phishing Dataset* (CC BY 4.0,
+  2,991 messages, binary labels) — **keeps URLs**, including live phishing domains, and the paper
+  must not claim otherwise. It is used as a held-out test set (§7), not corrected: its labels are
+  its own. Two facts about it are reported as measurement, not as fault. First, its binary
+  boundary is a different question from §4's: it separates *genuine sender* from *scam*, so its
+  benign class carries the operators' own promotional messages — a model-assisted pass put about
+  half of them under `spam` in the three-class sense, and a hand audit of a sample agreed — where
+  §4 calls an unsolicited promotion `spam` whoever sent it. That is a difference of scheme, and
+  the paper frames it as one; it is also why the benchmark is scored against its own labels rather
+  than merged. Second, its anonymisation missed what a mechanical check catches: mapping it in
+  (§1) dropped 315 of 2,991 rows for SCHEMA.md rule 2, most carrying an unmasked one-time code in
+  a bank message its README declares clean — what "quality-assured by hand" looks like beside a
+  rule a script can hold. Neither point is a claim that the corpus is wrong; both are stated with
+  its authors credited, and its own labels shipped unchanged for anyone to check.
 - The 2017 operator corpus (5,557 ham and 1,042 spam from Viettel and Vinaphone) is available on
   request only, and whether its texts keep URLs is undocumented; the paper says that and no more,
   unless its authors answer.

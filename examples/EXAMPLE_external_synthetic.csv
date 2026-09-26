@@ -1,0 +1,2 @@
+message_id,text,label_source,template_id,sender_type,has_url,has_phone,has_otp,has_money
+QAV_COM_0000,Soan KM gui <NUMBER> de nhan uu dai data cua tong dai.,benign,T054,unknown,0,0,0,0

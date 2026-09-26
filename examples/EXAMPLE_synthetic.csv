@@ -1,8 +1,7 @@
-message_id,text,source,capture,final_label,label_annotator_1,label_annotator_2,label_source,template_id,sender_type,has_url,has_phone,has_otp,has_money,split
-SMS_00001,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,contributed,paste,legitimate,legitimate,legitimate,,T001,brandname,0,0,1,0,train
-SMS_00002,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,contributed,paste,phishing,phishing,phishing,,T017,brandname,1,0,0,0,test
-SMS_00003,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,contributed,screenshot,spam,spam,spam,,T029,shortcode,0,1,0,0,train
-SMS_00004,Ban da trung thuong 100.000.000d. Goi ngay <PHONE> de nhan.,contributed,paste,phishing,phishing,spam,,T041,unknown,0,1,0,1,validation
-SMS_00005,Diem thi hoc ky da co tren cong thong tin sinh vien.,contributed,paste,legitimate,legitimate,legitimate,,T006,brandname,0,0,0,0,train
-SMS_00006,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,contributed,paste,legitimate,legitimate,legitimate,,T002,brandname,0,0,0,1,train
-QAV_COM_0000,Soan KM gui <NUMBER> de nhan uu dai data cua tong dai.,qavn,imported,spam,spam,spam,benign,T054,unknown,0,0,0,0,train
+message_id,text,source,capture,final_label,label_annotator_1,label_annotator_2,template_id,sender_type,has_url,has_phone,has_otp,has_money,split
+SMS_00001,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,contributed,paste,legitimate,legitimate,legitimate,T001,brandname,0,0,1,0,train
+SMS_00002,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,contributed,paste,phishing,phishing,phishing,T017,brandname,1,0,0,0,test
+SMS_00003,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,contributed,screenshot,spam,spam,spam,T029,shortcode,0,1,0,0,train
+SMS_00004,Ban da trung thuong 100.000.000d. Goi ngay <PHONE> de nhan.,contributed,paste,phishing,phishing,phishing,T041,unknown,0,1,0,1,validation
+SMS_00005,Diem thi hoc ky da co tren cong thong tin sinh vien.,contributed,paste,legitimate,legitimate,legitimate,T006,brandname,0,0,0,0,train
+SMS_00006,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,contributed,paste,legitimate,legitimate,legitimate,T002,brandname,0,0,0,1,train

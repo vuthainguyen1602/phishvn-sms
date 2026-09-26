@@ -1,32 +1,32 @@
 #!/usr/bin/env python3
 """
-sms_import.py — the imported subset: rows of a published corpus, brought in for re-annotation.
+sms_import.py — the external test set: a published corpus, kept as an independent benchmark.
 
 The corpus imported is the *Quality-Assured Vietnamese SMS Phishing Dataset* (CC BY 4.0),
-credited in the paper. Its rows are already public, so nothing here is collection and no gate
-applies; what applies instead is §5 of the protocol — every imported row is re-labelled by the
-same two annotators, blind, and the paper reports how often they disagree with the source's
-binary label. To keep that comparison honest:
+credited in the paper. It is NOT merged into this corpus and NOT re-annotated: it is a held-out
+**external benchmark**, kept with its own binary labels, on which a model trained on the
+contributed corpus is evaluated (PROTOCOL §7). Two label schemes meet here — the source's
+genuine-sender-vs-scam and this project's three classes — so the evaluation collapses a model's
+prediction to the source's binary space rather than pretending the labels are the same.
 
-- the source's label goes to `label_source` (`benign`/`scam`) and nowhere an annotator sees;
-- `source` = `qavn`, `capture` = `imported`, `participant_id` stays empty, so the
-  leave-one-contributor-out folds never see these rows;
-- the source's PII tokens are mapped to this corpus's placeholders by the table below, and only
-  those: `[TB]`, `[QC]` and brand prefixes are message text, not placeholders. `[NUMBER]` and
-  `[POINT]` become `<NUMBER>`, a token only imported rows carry, because the source collapsed
-  phones, shortcodes and quantities into one token and inventing the distinction back would be
-  labelling by wishful thinking;
-- `message_id` is `QAV_` plus the source's own id, so any row can be checked against the
-  original;
-- a row that fails SCHEMA.md rule 2 after mapping is skipped and named, never repaired by hand:
-  repairing it would put untracked judgment inside a step documented as mechanical.
+What import does, and only this:
+- re-encodes each row's placeholder tokens into this corpus's (`[MONEY]`→`<AMOUNT>` and so on, by
+  the allowlist below; `[TB]`/`[QC]` and brand prefixes are message text, not placeholders);
+- keeps the source's own label in `label_source` (`benign`/`scam`), which is the evaluation
+  label, unchanged;
+- marks the row `source = qavn`, `capture = imported`, `split = external`, `queued = 0` — it is
+  never in the annotation queue (§5) and never in the train/validation/test split (§7);
+- refuses a row that still fails SCHEMA.md rule 2 after mapping, dropped and named, never
+  repaired by hand.
+
+`message_id` is `QAV_` plus the source's own id, so any row can be checked against the original.
 
 RUN:
-  python3 scripts/sms_import.py <full_dataset.csv>     append to the working file (once)
+  python3 scripts/sms_import.py <full_dataset.csv>     load the external set into the working file
 """
 from __future__ import annotations
 
-import argparse, csv, os, random, re, sys
+import argparse, csv, os, re, sys
 from collections import Counter
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -40,12 +40,6 @@ MAP = {"PHONE": "PHONE", "BANK_ACC": "ACCOUNT", "MONEY": "AMOUNT", "DATE": "DATE
        "TIME": "TIME", "NAME": "NAME", "OTP": "OTP", "URL": "URL",
        "NUMBER": "NUMBER", "POINT": "NUMBER"}
 DATE = re.compile(r"(\d{2})/(\d{2})/(\d{4})")
-# §5: two annotators cannot re-label the whole import, and pretending otherwise produces rushed
-# labels. Every scam row is queued; of the benign rows, a seeded sample of this size. A benign
-# row outside the sample keeps queued = 0, is never annotated, never ships, and still counts for
-# template grouping. The seed is a constant so the sample is the file's property, not a session's.
-BENIGN_SAMPLE = 500
-SAMPLE_SEED = 1602
 
 
 def convert(text: str) -> str:
@@ -63,8 +57,8 @@ def main() -> int:
     with open(WORKING, newline="", encoding="utf-8") as fh:
         rows = list(csv.DictReader(fh))
     if any(r["message_id"].startswith("QAV_") for r in rows):
-        raise SystemExit("[!] the working file already holds imported rows; delete them first "
-                         "if this is a redo — appending twice would duplicate the subset")
+        raise SystemExit("[!] the working file already holds the external set; delete those rows "
+                         "first if this is a redo — appending twice would duplicate it")
 
     rules = load_rules()
     added, skipped = [], []
@@ -81,19 +75,15 @@ def main() -> int:
                 "text": text, "capture": "imported", "sender_type": "unknown",
                 "received_month": f"{m.group(3)}-{m.group(2)}" if m else "",
                 "label_source": "benign" if r["label"].strip() == "0" else "scam",
-                "queued": "1" if r["label"].strip() != "0" else "0"})
-    benign = [r for r in added if r["label_source"] == "benign"]
-    for r in random.Random(SAMPLE_SEED).sample(benign, min(BENIGN_SAMPLE, len(benign))):
-        r["queued"] = "1"
+                "queued": "0", "split": "external"})
     with open(WORKING, "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=W_FIELDS)
         w.writeheader()
         w.writerows(rows + added)
     labels = Counter(r["label_source"] for r in added)
-    queued = sum(r["queued"] == "1" for r in added)
-    print(f"[+] {len(added)} imported row(s) appended ({dict(labels)}); "
-          f"{queued} queued for annotation (all scam + {BENIGN_SAMPLE} benign, seed "
-          f"{SAMPLE_SEED}); working file now {len(rows) + len(added)} row(s)")
+    print(f"[+] {len(added)} external row(s) appended ({dict(labels)}); "
+          f"split=external, not annotated, not in train/val/test; "
+          f"working file now {len(rows) + len(added)} row(s)")
     if skipped:
         print(f"[i] {len(skipped)} row(s) skipped for SCHEMA.md rule 2, kept out, not repaired:")
         for mid, why in skipped:

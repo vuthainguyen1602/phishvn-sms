@@ -51,35 +51,41 @@ labels their own inbox knowing the context, which is exactly the knowledge an an
 | `participant_id` | ingest | `P001`. **The reason this file is private.** Empty on imported rows, which have no contributor. |
 | `source` | ingest / import | `contributed`, or the imported corpus's tag (`qavn`) — PROTOCOL §1 |
 | *(all submission fields)* | | carried through unchanged; an imported row fills only `text`, `capture` (`imported`) and `sender_type` (`unknown`) |
-| `label_source` | import | imported rows only: the source corpus's own binary label, shown to the adjudicator and never to an annotator |
-| `queued` | ingest / import | 1 if the row is in the annotation queue (PROTOCOL §5): every contributed row, every imported scam row, a seeded sample of imported benign rows. A 0 row is never labelled and never ships. |
-| `label_ai` | pre-annotation | optional machine guess at the label, shown to the adjudicator as a third opinion, never to an annotator; not counted in kappa, not shipped (§5) |
-| `label_annotator_1` | annotation | independent |
-| `label_annotator_2` | annotation | independent |
+| `label_source` | import | external rows only: the source corpus's own binary label, kept as their evaluation label; never re-annotated (§7) |
+| `queued` | ingest / import | 1 if the row is annotated here: every contributed row is 1, every external row is 0 |
+| `label_annotator_1` | annotation | independent; contributed rows only |
+| `label_annotator_2` | annotation | independent; contributed rows only |
 | `adjudicated_by` | adjudication | who decided, where the two disagreed or either said `uncertain` |
 | `adjudication_note` | adjudication | one line of reasoning, for the hard cases |
-| `final_label` | adjudication | |
+| `final_label` | adjudication | contributed rows only; external rows have none |
 | `template_id` | grouping | computed |
-| `split` | splitting | assigned per template, never per message |
+| `split` | splitting | `train`/`validation`/`test` for contributed rows; `external` for the held-out benchmark (§7) |
 
 `adjudication_note` never ships: it quotes the message and sometimes reasons about the sender.
 
 ## 3. The projection — how the published file is produced
 
-Mechanically, by dropping columns. No value is edited in this step, and nothing is added.
+Mechanically, by dropping columns, into **two files**: the contributed rows become
+`sms_dataset.csv`, and the held-out external rows (`split = external`) become
+`sms_external_qavn.csv`. No value is edited in this step, and nothing is added.
 
 ```
-sms_working.csv                          sms_dataset.csv
+sms_working.csv (contributed rows)       sms_dataset.csv
 ──────────────────────────────────────   ───────────────
 message_id                            →  message_id
 text                                  →  text
 source                                →  source
 final_label                           →  final_label
 label_annotator_1, label_annotator_2  →  (both, unchanged)
-label_source                          →  (unchanged: already public, ships so the
-                                          re-annotation disagreement is recomputable)
 template_id, sender_type, split       →  (unchanged)
 capture                               →  (unchanged)
+has_url, has_phone, has_otp, has_money   derived from text
+
+sms_working.csv (split=external rows)    sms_external_qavn.csv
+──────────────────────────────────────   ───────────────
+message_id, text                      →  (unchanged)
+label_source                          →  (unchanged: the benchmark's own label)
+template_id, sender_type              →  (unchanged)
 has_url, has_phone, has_otp, has_money   derived from text
 ──────────────────────────────────────   ───────────────
 participant_id                        ✗  pseudonymisation with few contributors
@@ -88,10 +94,8 @@ sender                                ✗  a rare brandname narrows who receives
 received_month                        ✗  a month plus a sender still narrows it
 label_contributor                     ✗  the contributor's own reading of their own inbox
 adjudicated_by, adjudication_note     ✗  quotes messages, reasons about senders
-redaction_reviewed                    ✗  a process flag, not data
-queued                                ✗  a process flag too; its public trace is the count of
-                                         rows the projection reports leaving out
-label_ai                              ✗  a machine pre-annotation aid, never a shipped label
+redaction_reviewed, queued            ✗  process flags, not data
+final_label, annotator labels         ✗  (on external rows) never produced for them
 ```
 
 Four of the dropped columns are dropped for the same reason and it is worth saying once:
@@ -118,9 +122,9 @@ s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.exa
 **The working file, after annotation and adjudication** (first two rows):
 
 ```
-message_id,participant_id,source,submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed,label_source,queued,label_ai,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
-SMS_00001,P001,contributed,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1,,1,,legitimate,legitimate,,,legitimate,T001,train
-SMS_00002,P001,contributed,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,paste,VCB-Bank,brandname,2027-03,phishing,1,,1,,phishing,phishing,,,phishing,T017,test
+message_id,participant_id,source,submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed,label_source,queued,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
+SMS_00001,P001,contributed,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1,,1,legitimate,legitimate,,,legitimate,T001,train
+SMS_00002,P001,contributed,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,paste,VCB-Bank,brandname,2027-03,phishing,1,,1,phishing,phishing,,,phishing,T017,test
 ```
 
 Note the second row's sender: `VCB-Bank` against the real `VCB`. That is the kind of detail

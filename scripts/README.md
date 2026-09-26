@@ -13,12 +13,12 @@ screenshots in a .zip ──────────────→  sms_transcr
                                        hand against each image → finalize → ingest/<token>.csv
                                        sms_collect.py --ingest → data/raw/.../submissions.csv
                                        sms_annotate.py init → data/private/sms_working.csv
-                                       sms_import.py <published corpus> → appended, for re-annotation
+                                       sms_import.py <published corpus> → appended as external benchmark
                                        sms_annotate.py label --annotator 1   (independently: 2)
                                        sms_annotate.py adjudicate --by <name> → final_label
                                        sms_templates.py --assign → template_id
                                        sms_split.py --assign → split
-                                       sms_publish.py → data/sms_dataset.csv (at deposit)
+                                       sms_publish.py → data/sms_dataset.csv + sms_external_qavn.csv (at deposit)
 ```
 
 | script | what it does, and the rule it enforces |
@@ -26,11 +26,11 @@ screenshots in a .zip ──────────────→  sms_transcr
 | `redact.html` | the redaction page a contributor opens offline on their own phone. Holds **the one copy of the redaction rules**; `sms_transcribe.py` and `sms_templates.py` read them out of this file, so the routes cannot drift. |
 | `sms_transcribe.py` | the author's side of the screenshot route: `extract` re-encodes images from pixels alone (no name or metadata survives), OCRs them and writes a draft; the hand check sits between the two commands; `finalize` redacts, refuses rows that still fail the schema, and **deletes the images**. Gated: receiving screenshots is collecting. |
 | `sms_collect.py` | the collector. `--check` prints what still blocks collection; `--ingest` validates each submission row (reviewed, sender type, month format, capture route) and appends to `submissions.csv`. Gated. |
-| `sms_import.py` | the imported subset (protocol §1): a published corpus's rows appended to the working file for blind re-annotation — placeholder tokens mapped by an allowlist, the source's binary label kept in `label_source` where no annotator sees it, rows failing SCHEMA rule 2 dropped and named, never repaired. The annotation queue is set here too (§5): every scam row, a seeded sample of the benign ones; the rest never ship. Not collection, so not gated. |
+| `sms_import.py` | the external benchmark (protocol §1, §7): a published corpus's rows appended as a held-out test set — placeholder tokens mapped by an allowlist, the source's own binary label kept in `label_source`, marked `split=external` and `queued=0` so they are never annotated and never in the train/val/test split. Rows failing SCHEMA rule 2 dropped and named, never repaired. Not collection, so not gated. |
 | `sms_annotate.py` | `init` builds the working file (message_id, participant_id — the reason `data/` is private); `label` shows an annotator **the text and nothing else**, so the two annotators and the contributor stay independent; `adjudicate` finalizes agreements without an adjudicator and decides the rest with a recorded name and a one-line note; `report` prints Cohen's kappa, disagreements per class pair and the share adjudicated — whatever they show. |
 | `sms_templates.py` | groups messages into templates on a normalized view (URLs and amounts tokenized for grouping only), word 4-shingles, Jaccard τ = 0.8, connected components; reports τ = 0.7/0.9 beside it so chaining is visible. `--assign` writes `template_id`. |
 | `sms_split.py` | the fixed 70/15/15 split, assigned **per template, never per message**; greedy over seeded restarts, scored on size and label mix; seed and restart count are constants in the file, so the split reproduces from the working file alone. `--assign` writes `split`. |
-| `sms_publish.py` | the projection of SCHEMA_raw §3, mechanical because a promise about a manual step is worth nothing: keeps SCHEMA.md's columns, derives the four `has_*` flags from redact.html's patterns and the placeholders, and refuses a working file with holes — `uncertain` never ships, and neither does a row without a template or a split. |
+| `sms_publish.py` | the projection of SCHEMA_raw §3, mechanical because a promise about a manual step is worth nothing: writes two files — `sms_dataset.csv` (contributed, annotated) and `sms_external_qavn.csv` (the held-out benchmark with its own `label_source`). Keeps SCHEMA.md's columns, derives the four `has_*` flags from redact.html's patterns, and refuses to ship a train/val/test row with holes — `uncertain` never ships, nor a row without a template or a split. |
 
 `label` and `adjudicate` are interactive and run in a terminal; everything else is batch. The
 report modes (`sms_templates.py`, `sms_split.py`, `sms_annotate.py report`) write nothing and are

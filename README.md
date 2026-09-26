@@ -48,10 +48,11 @@ notifications, messages with a brandname or shortcode where there is no human au
 rule contributors are given is mechanical: a message from a personal phone number is not sent,
 whatever it says.
 
-The corpus also carries an **imported subset** (protocol §1): the rows of a published Vietnamese
-SMS corpus, taken under its CC BY 4.0 licence and re-labelled here by the same two annotators
-under the same three classes, with the source's own label shipped beside the new one so the
-disagreement the paper reports can be recomputed. Every row names its subset in `source`.
+Beside the contributed corpus sits an **external benchmark** (protocol §1, §7): the rows of a
+published Vietnamese SMS corpus, taken under its CC BY 4.0 licence and held out as an independent
+test set. It is **not** merged in and **not** re-labelled — it keeps the source's own labels, a
+model trained here is scored on it, and the paper reports how far the two label schemes diverge
+rather than correcting theirs. It ships as its own file, `sms_external_qavn.csv`.
 
 **Redaction happens on the contributor's device.** The contributor copies each message into an
 offline page on their own phone, reviews the redacted text, and sends only that; the raw text never
@@ -90,8 +91,8 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `scripts/sms_annotate.py` | the working file and its labels: blind labelling by two annotators, adjudication with a recorded note, and the agreement report |
 | `scripts/sms_templates.py` | template grouping on a normalized view of the text, per protocol §6 |
 | `scripts/sms_split.py` | the fixed template-disjoint 70/15/15 split, per protocol §7 |
-| `scripts/sms_publish.py` | the projection of SCHEMA_raw §3: the published file from the working file, by dropping columns; refuses a working file with holes |
-| `scripts/sms_import.py` | the imported subset: a published corpus's rows mapped into the working file for blind re-annotation, its own label kept beside for comparison |
+| `scripts/sms_publish.py` | the projection of SCHEMA_raw §3: `sms_dataset.csv` (contributed) and `sms_external_qavn.csv` (the benchmark), by dropping columns; refuses to ship a split row with holes |
+| `scripts/sms_import.py` | the external benchmark: a published corpus's rows mapped into the working file, held out (`split=external`), never annotated, its own label kept |
 | `scripts/README.md` | the pipeline in the order it runs, and what each stage refuses |
 | `tests/` | the redaction routes held to one list of cases, and the later stages to their invariants — template-disjointness, seeded reproducibility, the projection's exact columns: `python3 -m unittest discover tests` |
 | `examples/EXAMPLE_synthetic.csv` | six invented rows showing the shape; not collected data, nobody sent them |

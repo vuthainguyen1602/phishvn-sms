@@ -206,9 +206,10 @@ class Import(unittest.TestCase):
             self.assertEqual([r["message_id"] for r in rows], ["SMS_00001", "QAV_COM_1"])
             imported = rows[1]
             self.assertEqual(imported["text"], "Tang <AMOUNT> khi soan KM gui 191")
+            # external benchmark: source label kept, held out, never annotated
             self.assertEqual((imported["source"], imported["capture"], imported["label_source"],
-                              imported["received_month"], imported["participant_id"]),
-                             ("qavn", "imported", "benign", "2026-05", ""))
+                              imported["split"], imported["queued"], imported["participant_id"]),
+                             ("qavn", "imported", "benign", "external", "0", ""))
             self.assertIn("COM_2", out)
             with mock.patch.object(I, "WORKING", w), \
                  mock.patch.object(sys, "argv", ["x", src]), self.assertRaises(SystemExit):
@@ -240,7 +241,9 @@ class Publish(unittest.TestCase):
                              ["0", "0", "1", "1"])
 
     def test_refuses_holes(self):
-        for hole in ({"final_label": "uncertain"}, {"template_id": ""}, {"split": "dev"}):
+        # a row that IS in the train/val/test split but incomplete must block publication
+        for hole in ({"final_label": "uncertain"}, {"template_id": ""},
+                     {"sender_type": "0912345678"}):
             with tempfile.TemporaryDirectory() as d:
                 w, out = os.path.join(d, "w.csv"), os.path.join(d, "out.csv")
                 _write(w, A.W_FIELDS, [self._row(1, "t", **hole)])
@@ -248,6 +251,24 @@ class Publish(unittest.TestCase):
                      self.assertRaises(SystemExit):
                     _quiet(P.main)
                 self.assertFalse(os.path.exists(out), f"published despite {hole}")
+
+    def test_external_ships_separately(self):
+        with tempfile.TemporaryDirectory() as d:
+            w, out, ext = (os.path.join(d, x) for x in ("w.csv", "out.csv", "ext.csv"))
+            _write(w, A.W_FIELDS, [
+                self._row(1, "Ma OTP la <OTP>"),
+                {f: "" for f in A.W_FIELDS} | {"message_id": "QAV_COM_1",
+                    "text": "Soan KM gui <NUMBER>", "source": "qavn", "capture": "imported",
+                    "sender_type": "unknown", "label_source": "benign",
+                    "template_id": "T099", "split": "external", "queued": "0"}])
+            with mock.patch.object(sys, "argv", ["x", w, "--out", out, "--ext-out", ext]):
+                _quiet(P.main)
+            prim, extrows = _read(out), _read(ext)
+            self.assertEqual([r["message_id"] for r in prim], ["SMS_00001"])  # external excluded
+            self.assertEqual(list(prim[0]), P.PUB_FIELDS)
+            self.assertEqual([r["message_id"] for r in extrows], ["QAV_COM_1"])
+            self.assertEqual(list(extrows[0]), P.EXT_FIELDS)  # its own columns, label_source kept
+            self.assertEqual(extrows[0]["label_source"], "benign")
 
 
 if __name__ == "__main__":
