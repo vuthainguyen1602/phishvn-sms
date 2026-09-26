@@ -33,9 +33,9 @@ WORKING = os.path.join(ROOT, "data", "private", "sms_working.csv")
 OUT = os.path.join(ROOT, "data", "sms_dataset.csv")
 # SCHEMA.md, in its order. Everything in the working file and not here is dropped, unnamed:
 # naming the dropped columns twice would let the two lists drift.
-PUB_FIELDS = ["message_id", "text", "capture", "final_label", "label_annotator_1",
-              "label_annotator_2", "template_id", "sender_type", "has_url", "has_phone",
-              "has_otp", "has_money", "split"]
+PUB_FIELDS = ["message_id", "text", "source", "capture", "final_label", "label_annotator_1",
+              "label_annotator_2", "label_source", "template_id", "sender_type", "has_url",
+              "has_phone", "has_otp", "has_money", "split"]
 LABELS = ("legitimate", "spam", "phishing")
 SPLITS = ("train", "validation", "test")
 

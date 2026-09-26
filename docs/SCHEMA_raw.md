@@ -47,9 +47,11 @@ labels their own inbox knowing the context, which is exactly the knowledge an an
 
 | field | added by | meaning |
 |---|---|---|
-| `message_id` | ingest | `SMS_00001`, assigned in ingest order |
-| `participant_id` | ingest | `P001`. **The reason this file is private.** |
-| *(all submission fields)* | | carried through unchanged |
+| `message_id` | ingest / import | `SMS_00001` in ingest order; `QAV_` plus the source corpus's id for imported rows |
+| `participant_id` | ingest | `P001`. **The reason this file is private.** Empty on imported rows, which have no contributor. |
+| `source` | ingest / import | `contributed`, or the imported corpus's tag (`qavn`) — PROTOCOL §1 |
+| *(all submission fields)* | | carried through unchanged; an imported row fills only `text`, `capture` (`imported`) and `sender_type` (`unknown`) |
+| `label_source` | import | imported rows only: the source corpus's own binary label, shown to the adjudicator and never to an annotator |
 | `label_annotator_1` | annotation | independent |
 | `label_annotator_2` | annotation | independent |
 | `adjudicated_by` | adjudication | who decided, where the two disagreed or either said `uncertain` |
@@ -69,8 +71,11 @@ sms_working.csv                          sms_dataset.csv
 ──────────────────────────────────────   ───────────────
 message_id                            →  message_id
 text                                  →  text
+source                                →  source
 final_label                           →  final_label
 label_annotator_1, label_annotator_2  →  (both, unchanged)
+label_source                          →  (unchanged: already public, ships so the
+                                          re-annotation disagreement is recomputable)
 template_id, sender_type, split       →  (unchanged)
 capture                               →  (unchanged)
 has_url, has_phone, has_otp, has_money   derived from text
@@ -91,10 +96,11 @@ knows the group could use it to work out whose messages they are reading.
 
 ## 4. Example rows
 
-Invented, as in `SCHEMA.md`. Nobody sent these. They are the same six messages as
-`examples/EXAMPLE_synthetic.csv`, one stage earlier: `examples/EXAMPLE_submission_synthetic.csv` and
-`examples/EXAMPLE_working_synthetic.csv` hold them as files, and dropping the columns of §3 from the working
-file gives the published example exactly.
+Invented, as in `SCHEMA.md`. Nobody sent these. They are the same messages as
+`examples/EXAMPLE_synthetic.csv`, one stage earlier: `examples/EXAMPLE_submission_synthetic.csv`
+holds the six contributed ones as a submission file (the imported row never was a submission),
+`examples/EXAMPLE_working_synthetic.csv` holds all seven as the working file, and the published
+example is produced from it by `scripts/sms_publish.py`, not by hand.
 
 **A submission file** (first two rows):
 

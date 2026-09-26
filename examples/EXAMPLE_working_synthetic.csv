@@ -1,7 +1,8 @@
-message_id,participant_id,submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
-SMS_00001,P001,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1,legitimate,legitimate,,,legitimate,T001,train
-SMS_00002,P001,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,paste,VCB-Bank,brandname,2027-03,phishing,1,phishing,phishing,,,phishing,T017,test
-SMS_00003,P002,s2c84e07,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,screenshot,8079,shortcode,2027-03,spam,1,spam,spam,,,spam,T029,train
-SMS_00004,P002,s2c84e07,Ban da trung thuong 100.000.000d. Goi ngay <PHONE> de nhan.,paste,TB-QUA,unknown,2027-03,phishing,1,phishing,spam,adjudicator,false pretext (a prize never entered) plus a call-back: guideline signal 5,phishing,T041,validation
-SMS_00005,P001,s91d5b2a,Diem thi hoc ky da co tren cong thong tin sinh vien.,paste,DAIHOC-X,brandname,2027-03,legitimate,1,legitimate,legitimate,,,legitimate,T006,train
-SMS_00006,P001,s91d5b2a,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,paste,VCB,brandname,2027-03,legitimate,1,legitimate,legitimate,,,legitimate,T002,train
+message_id,participant_id,source,submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed,label_source,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
+SMS_00001,P001,contributed,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1,,legitimate,legitimate,,,legitimate,T001,train
+SMS_00002,P001,contributed,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,paste,VCB-Bank,brandname,2027-03,phishing,1,,phishing,phishing,,,phishing,T017,test
+SMS_00003,P002,contributed,s2c84e07,KHUYEN MAI 50% toan bo don hang. LH <PHONE>,screenshot,8079,shortcode,2027-03,spam,1,,spam,spam,,,spam,T029,train
+SMS_00004,P002,contributed,s2c84e07,Ban da trung thuong 100.000.000d. Goi ngay <PHONE> de nhan.,paste,TB-QUA,unknown,2027-03,phishing,1,,phishing,spam,adjudicator,false pretext (a prize never entered) plus a call-back: guideline signal 5,phishing,T041,validation
+SMS_00005,P001,contributed,s91d5b2a,Diem thi hoc ky da co tren cong thong tin sinh vien.,paste,DAIHOC-X,brandname,2027-03,legitimate,1,,legitimate,legitimate,,,legitimate,T006,train
+SMS_00006,P001,contributed,s91d5b2a,Tk cua ban +<AMOUNT>. So du <AMOUNT>. ND: chuyen khoan.,paste,VCB,brandname,2027-03,legitimate,1,,legitimate,legitimate,,,legitimate,T002,train
+QAV_COM_0000,,qavn,,Soan KM gui <NUMBER> de nhan uu dai data cua tong dai.,imported,,unknown,,,,benign,spam,spam,,,spam,T054,train

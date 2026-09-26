@@ -39,13 +39,19 @@ oversight.
 
 ## What is collected, and what is deliberately not
 
-**Only the scam class.** An ordinary message in a student's phone was written by somebody else —
-a friend, a relative, a bank clerk — who is not present to consent. A student can give away what
-is theirs; nobody can consent on behalf of a sender. A scam message has no such sender: it was
-broadcast to strangers by someone with no privacy interest in it.
+**Never a message a person wrote.** A message from a friend, a relative or a colleague was
+written by somebody who is not present to consent; a contributor can give away what is their own,
+and nobody can consent on a sender's behalf. Two kinds of message clear that line and are
+collected: **scam and spam** — broadcast to strangers by someone with no privacy interest in
+them — and **legitimate messages sent by a machine**: one-time codes, bank and operator
+notifications, messages with a brandname or shortcode where there is no human author to ask. The
+rule contributors are given is mechanical: a message from a personal phone number is not sent,
+whatever it says.
 
-The negative class therefore comes from a SIM honeypot, a line with no personal traffic, or from
-the ham half of an already published corpus under its licence. Never from a personal inbox.
+The corpus also carries an **imported subset** (protocol §1): the rows of a published Vietnamese
+SMS corpus, taken under its CC BY 4.0 licence and re-labelled here by the same two annotators
+under the same three classes, with the source's own label shipped beside the new one so the
+disagreement the paper reports can be recomputed. Every row names its subset in `source`.
 
 **Redaction happens on the contributor's device.** The contributor copies each message into an
 offline page on their own phone, reviews the redacted text, and sends only that; the raw text never
@@ -85,6 +91,7 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `scripts/sms_templates.py` | template grouping on a normalized view of the text, per protocol §6 |
 | `scripts/sms_split.py` | the fixed template-disjoint 70/15/15 split, per protocol §7 |
 | `scripts/sms_publish.py` | the projection of SCHEMA_raw §3: the published file from the working file, by dropping columns; refuses a working file with holes |
+| `scripts/sms_import.py` | the imported subset: a published corpus's rows mapped into the working file for blind re-annotation, its own label kept beside for comparison |
 | `scripts/README.md` | the pipeline in the order it runs, and what each stage refuses |
 | `tests/` | the redaction routes held to one list of cases, and the later stages to their invariants — template-disjointness, seeded reproducibility, the projection's exact columns: `python3 -m unittest discover tests` |
 | `examples/EXAMPLE_synthetic.csv` | six invented rows showing the shape; not collected data, nobody sent them |

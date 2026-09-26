@@ -15,8 +15,10 @@ assignment is the one closest to both the 70/15/15 message fractions and, in eac
 label mix of the whole file. Seed and restart count are constants below, so the split is
 reproducible from the working file alone.
 
-The label balanced against is `final_label` where the file has one (the working file after
-adjudication), else `label_contributor` (earlier stages), else none — size balance still holds.
+The label balanced against is, per row, the first of `final_label`, `label_contributor`,
+`label_source` that holds a value — adjudicated when it exists, the contributor's or the source
+corpus's opinion before then. Vocabularies mix across those columns; for balancing that is fine,
+proportions of each value are held even, and none of this feeds any label that ships.
 
 RUN:
   python3 scripts/sms_split.py <file.csv>            report the split it would assign
@@ -78,16 +80,17 @@ def main() -> int:
         fields, rows = reader.fieldnames or [], list(reader)
     if "template_id" not in fields:
         raise SystemExit(f"[!] {a.csv} has no template_id column: run sms_templates.py --assign first")
-    # The first label column that actually holds values: a working file before adjudication has
-    # an empty final_label column, and balancing against emptiness balances nothing.
-    label_col = next((c for c in ("final_label", "label_contributor")
-                      if c in fields and any(r[c].strip() for r in rows)), None)
+    # Per row, the first label column that holds a value: a working file before adjudication has
+    # an empty final_label column, and an imported row carries label_source instead of a
+    # contributor's label. Balancing against emptiness balances nothing.
+    cols = [c for c in ("final_label", "label_contributor", "label_source") if c in fields]
+    label = lambda r: next((r[c].strip() for c in cols if r[c].strip()), "")
 
     by_tpl = defaultdict(list)
     for i, r in enumerate(rows):
         by_tpl[r["template_id"]].append(i)
     sizes = {t: len(m) for t, m in by_tpl.items()}
-    labels_of = {t: Counter(rows[i][label_col] for i in m) if label_col else Counter()
+    labels_of = {t: Counter(x for x in (label(rows[i]) for i in m) if x)
                  for t, m in by_tpl.items()}
 
     best, best_err = None, None
@@ -102,7 +105,7 @@ def main() -> int:
     for s in FRACTIONS:
         tpls = sorted(t for t in best if best[t] == s)
         idx = [i for t in tpls for i in by_tpl[t]]
-        mix = dict(Counter(rows[i][label_col] for i in idx)) if label_col else {}
+        mix = dict(Counter(x for x in (label(rows[i]) for i in idx) if x))
         print(f"{s:6} {len(idx):>4} {100 * len(idx) / total:>5.1f} {len(tpls):>9}  {mix}")
 
     if not a.assign:

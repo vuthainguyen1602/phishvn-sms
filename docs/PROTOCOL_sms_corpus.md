@@ -41,6 +41,17 @@ nobody can consent on a sender's behalf. This is also the right line for the pro
 from a friend teaches a smishing detector nothing. The rule the guideline states is mechanical —
 **a message from a personal phone number is not collected, whatever it says.**
 
+**The corpus has two subsets, and every row says which it is in `source`.** Beside the
+contributed subset above sits an **imported subset**: the rows of the *Quality-Assured
+Vietnamese SMS Phishing Dataset* (CC BY 4.0, credited), taken under its licence and
+**re-annotated here** by the same two annotators, blind, under §4's three classes. Importing
+published rows is not collection and needs no consent chain of its own; what it needs is honesty
+about provenance, so imported rows carry `capture = imported`, no participant, the source's own
+placeholder tokens mapped mechanically to this corpus's, and the source's binary label kept in
+`label_source` for §5's comparison — never shown to an annotator. Rows that fail SCHEMA.md
+rule 2 after mapping are dropped and counted, not repaired: in the event, 314 of 2,991, most
+carrying a one-time code the source's anonymisation missed.
+
 ## 2. The consent design
 
 Contributors may be students, and the author teaches. A student asked by a lecturer for phone data
@@ -129,6 +140,12 @@ adjudication, the **disagreement rate per class pair**, and the share adjudicate
 a result about how separable these classes are in practice, and it is published as one rather
 than repaired by relabelling until the annotators agree.
 
+Imported rows are labelled the same way, by the same annotators, equally blind. A fourth number
+is reported for them: **how often `final_label` disagrees with the source corpus's own binary
+label** — per direction, since a benign row re-labelled `spam` (an operator's advert) and a scam
+row re-labelled `legitimate` are different findings. That number is the empirical case for three
+classes, or against them; either way it is reported.
+
 ## 6. Templates
 
 Scam SMS is sent by template, and after redaction fifty one-time-code messages become the same
@@ -171,13 +188,15 @@ reports it.
 **Leave-one-contributor-out** is reported beside it: train on all contributors but one, test on
 the one. With **30** contributors that is as many folds, each a single person, so the folds
 are reported **individually and never averaged** — it answers "does this transfer to an inbox it
-has not seen" qualitatively, and estimates nothing.
+has not seen" qualitatively, and estimates nothing. Imported rows have no contributor and sit in
+every LOCO training set, never in a held-out fold.
 
 ## 8. What ships, and what does not
 
-`sms_dataset.csv`: `message_id`, `text` (redacted), `capture`, `final_label`, `label_annotator_1`,
-`label_annotator_2`, `template_id`, `sender_type`, `has_url`, `has_phone`, `has_otp`,
-`has_money`, `split`. The derived flags are produced by a published regular expression, not by eye.
+`sms_dataset.csv`: `message_id`, `text` (redacted), `source`, `capture`, `final_label`,
+`label_annotator_1`, `label_annotator_2`, `template_id`, `sender_type`, `has_url`, `has_phone`,
+`has_otp`, `has_money`, `split`. The derived flags are produced by a published regular
+expression, not by eye.
 
 **`participant_id` does not ship.** With a handful of contributors it is pseudonymisation rather
 than anonymisation: anyone who knows the group could read off which bank or which school each of
@@ -205,7 +224,10 @@ The claim is made against what actually exists, stated precisely because a revie
   class carries the operators' own promotional messages — a sample audit found `[QC]` data
   bundles, prize draws and a fast-loan advert labelled benign — where §4 would call every one of
   them `spam` whoever sent it. A binary corpus cannot express that difference; this one can, and
-  reports it.
+  reports it. Its anonymisation also missed what a mechanical check catches: importing it here
+  (§1) dropped 314 of 2,991 rows for SCHEMA.md rule 2, most carrying an unmasked one-time code
+  in a bank message its README declares clean. The paper states this as measurement, not blame:
+  it is what "quality-assured by hand" looks like beside a rule a script can hold.
 - The 2017 operator corpus (5,557 ham and 1,042 spam from Viettel and Vinaphone) is available on
   request only, and whether its texts keep URLs is undocumented; the paper says that and no more,
   unless its authors answer.

@@ -39,9 +39,11 @@ SUBMISSIONS = os.path.join(ROOT, "data", "raw", "sms_corpus", "submissions.csv")
 WORKING = os.path.join(ROOT, "data", "private", "sms_working.csv")
 # SCHEMA_raw.md §2, in its order. template_id and split are carried if the source has them and
 # left empty otherwise: sms_templates.py and sms_split.py fill them on this file later.
-W_FIELDS = (["message_id", "participant_id"] + FIELDS
-            + ["label_annotator_1", "label_annotator_2", "adjudicated_by", "adjudication_note",
-               "final_label", "template_id", "split"])
+# `source` separates the contributed subset from imported ones; `label_source` holds an imported
+# corpus's own label, kept out of every screen an annotator sees (§5: the re-annotation is blind).
+W_FIELDS = (["message_id", "participant_id", "source"] + FIELDS
+            + ["label_source", "label_annotator_1", "label_annotator_2", "adjudicated_by",
+               "adjudication_note", "final_label", "template_id", "split"])
 LABELS = {"1": "legitimate", "2": "spam", "3": "phishing"}
 RULE = "§4: not phishing because it looks suspicious — evidence of deceptive intent, or it is spam"
 
@@ -74,7 +76,8 @@ def init(sub: str, map_path: str | None) -> int:
         if tok not in pid:
             pid[tok] = f"P{len(set(pid.values())) + 1:03d}"
         out.append({**{f: r.get(f, "") for f in W_FIELDS},
-                    "message_id": f"SMS_{i:05d}", "participant_id": pid[tok]})
+                    "message_id": f"SMS_{i:05d}", "participant_id": pid[tok],
+                    "source": "contributed"})
     os.makedirs(os.path.dirname(WORKING), exist_ok=True)
     _write(WORKING, out)
     per = Counter(r["participant_id"] for r in out)
@@ -132,7 +135,9 @@ def adjudicate(by: str) -> int:
         print(f"\n--- {r['message_id']} " + "-" * 40)
         print(r["text"])
         print(f"    sender: {r['sender'] or '(none)'} ({r['sender_type']}), capture: {r['capture']}")
-        print(f"    annotator 1: {a}   annotator 2: {b}   contributor: {r['label_contributor']}")
+        third = (f"source: {r['label_source']}" if r.get("label_source", "").strip()
+                 else f"contributor: {r['label_contributor']}")
+        print(f"    annotator 1: {a}   annotator 2: {b}   {third}")
         while True:
             k = input("final [1] legitimate  [2] spam  [3] phishing  [q] save and quit > ").strip().lower()
             if k in LABELS or k == "q":

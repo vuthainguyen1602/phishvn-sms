@@ -10,6 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(REPO, "scripts"))
 import sms_annotate as A    # noqa: E402
+import sms_import as I      # noqa: E402
 import sms_publish as P     # noqa: E402
 import sms_split as S       # noqa: E402
 import sms_templates as T   # noqa: E402
@@ -170,6 +171,38 @@ class Annotate(unittest.TestCase):
                 out = _quiet(A.report)
             self.assertIn("kappa (before adjudication): 0.500", out)
             self.assertIn("sent to adjudication: 1 (25.0%)", out)
+
+
+class Import(unittest.TestCase):
+    def test_token_mapping_is_an_allowlist(self):
+        # PII tokens map; [TB]/[QC] and brand prefixes are message text and must survive.
+        self.assertEqual(I.convert("[TB] Tang [MONEY] ngay [DATE], soan KM gui [NUMBER]"),
+                         "[TB] Tang <AMOUNT> ngay <DATE>, soan KM gui <NUMBER>")
+
+    def test_append_skip_and_rerun_refusal(self):
+        with tempfile.TemporaryDirectory() as d:
+            w, src = os.path.join(d, "working.csv"), os.path.join(d, "src.csv")
+            _write(w, A.W_FIELDS, [{f: "" for f in A.W_FIELDS}
+                                   | {"message_id": "SMS_00001", "text": "t"}])
+            _write(src, ["message_id", "date", "message", "label"], [
+                {"message_id": "COM_1", "date": "28/05/2026",
+                 "message": "Tang [MONEY] khi soan KM gui 191", "label": "0"},
+                {"message_id": "COM_2", "date": "",
+                 "message": "Ma OTP la 066595", "label": "0"}])  # rule 2: dropped, not repaired
+            with mock.patch.object(I, "WORKING", w), \
+                 mock.patch.object(sys, "argv", ["x", src]):
+                out = _quiet(I.main)
+            rows = _read(w)
+            self.assertEqual([r["message_id"] for r in rows], ["SMS_00001", "QAV_COM_1"])
+            imported = rows[1]
+            self.assertEqual(imported["text"], "Tang <AMOUNT> khi soan KM gui 191")
+            self.assertEqual((imported["source"], imported["capture"], imported["label_source"],
+                              imported["received_month"], imported["participant_id"]),
+                             ("qavn", "imported", "benign", "2026-05", ""))
+            self.assertIn("COM_2", out)
+            with mock.patch.object(I, "WORKING", w), \
+                 mock.patch.object(sys, "argv", ["x", src]), self.assertRaises(SystemExit):
+                _quiet(I.main)  # appending twice would duplicate the subset
 
 
 class Publish(unittest.TestCase):
