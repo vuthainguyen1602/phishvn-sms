@@ -190,9 +190,25 @@ checked; everything else unredacted is deleted once the redacted corpus is fixed
 ## 9. What the paper may claim
 
 One small group, one window, volunteers. It is not a sample of Vietnamese smishing, and the
-abstract says so. The corpus's contribution is that it is **labelled by two annotators with the
-agreement reported, grouped by template, and split so that no template crosses the boundary** —
-which the corpora it sits beside are not.
+abstract says so. The corpus's contribution is **method, not novelty of content**: two annotators
+with the agreement reported, three classes with a published collapse rule, templates grouped by a
+stated computation, and a split no template crosses.
+
+The claim is made against what actually exists, stated precisely because a reviewer will check:
+
+- The public corpus this project audits — the *Quality-Assured Vietnamese SMS Phishing Dataset*
+  (CC BY 4.0, 2,991 messages, binary labels) — **keeps URLs**, including live phishing domains,
+  and the paper must not claim otherwise. What it does not have is verifiable labelling — a
+  shared rulebook, applied by a team, with no inter-annotator agreement reported — or a
+  leakage-free split (§7: 7.9% of its test rows repeat a training text). Its binary boundary is
+  also a different question from §4's: it separates *genuine sender* from *scam*, so its benign
+  class carries the operators' own promotional messages — a sample audit found `[QC]` data
+  bundles, prize draws and a fast-loan advert labelled benign — where §4 would call every one of
+  them `spam` whoever sent it. A binary corpus cannot express that difference; this one can, and
+  reports it.
+- The 2017 operator corpus (5,557 ham and 1,042 spam from Viettel and Vinaphone) is available on
+  request only, and whether its texts keep URLs is undocumented; the paper says that and no more,
+  unless its authors answer.
 
 ## 10. Ethics approval
 
