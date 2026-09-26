@@ -52,7 +52,9 @@ of its own; what it needs is honesty about provenance, so external rows carry `s
 `capture = imported`, `split = external`, no participant, and the source's placeholder tokens
 mapped mechanically to this corpus's. Rows that fail SCHEMA.md rule 2 after mapping are dropped
 and counted, not repaired: in the event, 315 of 2,991, most carrying a one-time code the source's
-anonymisation missed.
+anonymisation missed. The exact copy used — its authors, licence, citation and a SHA-256 that
+pins it to the byte — is recorded in `docs/EXTERNAL_QAVN.md`, so the benchmark number the paper
+reports can be reproduced against the same data.
 
 ## 2. The consent design
 
@@ -245,7 +247,8 @@ The claim is made against what actually exists, stated precisely because a revie
   (§1) dropped 315 of 2,991 rows for SCHEMA.md rule 2, most carrying an unmasked one-time code in
   a bank message its README declares clean — what "quality-assured by hand" looks like beside a
   rule a script can hold. Neither point is a claim that the corpus is wrong; both are stated with
-  its authors credited, and its own labels shipped unchanged for anyone to check.
+  its authors credited (`docs/EXTERNAL_QAVN.md`: names, licence, citation, and a SHA-256 pinning
+  the exact copy) and its own labels shipped unchanged for anyone to check.
 - The 2017 operator corpus (5,557 ham and 1,042 spam from Viettel and Vinaphone) is available on
   request only, and whether its texts keep URLs is undocumented; the paper says that and no more,
   unless its authors answer.

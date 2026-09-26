@@ -73,7 +73,8 @@ the guideline treats as evidence of deceptive intent. Both original labels stay 
 
 The *Quality-Assured Vietnamese SMS Phishing Dataset* (CC BY 4.0, credited), held out as an
 external test set (PROTOCOL §7). It is **not** part of `sms_dataset.csv` and is not annotated by
-this project: it keeps the source corpus's own binary label. A model trained on `sms_dataset.csv`
+this project: it keeps the source corpus's own binary label. The exact copy used — authors,
+licence, citation and a SHA-256 that pins it to the byte — is recorded in `docs/EXTERNAL_QAVN.md`. A model trained on `sms_dataset.csv`
 is scored on it after collapsing its prediction to the source's two classes
 (`legitimate` → `benign`, `spam`/`phishing` → `scam`).
 
