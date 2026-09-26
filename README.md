@@ -1,5 +1,7 @@
 # phishvn-sms
 
+[![tests](https://github.com/vuthainguyen1602/phishvn-sms/actions/workflows/tests.yml/badge.svg)](https://github.com/vuthainguyen1602/phishvn-sms/actions/workflows/tests.yml)
+
 A Vietnamese SMS corpus of scam messages, contributed by consenting students.
 
 ## Nothing has been collected
