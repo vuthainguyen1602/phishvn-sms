@@ -72,6 +72,10 @@ def main() -> int:
 
     with open(a.working, newline="", encoding="utf-8") as fh:
         rows = list(csv.DictReader(fh))
+    # §5: a row outside the annotation queue is never labelled and never ships. It is left out
+    # and counted here, not treated as a hole: the hole check is for rows that should be whole.
+    unqueued = sum(r.get("queued", "1") == "0" for r in rows)
+    rows = [r for r in rows if r.get("queued", "1") != "0"]
     bad = [(r.get("message_id", f"row {i}"), holes(r)) for i, r in enumerate(rows, start=2)]
     bad = [(m, w) for m, w in bad if w]
     if bad:
@@ -87,7 +91,8 @@ def main() -> int:
     labels = Counter(r["final_label"] for r in out)
     splits = Counter(r["split"] for r in out)
     print(f"[+] {len(out)} row(s) -> {os.path.relpath(a.out, ROOT)}; "
-          f"labels {dict(labels)}; splits {dict(splits)}")
+          f"labels {dict(labels)}; splits {dict(splits)}"
+          + (f"; {unqueued} unqueued row(s) left out (§5)" if unqueued else ""))
     return 0
 
 

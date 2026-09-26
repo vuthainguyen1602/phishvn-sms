@@ -42,8 +42,8 @@ WORKING = os.path.join(ROOT, "data", "private", "sms_working.csv")
 # `source` separates the contributed subset from imported ones; `label_source` holds an imported
 # corpus's own label, kept out of every screen an annotator sees (§5: the re-annotation is blind).
 W_FIELDS = (["message_id", "participant_id", "source"] + FIELDS
-            + ["label_source", "label_annotator_1", "label_annotator_2", "adjudicated_by",
-               "adjudication_note", "final_label", "template_id", "split"])
+            + ["label_source", "queued", "label_annotator_1", "label_annotator_2",
+               "adjudicated_by", "adjudication_note", "final_label", "template_id", "split"])
 LABELS = {"1": "legitimate", "2": "spam", "3": "phishing"}
 RULE = "§4: not phishing because it looks suspicious — evidence of deceptive intent, or it is spam"
 
@@ -77,7 +77,7 @@ def init(sub: str, map_path: str | None) -> int:
             pid[tok] = f"P{len(set(pid.values())) + 1:03d}"
         out.append({**{f: r.get(f, "") for f in W_FIELDS},
                     "message_id": f"SMS_{i:05d}", "participant_id": pid[tok],
-                    "source": "contributed"})
+                    "source": "contributed", "queued": "1"})
     os.makedirs(os.path.dirname(WORKING), exist_ok=True)
     _write(WORKING, out)
     per = Counter(r["participant_id"] for r in out)
@@ -92,7 +92,8 @@ def init(sub: str, map_path: str | None) -> int:
 def label(annotator: str) -> int:
     col = f"label_annotator_{annotator}"
     _, rows = _read(WORKING)
-    todo = [r for r in rows if not r[col].strip()]
+    # §5: only queued rows are labelled — every contributed row, and the import's sample.
+    todo = [r for r in rows if not r[col].strip() and r.get("queued", "1") != "0"]
     print(f"{len(todo)} message(s) to label as annotator {annotator}. {RULE}.")
     done = 0
     for r in todo:
@@ -110,7 +111,7 @@ def label(annotator: str) -> int:
         r[col] = "uncertain" if k == "u" else LABELS[k]
         done += 1
     _write(WORKING, rows)
-    left = sum(1 for r in rows if not r[col].strip())
+    left = sum(1 for r in rows if not r[col].strip() and r.get("queued", "1") != "0")
     print(f"\n[+] {done} labelled this session, {left} still empty for annotator {annotator}")
     return 0
 

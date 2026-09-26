@@ -146,6 +146,16 @@ label** — per direction, since a benign row re-labelled `spam` (an operator's 
 row re-labelled `legitimate` are different findings. That number is the empirical case for three
 classes, or against them; either way it is reported.
 
+**Not every imported row is annotated, and the queue is mechanical.** Two annotators cannot
+re-label an import of thousands honestly; pretending otherwise buys coverage with rushed labels.
+The queue is: every contributed row, every imported row the source called scam, and a **seeded
+random sample of 500** of its benign rows — sample size and seed are constants in
+`sms_import.py`, so the queue is a property of the file, chosen by no one's eye. An imported
+benign row outside the sample keeps an empty `final_label`, is left out of the published file
+and counted there (§8), and stays in the working file, where it still serves template grouping
+(§6). The flip rate for the benign direction is therefore an estimate from a random sample, and
+the paper reports it with its denominator, not as a census.
+
 ## 6. Templates
 
 Scam SMS is sent by template, and after redaction fifty one-time-code messages become the same
@@ -194,9 +204,11 @@ every LOCO training set, never in a held-out fold.
 ## 8. What ships, and what does not
 
 `sms_dataset.csv`: `message_id`, `text` (redacted), `source`, `capture`, `final_label`,
-`label_annotator_1`, `label_annotator_2`, `template_id`, `sender_type`, `has_url`, `has_phone`,
-`has_otp`, `has_money`, `split`. The derived flags are produced by a published regular
-expression, not by eye.
+`label_annotator_1`, `label_annotator_2`, `label_source`, `template_id`, `sender_type`,
+`has_url`, `has_phone`, `has_otp`, `has_money`, `split`. The derived flags are produced by a
+published regular expression, not by eye. Only annotated rows ship: an imported benign row
+outside §5's sample never gets a label, and the projection leaves it out and says how many it
+left out.
 
 **`participant_id` does not ship.** With a handful of contributors it is pseudonymisation rather
 than anonymisation: anyone who knows the group could read off which bank or which school each of

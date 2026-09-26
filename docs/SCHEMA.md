@@ -34,7 +34,8 @@ them, and the agreement the paper reports can be checked rather than believed.
    no `@`. Links and broadcast amounts are kept; personal data inside a link and the
    contributor's own balance and account movements are masked (PROTOCOL §3). Redaction failures are
    the one defect that cannot be repaired after publication.
-3. `final_label` is never `uncertain`.
+3. `final_label` is never `uncertain` and never empty: a row outside the annotation queue
+   (PROTOCOL §5) is not published at all.
 4. Every message sharing a `template_id` shares a `split`. **This is the rule the corpus exists
    to keep**, and it is checked rather than assumed.
 5. `has_*` are derived, not typed: `has_url` and `has_money` from the link and amount patterns in

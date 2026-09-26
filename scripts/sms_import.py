@@ -26,7 +26,7 @@ RUN:
 """
 from __future__ import annotations
 
-import argparse, csv, os, re, sys
+import argparse, csv, os, random, re, sys
 from collections import Counter
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -40,6 +40,12 @@ MAP = {"PHONE": "PHONE", "BANK_ACC": "ACCOUNT", "MONEY": "AMOUNT", "DATE": "DATE
        "TIME": "TIME", "NAME": "NAME", "OTP": "OTP", "URL": "URL",
        "NUMBER": "NUMBER", "POINT": "NUMBER"}
 DATE = re.compile(r"(\d{2})/(\d{2})/(\d{4})")
+# §5: two annotators cannot re-label the whole import, and pretending otherwise produces rushed
+# labels. Every scam row is queued; of the benign rows, a seeded sample of this size. A benign
+# row outside the sample keeps queued = 0, is never annotated, never ships, and still counts for
+# template grouping. The seed is a constant so the sample is the file's property, not a session's.
+BENIGN_SAMPLE = 500
+SAMPLE_SEED = 1602
 
 
 def convert(text: str) -> str:
@@ -74,14 +80,20 @@ def main() -> int:
                 "message_id": f"QAV_{r['message_id']}", "source": "qavn",
                 "text": text, "capture": "imported", "sender_type": "unknown",
                 "received_month": f"{m.group(3)}-{m.group(2)}" if m else "",
-                "label_source": "benign" if r["label"].strip() == "0" else "scam"})
+                "label_source": "benign" if r["label"].strip() == "0" else "scam",
+                "queued": "1" if r["label"].strip() != "0" else "0"})
+    benign = [r for r in added if r["label_source"] == "benign"]
+    for r in random.Random(SAMPLE_SEED).sample(benign, min(BENIGN_SAMPLE, len(benign))):
+        r["queued"] = "1"
     with open(WORKING, "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=W_FIELDS)
         w.writeheader()
         w.writerows(rows + added)
     labels = Counter(r["label_source"] for r in added)
+    queued = sum(r["queued"] == "1" for r in added)
     print(f"[+] {len(added)} imported row(s) appended ({dict(labels)}); "
-          f"working file now {len(rows) + len(added)} row(s)")
+          f"{queued} queued for annotation (all scam + {BENIGN_SAMPLE} benign, seed "
+          f"{SAMPLE_SEED}); working file now {len(rows) + len(added)} row(s)")
     if skipped:
         print(f"[i] {len(skipped)} row(s) skipped for SCHEMA.md rule 2, kept out, not repaired:")
         for mid, why in skipped:

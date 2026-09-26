@@ -52,6 +52,7 @@ labels their own inbox knowing the context, which is exactly the knowledge an an
 | `source` | ingest / import | `contributed`, or the imported corpus's tag (`qavn`) — PROTOCOL §1 |
 | *(all submission fields)* | | carried through unchanged; an imported row fills only `text`, `capture` (`imported`) and `sender_type` (`unknown`) |
 | `label_source` | import | imported rows only: the source corpus's own binary label, shown to the adjudicator and never to an annotator |
+| `queued` | ingest / import | 1 if the row is in the annotation queue (PROTOCOL §5): every contributed row, every imported scam row, a seeded sample of imported benign rows. A 0 row is never labelled and never ships. |
 | `label_annotator_1` | annotation | independent |
 | `label_annotator_2` | annotation | independent |
 | `adjudicated_by` | adjudication | who decided, where the two disagreed or either said `uncertain` |
@@ -87,6 +88,8 @@ received_month                        ✗  a month plus a sender still narrows i
 label_contributor                     ✗  the contributor's own reading of their own inbox
 adjudicated_by, adjudication_note     ✗  quotes messages, reasons about senders
 redaction_reviewed                    ✗  a process flag, not data
+queued                                ✗  a process flag too; its public trace is the count of
+                                         rows the projection reports leaving out
 ```
 
 Four of the dropped columns are dropped for the same reason and it is worth saying once:
@@ -113,9 +116,9 @@ s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.exa
 **The working file, after annotation and adjudication** (first two rows):
 
 ```
-message_id,participant_id,submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
-SMS_00001,P001,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1,legitimate,legitimate,,,legitimate,T001,train
-SMS_00002,P001,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,paste,VCB-Bank,brandname,2027-03,phishing,1,phishing,phishing,,,phishing,T017,test
+message_id,participant_id,source,submission_token,text,capture,sender,sender_type,received_month,label_contributor,redaction_reviewed,label_source,queued,label_annotator_1,label_annotator_2,adjudicated_by,adjudication_note,final_label,template_id,split
+SMS_00001,P001,contributed,s7f3a91c,Ma OTP giao dich cua quy khach la <OTP>. Khong chia se ma nay.,paste,VCB,brandname,2027-03,legitimate,1,,1,legitimate,legitimate,,,legitimate,T001,train
+SMS_00002,P001,contributed,s7f3a91c,Tai khoan cua quy khach se bi khoa. Xac minh tai http://vcb-xacminh.example/x7K9q,paste,VCB-Bank,brandname,2027-03,phishing,1,,1,phishing,phishing,,,phishing,T017,test
 ```
 
 Note the second row's sender: `VCB-Bank` against the real `VCB`. That is the kind of detail
