@@ -173,6 +173,16 @@ class Annotate(unittest.TestCase):
             self.assertIn("sent to adjudication: 1 (25.0%)", out)
 
 
+class RedactBoundary(unittest.TestCase):
+    def test_vietnamese_letter_does_not_end_an_amount_unit(self):
+        # "0004100000779007 Trần" once read as digit-run + unit "tr" because the lookahead
+        # excluded only ASCII letters: the account number slipped rule 2 behind a person's name.
+        from sms_transcribe import problems
+        self.assertTrue(problems("ck giup e nha, ocb 0004100000779007 Trần thị thu vân", RULES))
+        for kept in ("Nap 500k nhan uu dai", "Chi 5.000d/ngay", "Vay den 20 trieu"):
+            self.assertEqual(problems(kept, RULES), [], kept)
+
+
 class Import(unittest.TestCase):
     def test_token_mapping_is_an_allowlist(self):
         # PII tokens map; [TB]/[QC] and brand prefixes are message text and must survive.
