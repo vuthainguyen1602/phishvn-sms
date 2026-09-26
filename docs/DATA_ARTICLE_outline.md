@@ -33,7 +33,7 @@ not a sample of Vietnamese smishing. Close with the number of messages and the l
 | How data were acquired | Volunteer contribution (paste via an offline redaction page, or blacked-out screenshots); external benchmark from a published corpus (`EXTERNAL_QAVN.md`) |
 | Data format | Redacted, analysed (labelled, grouped, split) |
 | Description of data collection | Consent-first; only machine-sent messages (scam/spam and legitimate brandname/shortcode traffic); never person-to-person; redaction before the raw text leaves the device |
-| Data source location | Vietnam; contributors' own handsets. External benchmark: [FILL: QAVN source URL] |
+| Data source location | Vietnam; contributors' own handsets. External benchmark: `https://huggingface.co/datasets/trannguyenthaituan/vietnamese_sms_dataset` |
 | Data accessibility | Repository: `https://github.com/vuthainguyen1602/phishvn-sms`; dataset deposited at [FILL: deposit DOI/URL] under [FILL: corpus licence] |
 | Related research article | [FILL: none / the analysis paper if any] |
 

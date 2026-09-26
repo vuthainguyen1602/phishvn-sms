@@ -38,7 +38,8 @@ this project's external benchmark **only if its `full_dataset.csv` has the SHA-2
 | **Records** | 2,991 total — 2,193 `benign` (label 0), 798 `scam` (label 1) |
 | *(the authors' own split, not used here)* | `train.csv` 2,394 · `test.csv` 597 |
 | **Copy obtained** | 2026-08 (local file timestamp; exact download date not recorded) |
-| **Source URL** | *fill in from where the copy was downloaded (e.g. the Hugging Face dataset page); not recorded in the local copy* |
+| **Source URL** | `https://huggingface.co/datasets/trannguyenthaituan/vietnamese_sms_dataset` |
+| **Revision** | *not recorded; the SHA-256 above pins the exact `full_dataset.csv` regardless* |
 
 Verify a copy before use:
 
