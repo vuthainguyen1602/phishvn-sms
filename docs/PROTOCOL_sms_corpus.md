@@ -134,11 +134,25 @@ than repaired by relabelling until the annotators agree.
 Scam SMS is sent by template, and after redaction fifty one-time-code messages become the same
 string. Grouping them is what makes an honest split possible.
 
-Grouping is **computed, not assigned by hand**: messages are lower-cased, placeholder tokens kept,
-whitespace collapsed; each becomes the set of its word 4-shingles; pairs at or above Jaccard
-**τ = 0.8** are linked and a template is a connected component. Results at **τ = 0.7 and 0.9** are
-reported beside the primary so that chaining is visible. This is the method the kit-reuse study
-registers, reused here because it is already written and already argued.
+Grouping is **computed, not assigned by hand**, and it runs on a **normalized view** of the text
+that exists only for this step: messages are lower-cased, whitespace collapsed, placeholder tokens
+kept, and every URL and money amount is replaced by a `<URL>` or `<AMT>` token. The published text
+keeps both — a link is the strongest signal a phishing message carries, and the size of a lure is
+a signal too — but for grouping they are the slots a campaign rotates, and leaving them in place
+splits one template into many. The amount patterns for this step extend the redaction rules with
+the short forms (one to three digits plus k/tr/tỷ) that redaction rightly ignores — two digits
+identify nobody — but grouping must not. Each normalized message becomes the set of its word
+4-shingles; pairs at or above Jaccard **τ = 0.8** are linked and a template is a connected
+component. Results at **τ = 0.7 and 0.9** are reported beside the primary so that chaining is
+visible.
+
+The shingling, the thresholds and the connected components are the method the kit-reuse study
+registers; the normalization is this protocol's one departure from it, adopted after a pilot
+batch showed the failure it repairs. A scam sent twice with one edited character in the domain,
+or with a different lure amount, fell below τ even at 0.7: in a message of eight words, one
+changed word destroys four shingles. Counted as different templates, the two copies then land on
+opposite sides of a template-disjoint split — the leakage §7 exists to prevent, back in through
+another door.
 
 A hand-assigned `template_id` would be unreproducible, and template leakage is exactly the defect
 this corpus exists to avoid.
