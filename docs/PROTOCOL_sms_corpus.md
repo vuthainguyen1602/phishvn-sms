@@ -132,8 +132,19 @@ Evidence of deceptive intent is required, and where it is absent the message is 
 ## 5. Annotation, and what is reported about it
 
 Two annotators label every message **independently**, neither seeing the other's labels nor the
-contributor's own. Disagreements and every `uncertain` go to an adjudicator, whose decision is
-`final_label`.
+contributor's own. **Both annotators are people.** Disagreements and every `uncertain` go to an
+adjudicator, whose decision is `final_label`.
+
+An optional column `label_ai` may hold a **machine pre-annotation** — a language model's guess at
+the label, produced from the text alone. It exists to speed a human's pass, not to stand in for
+one: it is **never** written to `label_annotator_1` or `label_annotator_2`, is hidden from the
+annotators exactly as every other opinion is, and reaches only the adjudicator, as a third
+opinion beside the contributor's and the source's. The reported kappa is agreement between the
+two **human** annotators; a model's labels are not counted in it, and the corpus does not claim
+two annotators where one of them was a model. Where the whole queue is pre-annotated by a model,
+`label_ai` is populated in one pass and disclosed as such, with the model named; the human
+annotators still label independently, and their labels — not the model's — are what adjudication
+and kappa are built from. `label_ai` is a working-file column and does not ship (§8).
 
 Three things are reported whatever they show: **Cohen's kappa** between the two annotators before
 adjudication, the **disagreement rate per class pair**, and the share adjudicated. A low kappa is

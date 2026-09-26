@@ -42,7 +42,7 @@ WORKING = os.path.join(ROOT, "data", "private", "sms_working.csv")
 # `source` separates the contributed subset from imported ones; `label_source` holds an imported
 # corpus's own label, kept out of every screen an annotator sees (§5: the re-annotation is blind).
 W_FIELDS = (["message_id", "participant_id", "source"] + FIELDS
-            + ["label_source", "queued", "label_annotator_1", "label_annotator_2",
+            + ["label_source", "queued", "label_ai", "label_annotator_1", "label_annotator_2",
                "adjudicated_by", "adjudication_note", "final_label", "template_id", "split"])
 LABELS = {"1": "legitimate", "2": "spam", "3": "phishing"}
 RULE = "§4: not phishing because it looks suspicious — evidence of deceptive intent, or it is spam"
@@ -138,7 +138,8 @@ def adjudicate(by: str) -> int:
         print(f"    sender: {r['sender'] or '(none)'} ({r['sender_type']}), capture: {r['capture']}")
         third = (f"source: {r['label_source']}" if r.get("label_source", "").strip()
                  else f"contributor: {r['label_contributor']}")
-        print(f"    annotator 1: {a}   annotator 2: {b}   {third}")
+        ai = f"   ai: {r['label_ai']}" if r.get("label_ai", "").strip() else ""
+        print(f"    annotator 1: {a}   annotator 2: {b}   {third}{ai}")
         while True:
             k = input("final [1] legitimate  [2] spam  [3] phishing  [q] save and quit > ").strip().lower()
             if k in LABELS or k == "q":
