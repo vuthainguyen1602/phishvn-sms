@@ -114,8 +114,8 @@ Condense `PROTOCOL_sms_corpus.md`:
 ## Acknowledgments
 
 The authors of the *Quality-Assured Vietnamese SMS Phishing Dataset* (`EXTERNAL_QAVN.md`) for the
-benchmark under CC BY 4.0; [FILL: contributors, funders]. If any AI assistance was used in
-tooling, disclose it here per the venue's policy.
+benchmark under CC BY 4.0; [FILL: contributors, funders]. An AI coding assistant (Claude) was used
+to help develop the processing scripts; all data labels are human-assigned.
 
 ## Declaration of competing interest
 
