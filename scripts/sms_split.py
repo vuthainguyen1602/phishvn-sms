@@ -27,7 +27,7 @@ from __future__ import annotations
 import argparse, csv, random, sys
 from collections import Counter, defaultdict
 
-FRACTIONS = {"train": 0.70, "dev": 0.15, "test": 0.15}
+FRACTIONS = {"train": 0.70, "validation": 0.15, "test": 0.15}
 SEED = 1602        # fixed forever once the corpus ships; changing it is a new split, not a rerun
 RESTARTS = 200     # cheap at any plausible template count, and the score plateaus long before
 
@@ -78,7 +78,10 @@ def main() -> int:
         fields, rows = reader.fieldnames or [], list(reader)
     if "template_id" not in fields:
         raise SystemExit(f"[!] {a.csv} has no template_id column: run sms_templates.py --assign first")
-    label_col = next((c for c in ("final_label", "label_contributor") if c in fields), None)
+    # The first label column that actually holds values: a working file before adjudication has
+    # an empty final_label column, and balancing against emptiness balances nothing.
+    label_col = next((c for c in ("final_label", "label_contributor")
+                      if c in fields and any(r[c].strip() for r in rows)), None)
 
     by_tpl = defaultdict(list)
     for i, r in enumerate(rows):
