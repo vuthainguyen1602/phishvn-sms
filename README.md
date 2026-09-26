@@ -74,6 +74,10 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `scripts/redact.html` | the redaction page contributors open on their phone; one offline file, no network access, holds the redaction rules |
 | `scripts/sms_transcribe.py` | the author's side of the screenshot route: re-encodes images, OCRs them, redacts by the page's rules, deletes the images |
 | `scripts/sms_collect.py` | the collector; refuses everything but `--check` until both documents are real |
+| `scripts/sms_annotate.py` | the working file and its labels: blind labelling by two annotators, adjudication with a recorded note, and the agreement report |
+| `scripts/sms_templates.py` | template grouping on a normalized view of the text, per protocol §6 |
+| `scripts/sms_split.py` | the fixed template-disjoint 70/15/15 split, per protocol §7 |
+| `scripts/README.md` | the pipeline in the order it runs, and what each stage refuses |
 | `tests/` | the page and `sms_transcribe.py` held to one list of redaction cases, and the screenshot route end to end: `python3 -m unittest discover tests` |
 | `examples/EXAMPLE_synthetic.csv` | six invented rows showing the shape; not collected data, nobody sent them |
 | `examples/EXAMPLE_submission_synthetic.csv`, `examples/EXAMPLE_working_synthetic.csv` | the same six messages at the two private stages; also invented |
