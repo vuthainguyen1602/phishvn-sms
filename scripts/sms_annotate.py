@@ -45,7 +45,10 @@ W_FIELDS = (["message_id", "participant_id", "source"] + FIELDS
             + ["label_source", "queued", "label_annotator_1", "label_annotator_2",
                "adjudicated_by", "adjudication_note", "final_label", "template_id", "split"])
 LABELS = {"1": "legitimate", "2": "spam", "3": "phishing"}
-RULE = "§4: not phishing because it looks suspicious — evidence of deceptive intent, or it is spam"
+RULE = ("§4: not phishing because it looks suspicious — evidence of deceptive intent, or it is spam. "
+        "One question: does the message lie to the recipient about what it is? A casino that says it is a "
+        "casino is spam, however illegal or obfuscated; anything that pretends to be a brand, a fine, a prize, "
+        "a job or a login is phishing; unreadable → uncertain, never a guess")
 
 
 def _read(path: str):
