@@ -10,3 +10,15 @@ __pycache__/
 # Dated backups of the private files, wherever they get made: a backup of private data is as
 # private as the original, and data/* alone would not catch one made outside data/.
 *.backup-*.csv
+
+# LaTeX build artefacts under paper/, the same rule as the sibling repositories' papers/. The
+# figure PDFs in paper/figures/ are tracked: they are inputs to the build, not outputs of it.
+paper/**/*.aux
+paper/**/*.log
+paper/**/*.out
+paper/**/*.toc
+paper/**/*.fls
+paper/**/*.fdb_latexmk
+paper/**/*.xdv
+paper/**/*.synctex.gz
+paper/main.pdf

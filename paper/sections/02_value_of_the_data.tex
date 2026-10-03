@@ -1,0 +1,31 @@
+\section*{Value of the Data}
+\begin{itemize}[leftmargin=1.3em,itemsep=1pt,topsep=2pt]
+  \item \emph{Vietnamese smishing data with links intact.} Public Vietnamese SMS corpora are
+  few. This one keeps URLs, including live phishing domains, as a first-class signal, and masks
+  personal data instead of stripping everything that looks like a token. The domain and path are
+  the strongest evidence a smishing message carries; a corpus that removes them has removed the
+  thing it exists to measure.
+  \item \emph{Three classes with a published collapse rule.} \texttt{legitimate}, \texttt{spam}
+  and \texttt{phishing} are labelled separately. A reader who wants a binary task collapses them
+  in one line (\texttt{legitimate} $+$ \texttt{spam} $\to 0$, \texttt{phishing} $\to 1$); a
+  reader who disagrees with that collapse can choose another. A binary corpus cannot be made
+  finer afterwards.
+  \item \emph{A split no template crosses.} Scam SMS is sent by template, and after redaction
+  fifty one-time-code messages become one string. Messages are grouped by a stated computation
+  and the 70/15/15 split is assigned per template, so a model tested here is asked to detect,
+  not to remember. The published corpus this project audits puts 7.9\% of its test texts in its
+  training set; this one, by construction, puts none.
+  \item \emph{An independent external benchmark, shipped alongside.} A published Vietnamese
+  corpus~\cite{qavn_sms} is held out entirely, with its own labels unchanged, for cross-dataset
+  generalization testing. The exact copy is pinned by content hash, and the measured divergence
+  between the two label schemes is reported rather than corrected.
+  \item \emph{Labels that can be audited.} Both annotators' labels ship unmodified, including
+  every disagreement and every \texttt{uncertain}, with Cohen's $\kappa$~\cite{cohen_sms},
+  per-class-pair disagreement and the share adjudicated. The agreement can be recomputed, not
+  believed.
+  \item \emph{A consent and privacy design that is checkable.} The protocol and the consent form
+  were committed, publicly and timestamped, before the first message was collected. Redaction
+  ran on the contributor's device, so raw text never reached the researchers on the primary
+  route. The design is reusable by anyone collecting message data from a population they teach
+  or supervise.
+\end{itemize}

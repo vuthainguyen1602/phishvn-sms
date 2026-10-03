@@ -86,8 +86,7 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `docs/SCHEMA.md` | the published file's fields, the rules a valid file satisfies, and what is withheld |
 | `docs/SCHEMA_raw.md` | the two files that come before it and never ship, and the exact columns dropped to produce the published one |
 | `docs/EXTERNAL_QAVN.md` | the external benchmark's provenance: its authors, licence, citation, and a SHA-256 pinning the exact copy evaluated |
-| `docs/DATA_ARTICLE_outline.md` | the data article's skeleton, after the *Data in Brief* template |
-| `docs/DATA_ARTICLE.md` | the data article's full draft; design facts written out, every number that depends on collection, annotation or approval left as `[FILL: …]` |
+| `paper/` | the data article, laid out like the sibling repositories' `papers/`: `main.tex` + `sections/` (*Data in Brief* structure), the pipeline figure, `OUTLINE.md` and the prose `DRAFT.md` it was typeset from; every number that depends on collection, annotation or approval is a red `\FILL`, and `paper/HOW_TO_RUN.md` says where each will come from |
 | `scripts/redact.html` | the redaction page contributors open on their phone; one offline file, no network access, holds the redaction rules |
 | `scripts/sms_transcribe.py` | the author's side of the screenshot route: re-encodes images, OCRs them, redacts by the page's rules, deletes the images |
 | `scripts/sms_collect.py` | the collector; refuses everything but `--check` until both documents are real |

@@ -1,5 +1,7 @@
 # Data article — outline
 
+*Superseded by `main.tex` + `sections/` in this folder; kept as the plan the draft followed.*
+
 A skeleton for the data-descriptor paper, structured after the *Data in Brief* template (the same
 sections an IEEE Access data article uses). Design facts are filled in; every number that depends
 on annotation or ethics approval is a bracketed placeholder `[FILL: …]`, never invented. Prose in

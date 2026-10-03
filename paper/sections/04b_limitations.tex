@@ -1,0 +1,29 @@
+\section*{Limitations}
+\begin{itemize}[leftmargin=1.3em,itemsep=1pt,topsep=2pt]
+  \item \emph{A pilot, not a sample.} One small volunteer group, one collection window, one
+  institution. The corpus is not a representative sample of Vietnamese smishing, and its designed
+  class ratio is not any inbox's prevalence. Per-class metrics are meaningful; anything that
+  depends on the base rate is not.
+  \item \emph{Small test slice.} The fixed split's test half holds \FILL{} phishing messages.
+  It ships for presentation; conclusions should rest on cross-validation over template groups.
+  \item \emph{The sender filter excludes a real part of the problem.} Many scam messages in
+  Vietnam come from personal numbers. They were not collected, for consent reasons, so the
+  corpus under-represents that channel by design.
+  \item \emph{Screenshot rows are OCR transcriptions.} Obfuscating spellings and unusual Unicode
+  may not survive OCR even after a hand check; a character-level study should filter on
+  \texttt{capture = paste}.
+  \item \emph{The external benchmark inherits its source's biases}: its collection sources and
+  period, and its heavy operator traffic. It tests generalization to a differently collected
+  corpus; it does not remove bias. Its 315 dropped rows are not a random subset (most are bank
+  messages with a one-time code), so the loaded benchmark is slightly skewed against that
+  message type.
+  \item \emph{Scheme divergence is measured, not resolved.} About \FILL{} of the benchmark's
+  \texttt{benign} rows are \texttt{spam} under this corpus's scheme; a model trained here will be
+  penalised on them by the source's labels. The reported benchmark score is therefore a lower
+  bound on agreement with the three-class scheme, and should be read beside the divergence
+  figure.
+  \item \emph{Annotation.} \FILL{two annotators and one adjudicator from the research group;
+  $\kappa$ as reported; any class pair with notably low agreement.}
+  \item \emph{Links die.} Phishing domains are short-lived; \texttt{has\_url} and the URL text
+  remain, but the destinations will not resolve for long.
+\end{itemize}

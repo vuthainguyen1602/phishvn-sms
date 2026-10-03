@@ -1,0 +1,46 @@
+% Same preamble as the sibling phishvn/papers/P1_dataset (Data in Brief, Elsevier Editorial
+% Manager): EM builds the submission PDF with pdflatex, so the preamble has to survive both
+% engines. fontspec is XeTeX/LuaTeX-only and aborts pdflatex outright; both branches end up in
+% Latin Modern, so the two builds are typographically identical.
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+\fi
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{caption}
+\captionsetup[table]{skip=8pt}
+\usepackage{array}
+\usepackage{graphicx}
+% Editorial Manager flattens an upload: figures/ does not survive. Searching both places lets
+% the same source build from the repo and from EM's flat layout without an edit.
+\graphicspath{{figures/}{./}}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\definecolor{linknavy}{RGB}{18,40,75}
+\usepackage{hyperref}
+\usepackage{xurl}
+\hypersetup{colorlinks=true, urlcolor=linknavy, linkcolor=linknavy, breaklinks=true,
+  pdftitle={PhishVN-SMS: A Template-Disjoint, Three-Class Vietnamese SMS Corpus with
+  Consent-First Collection and an External Benchmark}, pdfauthor={Thai Nguyen Vu}}
+\usepackage{parskip}
+\usepackage[htt]{hyphenat}
+\usepackage{amsmath}
+\setlength{\emergencystretch}{3em}
+
+% Dataset DOI: set ONCE here after deposit, used everywhere via \datadoi.
+\newcommand{\datadoi}{\FILL{deposit DOI}}
+
+% Every number that depends on collection, annotation or ethics approval is a \FILL, never a
+% guess. It prints red so none can survive into a submission unnoticed; `grep -n FILL
+% sections/*.tex` lists what is left. Redefine to \textcolor{black} only for a final build in
+% which the grep is empty.
+\newcommand{\FILL}[1]{\textcolor{red}{[FILL\if\relax\detokenize{#1}\relax\else: #1\fi]}}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}

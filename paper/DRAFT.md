@@ -1,7 +1,8 @@
 # PhishVN-SMS: a template-disjoint, three-class Vietnamese SMS corpus with consent-first collection and an external benchmark
 
-*Data article — full draft, structured after the* Data in Brief *template. It expands
-`DATA_ARTICLE_outline.md`. Every design fact is written out; every number that depends on
+*Prose draft the LaTeX in this folder was typeset from. `main.tex` and `sections/` are the
+manuscript; edit those, not this. Structured after the* Data in Brief *template. It expands
+`OUTLINE.md`. Every design fact is written out; every number that depends on
 annotation, collection or ethics approval is a bracketed placeholder `[FILL: …]` and is not
 invented. The abstract is drafted with the same placeholders and is rewritten last, once the
 counts exist. Source documents: `PROTOCOL_sms_corpus.md` (§ numbers below refer to it),

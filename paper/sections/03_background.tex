@@ -1,0 +1,24 @@
+\section*{Background}
+SMS remains a primary channel for scams aimed at Vietnamese users: one-time-code theft,
+impersonated bank and operator notices, prize and job lures, each carrying a link or a
+call-back number. Public data for the channel is thin. The Quality-Assured Vietnamese SMS
+Phishing Dataset~\cite{qavn_sms} (2{,}991 messages, binary labels, URLs kept) is the one open
+corpus the authors are aware of; a 2017 operator corpus~\cite{operator2017_sms} (5{,}557 ham
+and 1{,}042 spam from two carriers) is available on request only, and whether its texts keep
+URLs is undocumented. The widely used SMS Spam Collection~\cite{uci_sms} is English and
+predates smishing as it now looks.
+
+Three defects recur in such corpora and motivated this one. \emph{Binary labels} fold the
+operators' own promotions into either class, so a reader cannot separate an unsolicited advert
+from a credential lure. \emph{Template leakage}: scam SMS is sent in near-identical copies, and
+a split drawn per message puts copies of one template on both sides; in the published corpus
+above, 47 of 597 test rows (7.9\%) repeat a training text byte for byte. \emph{Undocumented
+consent and redaction}: a message corpus is a corpus of what arrived in people's phones, and a
+data article has to say whose, with what agreement, and what left the device.
+
+PhishVN-SMS answers each by design rather than by content: three classes with a published
+collapse rule, templates computed by a stated method and a split assigned per template, and a
+consent-first collection in which redaction runs on the contributor's own phone and the protocol
+was public before the first message. It is a pilot, and its contribution is the method, which is
+why the published corpus above is shipped beside it as an unchanged external benchmark rather
+than merged into it.

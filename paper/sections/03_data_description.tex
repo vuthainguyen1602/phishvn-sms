@@ -1,0 +1,140 @@
+\section*{Data Description}
+The deposit (DOI \datadoi) contains two CSV files (UTF-8, comma-separated, header row, one
+message per row), the schema document and the version pin of the external benchmark; the
+processing code and the governing documents live in the public repository.
+Table~\ref{tab:files} lists every file.
+
+\begin{table}[h]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Deposit structure: every file in the deposited archive.}
+\label{tab:files}
+\begin{tabular}{@{}l l l@{}}
+\toprule
+Path & Size/count & Contents \\
+\midrule
+\texttt{README.md} & n/a & Overview, counts, usage notes \\
+\texttt{LICENSE} & n/a & \FILL{corpus licence} text \\
+\texttt{MANIFEST.txt} & n/a & SHA-256 and byte size of every file \\
+\texttt{sms\_dataset.csv} & \FILL{N} rows & The contributed corpus (14 columns) \\
+\texttt{sms\_external\_qavn.csv} & 2{,}676 rows & The external benchmark, source labels (9 columns) \\
+\texttt{SCHEMA.md} & n/a & Column-level dictionary, validity rules, what is withheld \\
+\texttt{EXTERNAL\_QAVN.md} & n/a & Benchmark provenance, licence, citation, SHA-256 pin \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{\texttt{sms\_dataset.csv}: the contributed corpus}
+One row per message, \FILL{N} rows. Table~\ref{tab:schema} gives the fourteen columns.
+
+\begin{table}[h]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Columns of \texttt{sms\_dataset.csv}.}
+\label{tab:schema}
+\begin{tabular}{@{}l l p{8.6cm}@{}}
+\toprule
+Column & Values & Meaning \\
+\midrule
+\texttt{message\_id} & \texttt{SMS\_00001} & stable identifier, assigned in ingest order, never reused \\
+\texttt{text} & free text & the message \emph{after redaction}; byte-for-byte as received where \texttt{capture} is \texttt{paste}, a hand-checked OCR transcription where it is \texttt{screenshot} \\
+\texttt{source} & \texttt{contributed} & which corpus a row belongs to; every row of this file \\
+\texttt{capture} & \texttt{paste}, \texttt{screenshot} & how the text was obtained \\
+\texttt{final\_label} & \texttt{legitimate}, \texttt{spam}, \texttt{phishing} & the adjudicated label; the only label to train on \\
+\texttt{label\_annotator\_1} & the three $+$ \texttt{uncertain} & first annotator, independent, unmodified \\
+\texttt{label\_annotator\_2} & the three $+$ \texttt{uncertain} & second annotator, independent, unmodified \\
+\texttt{template\_id} & \texttt{T0031} & computed template group; every message of one template shares it \\
+\texttt{sender\_type} & \texttt{brandname}, \texttt{shortcode}, \texttt{unknown} & how the sender appeared on the handset \\
+\texttt{has\_url} & 0/1 & the text contains a link; the link itself is kept in \texttt{text} \\
+\texttt{has\_phone} & 0/1 & the text contains \texttt{<PHONE>} \\
+\texttt{has\_otp} & 0/1 & the text contains \texttt{<OTP>} \\
+\texttt{has\_money} & 0/1 & the text contains an amount, kept or masked as \texttt{<AMOUNT>} \\
+\texttt{split} & \texttt{train}, \texttt{validation}, \texttt{test} & the shipped template-disjoint split \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Redaction placeholders that may appear in \texttt{text} are
+\texttt{<NAME>}, \texttt{<PHONE>}, \texttt{<ACCOUNT>}, \texttt{<OTP>}, \texttt{<EMAIL>},
+\texttt{<AMOUNT>}, \texttt{<ADDRESS>}, \texttt{<ID>}, \texttt{<DATE>}, \texttt{<TIME>} and
+\texttt{<TRANSACTION\_ID>}. Everything else in \texttt{text} is as received: odd punctuation,
+capitalisation, missing diacritics, typos, unusual Unicode and filter-evading spellings are kept
+exactly, because they are among the strongest signals a smishing message carries. Rows with
+\texttt{capture = screenshot} are OCR transcriptions and may have normalised such spellings; a
+study of them should use \texttt{paste} rows only.
+
+A valid file satisfies six rules, each checked by the publishing script rather than assumed:
+(1) \texttt{message\_id} is unique; (2) \texttt{text} contains no digit run of four or more
+outside a placeholder, a link or an amount, and no \texttt{@}; (3) \texttt{final\_label} is
+never \texttt{uncertain} or empty; (4) every message sharing a \texttt{template\_id} shares a
+\texttt{split}; (5) the four \texttt{has\_*} flags are derived from the published patterns,
+never typed; (6) \texttt{sender\_type} is never a phone number.
+
+\paragraph{Size and balance.} \FILL{N} messages from \FILL{n} contributors, grouped into
+\FILL{T} templates at the primary threshold ($\tau = 0.8$), \FILL{$T_{0.7}$} and
+\FILL{$T_{0.9}$} at $\tau = 0.7$ and $0.9$. Class balance: \FILL{legitimate / spam / phishing
+counts and shares}. Distinct malicious (\texttt{spam} $+$ \texttt{phishing}) templates:
+\FILL{M}, against the protocol's floor of 100. Capture route: \FILL{paste / screenshot counts}.
+Sender type: \FILL{brandname / shortcode / unknown counts}. Table~\ref{tab:glance} summarises.
+
+\begin{table}[t]
+\centering\small
+\caption{Dataset at a glance: the contributed corpus by split, and the external benchmark.}
+\label{tab:glance}
+\begin{tabular}{@{}l c c c c c@{}}
+\toprule
+Split & Messages & Templates & \texttt{legitimate} & \texttt{spam} & \texttt{phishing} \\
+\midrule
+train      & \FILL{} & \FILL{} & \FILL{} & \FILL{} & \FILL{} \\
+validation & \FILL{} & \FILL{} & \FILL{} & \FILL{} & \FILL{} \\
+test       & \FILL{} & \FILL{} & \FILL{} & \FILL{} & \FILL{} \\
+\midrule
+\textbf{contributed, total} & \FILL{N} & \FILL{T} & \FILL{} & \FILL{} & \FILL{} \\
+\midrule
+ & Messages & Templates & \texttt{benign} & \texttt{scam} & \\
+external (QAVN) & 2{,}676 & \FILL{} & 1{,}907 & 769 & \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+{\footnotesize The split is template-disjoint 70/15/15, assigned per template by a seeded
+greedy search (seed 1602, 200 restarts) scored on size and label mix. The external benchmark is
+entirely \texttt{split = external} and carries the source's binary labels, not this corpus's.}
+\end{table}
+
+The test slice of a pilot this size holds too few phishing messages to carry a conclusion on
+its own; it ships for presentation, and the primary evaluation is cross-validation over
+template groups (see \emph{Splits}).
+
+\paragraph{Annotation agreement.} Cohen's $\kappa$ between the two annotators before
+adjudication: \FILL{$\kappa$}. Disagreement rate per class pair: legitimate--spam \FILL{},
+legitimate--phishing \FILL{}, spam--phishing \FILL{}. Rows marked \texttt{uncertain} by at
+least one annotator: \FILL{}. Share of rows adjudicated: \FILL{}.
+
+\subsection*{\texttt{sms\_external\_qavn.csv}: the external benchmark}
+The rows of the Quality-Assured Vietnamese SMS Phishing Dataset~\cite{qavn_sms} (CC BY 4.0),
+mapped into this corpus's placeholder vocabulary and held out as an independent test set. It is
+\emph{not} part of \texttt{sms\_dataset.csv}, is \emph{not} annotated by this project, and
+carries the source's own binary label. Its columns: \texttt{message\_id} (a \texttt{QAV\_} id
+that traces to the source row); \texttt{text} (the source text with placeholder tokens remapped,
+\texttt{[MONEY]} $\to$ \texttt{<AMOUNT>} and so on; \texttt{[TB]}, \texttt{[QC]} and brand
+prefixes are message text and left alone); \texttt{label\_source} (\texttt{benign} /
+\texttt{scam}, the source's 0/1 label, unchanged, the evaluation label); \texttt{template\_id},
+\texttt{sender\_type} and the four \texttt{has\_*} flags, computed as for the contributed
+corpus. It has no \texttt{final\_label}, no annotator columns and no train split, because none
+were produced for it. \texttt{<NUMBER>} appears only in this file, as the mechanical image of
+the source's \texttt{[NUMBER]} and \texttt{[POINT]} tokens, which collapsed phones, shortcodes
+and quantities into one; \texttt{has\_phone} stays 0 on such a row.
+
+\paragraph{Size.} 2{,}676 messages (1{,}907 \texttt{benign}, 769 \texttt{scam}), after 315 of
+the source's 2{,}991 rows were dropped by redaction rule (2); most carried an unmasked one-time
+code. Templates: \FILL{count at $\tau = 0.8$}. No external template coincides with any training
+template of the contributed corpus (checked by the grouping script).
+
+\subsection*{What is withheld}
+\texttt{participant\_id} is kept privately and does not ship: with a handful of contributors it
+is pseudonymisation, not anonymisation, since someone who knows the group could read off which
+bank or school each uses. It exists so the leave-one-contributor-out result can be computed,
+and that result is reported without the mapping. Raw text and screenshots never ship;
+screenshots were deleted once their transcription was checked, before publication. No handset
+or SIM identifier, date of birth or contact name was collected.

@@ -1,0 +1,66 @@
+% pipeline.tex — PhishVN-SMS pipeline: contributor's device -> author's machine -> the two shipped files.
+% Standalone TikZ figure; palette from ../figstyle.tex (roles, not decoration). Compile: pdflatex pipeline.tex
+% Reuse: \includegraphics{figures/pipeline.pdf} inside a figure environment.
+% Mirrors the diagram in scripts/README.md; if a stage is added there, add it here.
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage{lmodern}\renewcommand{\familydefault}{\sfdefault}
+\usetikzlibrary{arrows.meta,positioning,fit}
+\input{../figstyle}
+\begin{document}
+\begin{tikzpicture}[
+  font=\small,
+  >={Stealth[length=2.4mm]},
+  tool/.style={draw=fgProcess,thick,align=center,minimum height=10mm,minimum width=44mm,fill=fgProcess!8},
+  data/.style={draw=fgStore,thick,rounded corners=2pt,align=center,minimum height=10mm,minimum width=40mm,fill=fgStore!12},
+  src/.style ={draw=fgSource,align=center,minimum height=10mm,minimum width=40mm,fill=fgSource!10},
+  ext/.style ={draw=fgAccent,align=center,minimum height=10mm,minimum width=40mm,fill=fgAccent!10},
+  arr/.style ={->,thick,draw=fgInk!70},
+  note/.style={font=\scriptsize\itshape,text=fgInk!70,align=center},
+  head/.style={font=\bfseries},
+]
+
+% ===== Author's machine: the vertical chain =====
+\node[tool] (ocr) {\texttt{sms\_transcribe.py}\\\scriptsize OCR, hand check, images deleted};
+\node[tool,below=5mm of ocr] (collect) {\texttt{sms\_collect.py}\\\scriptsize validates each row, ingests};
+\node[tool,below=5mm of collect] (annot) {\texttt{sms\_annotate.py}\\\scriptsize two blind annotators, adjudication};
+\node[tool,below=5mm of annot] (tmpl) {\texttt{sms\_templates.py}\\\scriptsize word 4-shingles, Jaccard $\tau=0.8$};
+\node[tool,below=5mm of tmpl] (split) {\texttt{sms\_split.py}\\\scriptsize 70/15/15 per template, seed 1602};
+\node[tool,below=5mm of split] (pub) {\texttt{sms\_publish.py}\\\scriptsize schema projection, rules checked};
+\node[tool,right=14mm of annot] (imp) {\texttt{sms\_import.py}\\\scriptsize tokens remapped, 315 rows dropped};
+\node[fit=(ocr)(pub)(imp),draw=fgMuted,densely dotted,inner sep=7pt] (auth) {};
+\node[head,anchor=south west,fill=white,inner sep=1pt] at ([yshift=2.5mm]auth.north west) {Author's machine};
+
+\draw[arr] (ocr) -- (collect);
+\draw[arr] (collect) -- (annot);
+\draw[arr] (annot) -- (tmpl);
+\draw[arr] (tmpl) -- (split);
+\draw[arr] (split) -- (pub);
+\draw[arr] (imp.south) |- (tmpl.east);
+\node[note,anchor=west] at ([xshift=2mm,yshift=-7mm]imp.south west) {held out: \texttt{split=external},\\never annotated, label kept};
+
+% ===== Contributor's device =====
+\node[src,left=18mm of collect] (redact) {\texttt{redact.html}\\\scriptsize offline page; redacts before sending};
+\node[src,above=5mm of redact] (paste) {copy \& paste\\\scriptsize from the messaging app};
+\node[src,above=5mm of paste] (shot) {screenshots\\\scriptsize cropped, own details blacked out};
+\node[fit=(shot)(paste)(redact),draw=fgSource!60,densely dotted,inner sep=7pt] (dev) {};
+\node[head,anchor=south west,fill=white,inner sep=1pt] at ([yshift=2.5mm]dev.north west) {Contributor's device};
+\node[note,below=2mm of dev.south] {what leaves the phone is already redacted;\\the raw text never reaches the author};
+
+\draw[arr] (paste) -- (redact);
+\draw[arr] (redact) -- (collect);
+\draw[arr] (shot.east) to[out=0,in=180] (ocr.west);
+
+% ===== External source =====
+\node[ext,right=10mm of imp] (qavn) {QAVN \texttt{full\_dataset.csv}\\\scriptsize 2,991 rows, CC BY 4.0, SHA-256 pinned};
+\draw[arr] (qavn) -- (imp);
+
+% ===== What ships =====
+\node[data,right=14mm of pub] (out1) {\texttt{sms\_dataset.csv}\\\scriptsize contributed, three-class labels};
+\node[data,below=4mm of out1] (out2) {\texttt{sms\_external\_qavn.csv}\\\scriptsize benchmark, source labels};
+\draw[arr] (pub) -- (out1);
+\draw[arr] (pub.east) -- ++(7mm,0) |- (out2.west);
+\node[head,anchor=south west,fill=white,inner sep=1pt] at ([yshift=2.5mm]out1.north west) {Ships, at deposit};
+
+\end{tikzpicture}
+\end{document}

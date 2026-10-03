@@ -1,0 +1,44 @@
+\section*{Specifications Table}
+\small
+\begin{longtable}{@{}p{4.0cm} p{11.0cm}@{}}
+\toprule
+Subject & Computer Science: Security and Privacy; Natural Language Processing \\
+\addlinespace
+Specific subject area & SMS spam and scam (smishing) detection in Vietnamese: corpus
+construction, annotation agreement, and leakage-free evaluation splits \\
+\addlinespace
+Type of data & Table (\texttt{.csv}, UTF-8); Text documentation (\texttt{.md}). Redacted
+message text with derived flags, three-class labels, computed template groups and a fixed
+split. A second table: an external benchmark carrying its source's own labels. Processed
+(redacted, labelled, grouped, split). \\
+\addlinespace
+Data collection & \emph{Contributed corpus:} volunteers paste messages into an offline
+redaction page on their own phone and submit the redacted text, or send cropped, blacked-out
+screenshots that are OCR-transcribed, hand-checked, redacted and then deleted. Only machine-sent
+messages (brandname or shortcode senders); never person-to-person. Two independent human
+annotators per message; adjudication of disagreements. Templates by word 4-shingle Jaccard
+clustering on a normalized view; the split assigned per template. \emph{External benchmark:}
+the Quality-Assured Vietnamese SMS Phishing Dataset~\cite{qavn_sms} (CC BY 4.0), placeholder
+tokens remapped, rows failing the redaction rule dropped and counted, labels kept as published,
+held out entirely. \\
+\addlinespace
+Data source location & Institution: Campus in Ho Chi Minh City, University of Transport and
+Communications, Ho Chi Minh City, Vietnam. Contributed messages: contributors' own handsets,
+Vietnam, \FILL{collection window}. External benchmark:
+\url{https://huggingface.co/datasets/trannguyenthaituan/vietnamese_sms_dataset}, file
+\texttt{full\_dataset.csv}, SHA-256 \newline
+{\footnotesize\texttt{8a29d50a6335c8938b8beef0a3daf57d276e880244394da453bc656f5a4c7847}} \\
+\addlinespace
+Data accessibility & Repository name: \FILL{Mendeley Data / Zenodo} \newline
+Data identification number: DOI \datadoi \newline
+Direct URL to data: \FILL{URL} \newline
+Instructions for accessing these data: the two CSV files (contributed corpus and external
+benchmark) and their schema are publicly available under \FILL{corpus licence} with no
+registration.
+Protocol, consent form, contributor instructions, redaction page, processing scripts and tests:
+\url{https://github.com/vuthainguyen1602/phishvn-sms} (code MIT), release \FILL{tag}. \\
+\addlinespace
+Related research article & \FILL{None / the analysis paper, if any} \\
+\bottomrule
+\end{longtable}
+\normalsize

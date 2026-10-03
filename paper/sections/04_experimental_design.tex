@@ -1,0 +1,218 @@
+\section*{Experimental Design, Materials and Methods}
+
+\subsection*{Scope and design}
+PhishVN-SMS is a \emph{pilot}: \FILL{30} contributors at around \FILL{100} messages each,
+about three thousand messages, enough to study labelling, templates and splitting, and not
+enough to describe Vietnamese smishing. The target mix (roughly 800 phishing, 450 spam, 1{,}800
+legitimate) is a designed 1:2 malicious-to-legitimate ratio, not the prevalence of any inbox;
+all reported metrics are per class, and nothing depends on this base rate. Messages are what is
+collected, but templates are what the evaluation counts: the figure that decides what the corpus
+can say is the number of distinct malicious templates (floor: 100), because another copy of a
+template already held adds nothing a template-disjoint split can use. Collection watched the
+template count as it went and stopped adding a contributor's near-duplicates before stopping
+their novel messages.
+
+Two kinds of message were collected, and only two. \emph{Scam and spam} of any sender,
+broadcast to strangers by someone with no privacy interest in them; and \emph{legitimate
+messages sent by a machine} (one-time codes, bank and telecommunications notifications, school
+and application notices) from a brandname or a service shortcode. \emph{Person-to-person
+messages were never collected.} A message a friend or relative sent is theirs, and they are not
+present to consent; a contributor can give away what is their own and nobody can consent on a
+sender's behalf. The rule contributors were given is mechanical: a message from a personal phone
+number is not sent, whatever it says, even when it is plainly a scam.
+
+\subsection*{Consent design}
+Contributors may be students, and the lead researcher teaches. A student asked by a lecturer
+for phone data is not free to refuse, and a consent form does not fix that by itself. The
+design removes the asymmetry instead of documenting it:
+\begin{enumerate}[leftmargin=1.6em,itemsep=1pt,topsep=2pt]
+  \item The invitation came from a colleague with no assessment role over the cohort.
+  \item Nothing was attached to participation: no marks, credit, bonus or attendance, and no
+  mention in class of who took part.
+  \item Submission was anonymous. The researchers never learn who participated, so declining
+  costs nothing and cannot be noticed.
+  \item Withdrawal needed no reason and was possible until deposit. After deposit the
+  researchers cannot identify which messages to remove, and the consent form says so in those
+  words instead of promising a deletion that cannot be performed.
+\end{enumerate}
+The consent form (\texttt{CONSENT\_vi.md}, in Vietnamese; the English translation is for
+reviewers and the Vietnamese governs) states in plain language what is asked for and what is
+not, that publication is permanent, that the screenshot route exposes the image to the
+researcher, and the principal risk: a personal detail the filter missed and the contributor did
+not notice on review. It asks for no signature, since a signature would turn an anonymous
+submission into an identified one.
+
+\subsection*{Collection and redaction}
+Figure~\ref{fig:pipeline} shows the pipeline from the contributor's phone to the two published
+files. Every stage reads files and writes files, so the whole of it can be rerun and checked.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{pipeline.pdf}
+  \caption{PhishVN-SMS pipeline. On the contributor's device, messages are pasted into an
+  offline redaction page (the raw text never leaves the phone) or sent as cropped, blacked-out
+  screenshots. On the author's machine, screenshots are OCR-transcribed, hand-checked, redacted
+  by the same rules and deleted; rows are validated and ingested; two annotators label blind
+  and disagreements are adjudicated; templates are computed and the split assigned per
+  template; the publishing script projects the schema's columns and checks its rules. The
+  external benchmark enters by a separate import, is held out as \texttt{split = external},
+  and ships as its own file with the source's labels.}
+  \label{fig:pipeline}
+\end{figure}
+
+\paragraph{Primary route: paste.} The contributor opens a single offline HTML page
+(\texttt{redact.html}) in the phone's own browser. The page makes no network request and works
+in airplane mode. Each message is copied from the messaging app and pasted in, so the text
+arrives character for character with no screenshot or OCR involved. The page replaces personal
+data with the placeholders listed under \emph{Data Description}; the contributor reviews every
+message after redaction and before sending, and drops any they are unsure about. The raw text
+never leaves the phone.
+
+\paragraph{What is kept, and what is masked.} Links are kept. A link was broadcast to strangers
+and is not personal data; only personal data \emph{inside} a link is masked: a phone number, an
+e-mail address, or a name or account in a query string (\texttt{?sdt=}, \texttt{?ten=},
+\texttt{?stk=}). A path segment that identifies the recipient without saying so cannot be
+recognised by rule, so contributors were asked to check each link and drop a message whose link
+carries their own details. Broadcast amounts are kept: a prize, a fee or a price in a scam or an
+advert is a signal. The contributor's own money is masked: a balance, a signed account movement
+(\texttt{+1.500.000VND}) and an amount beside a transaction marker are sensitive personal data
+and become \texttt{<AMOUNT>}. Normalisation stops there; spelling, punctuation and Unicode are
+untouched.
+
+\paragraph{Alternative route: screenshots.} A message that cannot be copied may be sent as a
+screenshot, cropped to the sender and the message, with the contributor's own details blacked
+out on the image, in one \texttt{.zip} file. On this route the researcher does see an unredacted
+image, and the consent form says so. On receipt, images are re-encoded from pixels alone so that
+no file name or metadata survives, transcribed by OCR (\FILL{engine and version}), checked by
+hand against each image, redacted by the same rules as the paste route (the transcription script
+reads the rules out of \texttt{redact.html}, so the two routes cannot drift), and deleted once
+checked. \texttt{capture = screenshot} marks every such row.
+
+\paragraph{Ingest.} Each submission row is validated (reviewed flag, sender type, month format,
+capture route) before being appended to the submissions file. The collector refuses to run until
+the protocol carries no draft status and the consent form has no unfilled blank; a unit test
+asserts that it does.
+
+\subsection*{Label scheme}
+Three classes, defined for annotators as in Table~\ref{tab:labels}.
+
+\begin{table}[h]
+\centering\small
+\caption{The label scheme.}
+\label{tab:labels}
+\begin{tabular}{@{}l p{11.5cm}@{}}
+\toprule
+Label & Definition \\
+\midrule
+\texttt{legitimate} & a genuine message from the organisation it appears to come from \\
+\texttt{spam} & unsolicited or promotional, with no evidence of intent to obtain credentials, money or information by deception \\
+\texttt{phishing} & impersonates an organisation or person, or seeks credentials, a one-time code, a payment, a call-back or an app install under a false pretext \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\emph{A message is not made \texttt{phishing} because it looks suspicious.} Evidence of
+deceptive intent is required; where it is absent the message is \texttt{spam}.
+\texttt{uncertain} is a fourth value an annotator may use and the published
+\texttt{final\_label} never carries: it sends a message to adjudication. For a binary experiment
+the published collapse rule is \texttt{legitimate} $+$ \texttt{spam} $\to 0$, \texttt{phishing}
+$\to 1$.
+
+\subsection*{Annotation}
+Two human annotators labelled every contributed message independently. The labelling tool shows
+an annotator the text and nothing else: not the other annotator's label, not the contributor's
+own label, not the sender or any metadata. Every disagreement and every \texttt{uncertain} went
+to an adjudicator, whose decision is \texttt{final\_label} and is recorded with a name and a
+one-line note. Agreements were finalised without an adjudicator.
+
+Three things are reported whatever they show: Cohen's $\kappa$~\cite{cohen_sms} between the two
+annotators before adjudication (\FILL{}), the disagreement rate per class pair (\FILL{}), and
+the share adjudicated (\FILL{}). A low $\kappa$ is a result about how separable these classes
+are in practice; it is published as one and not repaired by relabelling until the annotators
+agree. Both original labels ship unmodified so the agreement can be recomputed.
+\FILL{annotator background and training; whether the adjudicator was one of the annotators or a
+third person. The working file carries a machine pre-annotation column that the labelling tool
+never shows to an annotator and that is excluded from $\kappa$; state this.}
+
+\subsection*{Templates}
+Grouping is computed, not assigned by hand. It runs on a \emph{normalized view} of the text
+that exists only for this step: lower-cased, whitespace collapsed, placeholders kept, and every
+URL and money amount replaced by a \texttt{<URL>} or \texttt{<AMT>} token. The published text
+keeps both, but for grouping they are the slots a campaign rotates, and leaving them in place
+splits one template into many. The amount patterns for this step extend the redaction rules
+with the short forms (one to three digits plus a thousand/million/billion suffix) that redaction
+rightly ignores, since two digits identify nobody, but grouping must not.
+
+Each normalized message becomes the set of its word 4-shingles~\cite{broder_sms}. Pairs at or
+above Jaccard similarity $\tau = 0.8$ are linked, and a template is a connected component of
+that graph. Results at $\tau = 0.7$ and $\tau = 0.9$ are reported beside the primary so that
+chaining is visible. The shingling, thresholds and connected components are the method the
+sibling kit-reuse study registers~\cite{kitreuse_sms}; the normalization is this protocol's one
+departure from it, adopted after a pilot batch showed the failure it repairs: a scam sent twice
+with one edited character in the domain, or a different lure amount, fell below $\tau$ even at
+0.7, because in a message of eight words one changed word destroys four shingles. Counted as
+different templates, the two copies then land on opposite sides of a template-disjoint split,
+which is the leakage the split exists to prevent.
+
+\subsection*{Splits}
+\emph{Every message of one template lies in one split.} The published corpus this project
+audits~\cite{qavn_sms} does not do this: 47 of its 597 test rows (7.9\%) repeat a training
+text. A fixed 70/15/15 template-disjoint split ships with the corpus. It is assigned per
+template, never per message, by a greedy search over 200 seeded restarts (seed 1602), scored on
+split size and label mix; the seed and restart count are constants in the script, so the split
+reproduces from the working file alone, and a unit test asserts that no template crosses a
+split.
+
+Three evaluations are specified for the paper that uses the corpus, in decreasing order of what
+they can support:
+\begin{enumerate}[leftmargin=1.6em,itemsep=1pt,topsep=2pt]
+  \item \emph{Cross-validation over template groups} is the primary evaluation. The fixed
+  split is for presentation; with a pilot this size its test slice holds too few phishing
+  messages to carry a conclusion, and the paper says so where it reports it.
+  \item \emph{Leave-one-contributor-out}: train on all contributors but one, test on the one.
+  With \FILL{n} contributors that is as many folds, each a single person, so the folds are
+  reported individually and never averaged. It answers ``does this transfer to an inbox it has
+  not seen'' qualitatively and estimates nothing. It is computed from the private
+  \texttt{participant\_id} and reported without the mapping.
+  \item \emph{The external benchmark}, below.
+\end{enumerate}
+
+\subsection*{The external benchmark}
+The Quality-Assured Vietnamese SMS Phishing Dataset~\cite{qavn_sms} (CC BY 4.0; 2{,}991
+messages; binary labels, 2{,}193 \texttt{benign} and 798 \texttt{scam}) is held out entirely:
+every row is \texttt{split = external}, never train, validation or test. The copy used is
+pinned by the SHA-256 of its \texttt{full\_dataset.csv} (Specifications Table); a copy
+reproduces this benchmark only if its hash matches. No repository revision was recorded at
+download (2026-08), so the content hash is the anchor.
+
+Its placeholder tokens were mapped to this corpus's by an allowlist in the import script. Rows
+that still failed the redaction rule after mapping were dropped and counted, never repaired:
+315 of 2{,}991, most carrying an unmasked one-time code in a bank message. The loaded benchmark
+is therefore 2{,}676 rows (1{,}907 \texttt{benign}, 769 \texttt{scam}). Its labels are its own;
+this project does not re-annotate them and does not treat its three-class scheme as a
+correction of the source's two-class one.
+
+A model trained on \texttt{sms\_dataset.csv} is scored on the benchmark after collapsing its
+prediction to the source's two classes (\texttt{legitimate} $\to$ \texttt{benign};
+\texttt{spam}, \texttt{phishing} $\to$ \texttt{scam}), against the source's own labels. The
+paper also reports, once, \emph{how far the two label schemes diverge}. The source's boundary
+separates \emph{genuine sender} from \emph{scam}, so its \texttt{benign} class carries the
+operators' own promotional messages, which this corpus's scheme calls \texttt{spam} whoever
+sent them. In a model-assisted pass confirmed by a hand audit of a sample, \FILL{about 50\%} of
+the source's \texttt{benign} rows read as \texttt{spam} under the three-class scheme, while
+\FILL{about 0\%} of its \texttt{scam} rows read as \texttt{legitimate}. That divergence is the
+reason the two corpora are kept in separate files rather than merged: a single pooled label
+column would bury it. A template-grouping check confirms that no external template coincides
+with a training template, so the benchmark is genuinely unseen.
+
+\subsection*{Publishing}
+The two published files are a mechanical projection of the private working file: the
+publishing script keeps exactly the schema's columns, derives the four \texttt{has\_*} flags
+from the patterns in \texttt{redact.html}, and refuses to ship a train/validation/test row with
+an \texttt{uncertain} or empty \texttt{final\_label}, a missing \texttt{template\_id} or a
+missing \texttt{split}. A test suite holds the redaction routes to one list of cases and the
+later stages to their invariants: rotated slots group as one template, no template crosses a
+split, agreements finalise without an adjudicator, the projection ships exactly the schema's
+columns. The pipeline uses the Python~3 standard library only, apart from the OCR engine of the
+screenshot route; all scripts, the redaction page and the tests are in the repository at
+release \FILL{tag}.

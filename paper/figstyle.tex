@@ -1,0 +1,44 @@
+% figstyle.tex — one palette for every hand-drawn figure, the LaTeX twin of scripts/core/lib/figstyle.py.
+%
+% WHY THIS FILE EXISTS. The generated (matplotlib) figures have shared a validated house palette
+% since figstyle.py; the hand-drawn TikZ ones did not, and drifted into two systems: most were
+% monochrome black!N, while P7's pipeline had picked up Okabe--Ito. Two palettes across one thesis
+% read as two documents. The hexes below are figstyle.py's, unchanged, so a schematic and the plot
+% on the facing page name the same thing in the same colour.
+%
+% THE HUES ARE NOT DECORATION -- they carry the role, and the role assignment is fixed:
+%   fgSource   feeds, corpora, inputs entering the system      (figstyle.py BLUE)
+%   fgProcess  the active step: scripts, encoders, transforms  (figstyle.py ORANGE)
+%   fgStore    what the step produces: datasets, models, heads (figstyle.py TEAL)
+%   fgAccent   the paper's decisive object -- an attack, a blind spot, the thing under test
+%   fgMuted    infrastructure and third-party boxes whose individual identity is not the point
+%   fgInk      ALL text. A label never wears the series colour; the box beside it carries identity.
+%
+% Validated as a categorical set with the dataviz validator (light surface): lightness band,
+% chroma floor, CVD separation, normal-vision floor and contrast all pass; worst adjacent pair is
+% teal/blue at protan dE 17.5, normal dE 18.2. Tritan separation for that pair is 5.8, which is
+% inside the floor band and legal ONLY because every box in these diagrams is directly labelled --
+% colour is never the sole encoding here. Re-run the validator before adding a hue.
+%
+% Fills are the hue at 8-12% so black body text stays readable on them, and the structure survives
+% a greyscale print: the tints differ in lightness, and shape plus position already carry the flow.
+%
+% USAGE. Standalone figures compile in their own directory: \input{../../figstyle}
+%        Figures \input into a paper compile from the paper root: \input{../figstyle}
+\definecolor{fgSource}{HTML}{2A78D6}
+\definecolor{fgProcess}{HTML}{EB6834}
+\definecolor{fgStore}{HTML}{1B9E8A}
+\definecolor{fgAccent}{HTML}{7C4DBE}
+\definecolor{fgMuted}{HTML}{9AA0A6}
+\definecolor{fgInk}{HTML}{2B2B2B}
+% figstyle.py's ORANGE does double duty and it is the same hue on purpose: in a plot it is the
+% phishing/attention role, in a schematic it is the active step. Both are "the thing being looked
+% at". The alias exists so a bar chart of phishing counts does not have to say fgProcess.
+\colorlet{fgPhish}{fgProcess}
+\colorlet{fgBenign}{fgSource}
+
+% A tikz node with a `text width` line-breaks like a paragraph, hyphenation and all, so
+% a hyphen inside a labelled box reads as a typo rather than as typesetting. Nodes are
+% short enough to break at spaces or not at all.
+\tikzset{every node/.append style={execute at begin node={%
+  \hyphenpenalty=10000\exhyphenpenalty=10000\relax}}}
