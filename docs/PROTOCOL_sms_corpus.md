@@ -301,11 +301,13 @@ two it is.
   messages deleted** rather than masked — one other person's flight booking, five health-care
   messages addressed to the author (appointments and test results), one clinic-app OTP. It also
   tightened two rules for everyone (an own balance stated with words between "số dư" and the figure;
-  an own top-up "đã nạp" + amount), with cases in the tests. Exact repeats were kept (1,293; carriers
-  resend promotions), as in the community batch; templates (§6) absorb them. Nobody but the author
+  an own top-up "đã nạp" + amount), with cases in the tests. **Exact repeats were dropped** (1,293 of
+  2,894, leaving **1,601**; carriers resend the same promotion many times, and the key is the redacted
+  text with whitespace collapsed and case folded, first occurrence kept — `data/private/provenance.csv`
+  records both counts). Nobody but the author
   is a data subject here, so this is not collection and nothing was gated; the batch **is attributable**,
   to the author alone, so its `participant_id` is `AUTHOR`, never `C-MIX`, and leave-one-contributor-out
   (§7) must hold it out as one contributor. It was appended to `submissions.csv` and the working file
-  on 2026-10-04, as the community batch was (3,365 contributed rows; templates and the split
+  on 2026-10-04, as the community batch was (2,072 contributed rows; templates and the split
   recomputed over all of them): whether the author's own inbox enters the *published* corpus — the
   paper's "included / excluded" — is answered in §10 and the ethics statement, not here.
