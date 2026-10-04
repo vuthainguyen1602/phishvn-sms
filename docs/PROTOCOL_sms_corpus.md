@@ -290,3 +290,21 @@ two it is.
   is a question the ethics application asks explicitly (§10); until it is answered the batch counts
   for having exercised the pipeline, and the data article describes it as what it is: collected
   before the protocol, from the community, with its provenance recorded but not its consent.
+- **2026-10-04 — the author's own inbox, read as a batch.** The author's iPhone forwards its SMS to
+  Messages on the author's Mac, and `scripts/sms_imessage.py` read them out of that database:
+  **2,894 received SMS**, 2023-01 to 2026-10, almost all from brandnames and shortcodes (1,035 and
+  1,857; two from personal numbers, obfuscated gambling spam, reduced to `+84-mobile`). iMessage rows
+  and messages the author sent were never selected by the query. The text went through the same
+  redaction rules as every other route, and the author read the redacted preview before finalizing;
+  that reading found what the rules do not cover and fixed it by hand: the author's name on flight
+  and subscriber-registration notices masked as `<NAME>`, booking codes as `<ID>`, and **seven
+  messages deleted** rather than masked — one other person's flight booking, five health-care
+  messages addressed to the author (appointments and test results), one clinic-app OTP. It also
+  tightened two rules for everyone (an own balance stated with words between "số dư" and the figure;
+  an own top-up "đã nạp" + amount), with cases in the tests. Exact repeats were kept (1,293; carriers
+  resend promotions), as in the community batch; templates (§6) absorb them. Nobody but the author
+  is a data subject here, so this is not collection and nothing was gated; the batch **is attributable**,
+  to the author alone, so its `participant_id` is `AUTHOR`, never `C-MIX`, and leave-one-contributor-out
+  (§7) must hold it out as one contributor. It is held in `data/private/ingest/` and, like the community
+  batch, has not been appended to `submissions.csv`: whether the author's own inbox enters the published
+  corpus — the paper's "included / excluded" — is answered in §10 and the ethics statement, not here.

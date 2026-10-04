@@ -11,6 +11,8 @@ contributor's phone                    author's machine
 redact.html (paste route) ──────────→  submission rows
 screenshots in a .zip ──────────────→  sms_transcribe.py extract → draft.csv, checked by
                                        hand against each image → finalize → ingest/<token>.csv
+the author's own Messages (chat.db) →  sms_imessage.py extract → draft.csv with a redaction preview,
+                                       read by hand → finalize → ingest/<token>.csv (participant AUTHOR)
                                        sms_collect.py --ingest → data/raw/.../submissions.csv
                                        sms_annotate.py init → data/private/sms_working.csv
                                        sms_import.py <published corpus> → appended as external benchmark
@@ -25,6 +27,7 @@ screenshots in a .zip ──────────────→  sms_transcr
 |---|---|
 | `redact.html` | the redaction page a contributor opens offline on their own phone. Holds **the one copy of the redaction rules**; `sms_transcribe.py` and `sms_templates.py` read them out of this file, so the routes cannot drift. |
 | `sms_transcribe.py` | the author's side of the screenshot route: `extract` re-encodes images from pixels alone (no name or metadata survives), OCRs them and writes a draft; the hand check sits between the two commands; `finalize` redacts, refuses rows that still fail the schema, and **deletes the images**. Gated: receiving screenshots is collecting. |
+| `sms_imessage.py` | the author's own inbox, one contributor only: reads the received SMS out of Messages on the author's Mac (iMessage and sent messages are never selected by the query), reduces a numeric sender to its country prefix, keeps the month, drops texts already in `submissions.csv`, and writes a draft with the redaction preview and what the rules would still leave in; `finalize` redacts by the same rules, refuses what rule 2 forbids, records the token under participant `AUTHOR` (attributable, so never `C-MIX`) and deletes the draft. Not collection, so not gated — but the append to `submissions.csv` still is, and whether this batch enters the corpus is the protocol's open question. |
 | `sms_collect.py` | the collector. `--check` prints what still blocks collection; `--ingest` validates each submission row (reviewed, sender type, month format, capture route) and appends to `submissions.csv`. Gated. |
 | `sms_import.py` | the external benchmark (protocol §1, §7): a published corpus's rows appended as a held-out test set — placeholder tokens mapped by an allowlist, the source's own binary label kept in `label_source`, marked `split=external` and `queued=0` so they are never annotated and never in the train/val/test split. Rows failing SCHEMA rule 2 dropped and named, never repaired. Not collection, so not gated. |
 | `sms_annotate.py` | `init` builds the working file (message_id, participant_id — the reason `data/` is private); `label` shows an annotator **the text and nothing else**, so the two annotators and the contributor stay independent; `adjudicate` finalizes agreements without an adjudicator and decides the rest with a recorded name and a one-line note; `report` prints Cohen's kappa, disagreements per class pair and the share adjudicated — whatever they show. |
