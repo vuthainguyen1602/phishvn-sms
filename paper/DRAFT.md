@@ -346,7 +346,7 @@ never train, validation or test. The copy used is pinned by the SHA-256 of its `
 repository revision was recorded at download (2026-08), so the content hash is the anchor.
 
 Its placeholder tokens were mapped to this corpus's by an allowlist in the import script. Rows
-that still failed the redaction rule after mapping were dropped and counted, never repaired: 315
+that still failed the redaction rule after mapping were dropped and counted, never repaired: 310
 of 2,991, most carrying an unmasked one-time code in a bank message. The loaded benchmark is
 therefore 2,681 rows (1,910 `benign`, 771 `scam`). Its labels are its own; this project does not
 re-annotate them and does not treat its three-class scheme as a correction of the source's
