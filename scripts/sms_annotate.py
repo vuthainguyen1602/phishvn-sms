@@ -48,7 +48,8 @@ LABELS = {"1": "legitimate", "2": "spam", "3": "phishing"}
 RULE = ("§4: not phishing because it looks suspicious — evidence of deceptive intent, or it is spam. "
         "One question: does the message lie to the recipient about what it is? A casino that says it is a "
         "casino is spam, however illegal or obfuscated; anything that pretends to be a brand, a fine, a prize, "
-        "a job or a login is phishing; unreadable → uncertain, never a guess")
+        "a job or a login is phishing; a genuine brand advertising to its own customers is spam, "
+        "legitimate is the service message (code, transaction, bill, notice); unreadable → uncertain, never a guess")
 
 
 def _read(path: str):

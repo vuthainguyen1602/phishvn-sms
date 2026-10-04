@@ -122,12 +122,19 @@ in a line.
 
 | label | what it means |
 |---|---|
-| `legitimate` | a genuine message from the organisation it appears to come from |
-| `spam` | unsolicited or promotional, with no evidence of intent to obtain credentials, money or information by deception |
+| `legitimate` | a genuine message from the organisation it appears to come from, about a service the recipient has: a one-time code, a transaction, a bill, a delivery, a public notice |
+| `spam` | promotional or unsolicited, with no evidence of intent to obtain credentials, money or information by deception — **including a genuine promotion from a genuine sender**, such as a carrier's data offer to its own subscriber |
 | `phishing` | impersonates an organisation or person, or seeks credentials, a one-time code, a payment, a call-back or an app install under a false pretext |
 
 For a binary experiment: `legitimate` + `spam` → 0, `phishing` → 1. Both the three-class labels
 and the collapse rule ship with the corpus, so a reader may disagree with the collapse.
+
+**Tie-break between `legitimate` and `spam`:** the label follows the *content*, not the sender. A
+genuine brandname advertising to its own customers is `spam`; `legitimate` is reserved for service
+and transactional messages. The sender is masked for annotators and withheld from the published
+file, so a rule that turned on who sent the message could not be applied by the people applying it.
+(Amendment of 2026-10-04: the author's-inbox batch is some 1,260 carrier promotions sent to the
+author's own number, which fit both rows of the table as first written.)
 
 `uncertain` is a fourth value an annotator may use and the corpus never carries: it marks a
 message for adjudication. **A message is not made `phishing` because it looks suspicious.**
@@ -311,3 +318,10 @@ two it is.
   on 2026-10-04, as the community batch was (2,072 contributed rows; templates and the split
   recomputed over all of them): whether the author's own inbox enters the *published* corpus — the
   paper's "included / excluded" — is answered in §10 and the ethics statement, not here.
+- **2026-10-04 — §4, the `legitimate`/`spam` tie-break.** The table as first written put a genuine
+  promotion from a genuine sender in both rows. The author's-inbox batch is mostly such messages
+  (MobiFone data offers to the author's own number). Decision: the label follows the content —
+  promotional is `spam` whoever sends it; `legitimate` is the service and transactional message.
+  The reason is procedural as much as conceptual: annotators never see the sender, so a rule that
+  depended on it could not be applied. The on-screen rule of `sms_annotate.py` and the annotators'
+  guide (§6, "vài ca khó") say the same.
