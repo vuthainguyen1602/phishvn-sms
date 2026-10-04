@@ -31,5 +31,7 @@
   ["Phi van chuyen 35.000d, chuyen vao TK 0123456789", "Phi van chuyen 35.000d, chuyen vao TK <ACCOUNT>"],
   ["Nap 5000k nhan x2, lai 30 trieu/thang", "Nap 5000k nhan x2, lai 30 trieu/thang"],
   ["Giao dich 1.200.000VND tai SHOPEE. Ma OTP 482913", "Giao dich <AMOUNT> tai SHOPEE. Ma OTP <OTP>"],
-  ["N@p d@u tang 100% t@i pc-a.biz/9mr, lien he CSKH tele", "N@p d@u tang 100% t@i pc-a.biz/9mr, lien he CSKH tele"]
+  ["N@p d@u tang 100% t@i pc-a.biz/9mr, lien he CSKH tele", "N@p d@u tang 100% t@i pc-a.biz/9mr, lien he CSKH tele"],
+  ["Ban da nap 10000 VND vao TKC. So du hien tai 57500 VND,duoc su dung den 31/12/2026.", "Ban da nap <AMOUNT> vao TKC. So du hien tai <AMOUNT>,duoc su dung den <DATE>."],
+  ["Nap 100.000d nhan ngay 50% tai mobifone.vn/km", "Nap 100.000d nhan ngay 50% tai mobifone.vn/km"]
 ]
