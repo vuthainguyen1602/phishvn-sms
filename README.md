@@ -4,11 +4,11 @@
 
 A Vietnamese SMS corpus of scam messages, contributed by consenting students.
 
-## Nothing has been collected
+## Nothing has been collected under the protocol
 
-**No message exists in this repository, and no contributor has been asked for one.** There is no
-ethics approval yet, the collection protocol is still a draft, and the consent form still has
-blanks in it. `sms_collect.py` reads those two documents and refuses to collect while any of that
+**No message in this repository was collected under the protocol, and no contributor has been
+asked through its consent form.** There is no ethics approval yet, the collection protocol is
+still a draft, and the consent form still has blanks in it. `sms_collect.py` reads those two documents and refuses to collect while any of that
 is true; `--check` prints what is missing.
 
 ```
@@ -24,10 +24,13 @@ $ python3 scripts/sms_collect.py --check
 }
 ```
 
-The author's own inbox supplied a small pilot batch, held only on the author's machine and never
-committed, used to exercise the pipeline end to end. It is not the corpus: whether any of it may
-enter the corpus is a question the ethics application asks explicitly, and until then it counts
-for nothing but the pipeline having been run.
+A **community batch** does exist, and it predates the protocol: 465 messages gathered through a
+Google Form, direct requests, hand-copied public Facebook and Threads posts, and a few from the
+author's own inbox, with nothing kept about any contributor (protocol, amendment of 2026-10-04).
+It is held only on the author's machine, never committed, redacted and ingested by the same
+pipeline, and used to exercise it end to end. It is not the corpus: whether any of it may enter
+the corpus is a question the ethics application asks explicitly, and until then it counts for
+having run the pipeline and for what it taught (the rule-2 amendment of the same date).
 
 ## Why the documents are public before the data
 
@@ -99,7 +102,7 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `tests/` | the redaction routes held to one list of cases, and the later stages to their invariants — template-disjointness, seeded reproducibility, the projection's exact columns: `python3 -m unittest discover tests` |
 | `examples/EXAMPLE_synthetic.csv` | six invented rows showing the shape; not collected data, nobody sent them |
 | `examples/EXAMPLE_submission_synthetic.csv`, `examples/EXAMPLE_working_synthetic.csv` | the same six messages at the two private stages; also invented |
-| `data/` | empty, and stays empty until there is approval; `.gitignore` keeps everything but its README out of git |
+| `data/` | private, never committed; `.gitignore` keeps everything but its README out of git. Holds the community batch and the working file on the author's machine only |
 | `LICENSE-CODE` | MIT, for the code |
 | `LICENSE` | where the corpus licence will go; not one yet, and says why |
 

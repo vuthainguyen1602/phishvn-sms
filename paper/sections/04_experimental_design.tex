@@ -42,6 +42,29 @@ researcher, and the principal risk: a personal detail the filter missed and the 
 not notice on review. It asks for no signature, since a signature would turn an anonymous
 submission into an identified one.
 
+\subsection*{Two provenances}
+The corpus has two provenances, and every row's submission is recorded privately with its channel.
+
+\paragraph{The community batch, collected before the protocol.} Between \FILL{start} and
+2026-10-04, before ethics approval and before the consent form was in use, the lead author
+gathered \FILL{N\textsubscript{c}} messages (465 before annotation, after exact-duplicate
+removal) through four channels: a Google Form inviting people to submit scam SMS for research
+(\FILL{the form's wording on purpose and publication}); screenshots and texts people were asked
+for directly; public Facebook and Threads posts in which people showed scam SMS they had received,
+copied by hand and never crawled; and a few messages from the author's own inbox. Nothing about any
+contributor or poster was kept: no name, handle, post link or image; sender numbers were reduced to
+a country prefix; screenshots were deleted once transcribed. The batch is not attributable per
+message to a person or a channel, so it carries one unattributed participant code and contributes
+nothing to leave-one-contributor-out. The rule excluding personal-number senders was not in force
+for it, and most of its messages come from personal numbers. Its texts went through the same
+redaction, template and split stages as everything else; an export of form submissions is
+\texttt{capture = paste} (character-exact), screenshots are \texttt{capture = screenshot}.
+\FILL{Whether this batch enters the published corpus, and under which ethics statement, is the
+question the ethics application puts; state the answer here.}
+
+\paragraph{The protocol corpus.} Everything below describes collection under the protocol:
+consenting contributors, redaction on their own device, a mechanical sender rule. \FILL{counts}
+
 \subsection*{Collection and redaction}
 Figure~\ref{fig:pipeline} shows the pipeline from the contributor's phone to the two published
 files. Every stage reads files and writes files, so the whole of it can be rerun and checked.
@@ -173,7 +196,8 @@ they can support:
   With \FILL{n} contributors that is as many folds, each a single person, so the folds are
   reported individually and never averaged. It answers ``does this transfer to an inbox it has
   not seen'' qualitatively and estimates nothing. It is computed from the private
-  \texttt{participant\_id} and reported without the mapping.
+  \texttt{participant\_id} and reported without the mapping, over the protocol corpus only: the
+  community batch is unattributed and is held in the training side of every fold.
   \item \emph{The external benchmark}, below.
 \end{enumerate}
 

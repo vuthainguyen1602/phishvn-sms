@@ -255,7 +255,9 @@ The claim is made against what actually exists, stated precisely because a revie
 
 ## 10. Ethics approval
 
-**TO SET:** the approving body, the reference number and the date. If the university has no
+**TO SET:** the approving body, the reference number and the date. The application also asks,
+explicitly, whether the community batch of the 2026-10-04 amendment may enter the corpus and
+under which statement. If the university has no
 process covering this, the written answer saying so is filed here in its place — an absent
 process is not an absent question, and a data article's ethics statement has to say which of the
 two it is.
@@ -270,3 +272,20 @@ two it is.
   `sms_transcribe.py` and the tests alike. Consequence for the external benchmark (§1, §7): five
   source rows dropped under the old wording pass under the new one, so the benchmark is 2,681 rows
   (1,910 benign, 771 scam; 310 dropped), not 2,676 (315 dropped). `EXTERNAL_QAVN.md` records both.
+- **2026-10-04 — a community batch exists that predates this protocol.** Between **[FILL: start]**
+  and 2026-10-04, before approval and before the consent form was in use, the author gathered
+  **465 messages** (after exact-duplicate removal) from four channels: a Google Form inviting people
+  to submit scam SMS for research (**[FILL: the form's exact wording on purpose and publication]**);
+  screenshots and texts people were asked for directly; public Facebook and Threads posts in which
+  people showed scam SMS they had received, copied by hand, never crawled; and a few messages from
+  the author's own inbox. The batch is held privately (`data/private/provenance.csv` names each
+  submission's channel), was redacted and ingested by the same pipeline as everything else, and
+  **nothing about any contributor or poster was kept**: no name, handle, post link or image; sender
+  numbers were reduced to a country prefix; the screenshots were deleted once transcribed. The batch
+  is **not attributable per message** to a person or a channel, so its `participant_id` is the single
+  code `C-MIX` and it contributes **nothing to leave-one-contributor-out** (§7). The guideline of §1
+  (no messages from personal numbers) was not in force for it, and it is mostly messages from
+  personal numbers. Whether it may enter the published corpus, and under which ethics statement,
+  is a question the ethics application asks explicitly (§10); until it is answered the batch counts
+  for having exercised the pipeline, and the data article describes it as what it is: collected
+  before the protocol, from the community, with its provenance recorded but not its consent.

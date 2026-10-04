@@ -48,7 +48,7 @@ labels their own inbox knowing the context, which is exactly the knowledge an an
 | field | added by | meaning |
 |---|---|---|
 | `message_id` | ingest / import | `SMS_00001` in ingest order; `QAV_` plus the source corpus's id for imported rows |
-| `participant_id` | ingest | `P001`. **The reason this file is private.** Empty on imported rows, which have no contributor. |
+| `participant_id` | ingest | `P001`. **The reason this file is private.** Empty on imported rows, which have no contributor. `C-MIX` on the pre-protocol community batch (PROTOCOL amendment 2026-10-04), which is not attributable to a person and takes no part in leave-one-contributor-out. |
 | `source` | ingest / import | `contributed`, or the imported corpus's tag (`qavn`) — PROTOCOL §1 |
 | *(all submission fields)* | | carried through unchanged; an imported row fills only `text`, `capture` (`imported`) and `sender_type` (`unknown`) |
 | `label_source` | import | external rows only: the source corpus's own binary label, kept as their evaluation label; never re-annotated (§7) |
