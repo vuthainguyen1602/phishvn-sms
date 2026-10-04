@@ -88,6 +88,7 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `docs/CONSENT_en.md` | its English translation, so a reviewer who does not read Vietnamese can check what contributors were told; the Vietnamese governs |
 | `docs/SCHEMA.md` | the published file's fields, the rules a valid file satisfies, and what is withheld |
 | `docs/SCHEMA_raw.md` | the two files that come before it and never ship, and the exact columns dropped to produce the published one |
+| `docs/FORM_community_vi.md` | the Google Form the community batch came through, verbatim, with an English gloss and what it does and does not promise beside the consent form |
 | `docs/EXTERNAL_QAVN.md` | the external benchmark's provenance: its authors, licence, citation, and a SHA-256 pinning the exact copy evaluated |
 | `paper/` | the data article, laid out like the sibling repositories' `papers/`: `main.tex` + `sections/` (*Data in Brief* structure), the pipeline figure, `OUTLINE.md` and the prose `DRAFT.md` it was typeset from; every number that depends on collection, annotation or approval is a red `\FILL`, and `paper/HOW_TO_RUN.md` says where each will come from |
 | `scripts/redact.html` | the redaction page contributors open on their phone; one offline file, no network access, holds the redaction rules |

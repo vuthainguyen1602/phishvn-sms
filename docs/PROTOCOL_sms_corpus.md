@@ -275,7 +275,8 @@ two it is.
 - **2026-10-04 — a community batch exists that predates this protocol.** Between **[FILL: start]**
   and 2026-10-04, before approval and before the consent form was in use, the author gathered
   **465 messages** (after exact-duplicate removal) from four channels: a Google Form inviting people
-  to submit scam SMS for research (**[FILL: the form's exact wording on purpose and publication]**);
+  to submit SMS for research (its text, verbatim, and what it does and does not promise:
+  `docs/FORM_community_vi.md` — purpose and anonymity, not permanent publication or withdrawal);
   screenshots and texts people were asked for directly; public Facebook and Threads posts in which
   people showed scam SMS they had received, copied by hand, never crawled; and a few messages from
   the author's own inbox. The batch is held privately (`data/private/provenance.csv` names each
