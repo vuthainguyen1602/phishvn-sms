@@ -325,3 +325,20 @@ two it is.
   The reason is procedural as much as conceptual: annotators never see the sender, so a rule that
   depended on it could not be applied. The on-screen rule of `sms_annotate.py` and the annotators'
   guide (§6, "vài ca khó") say the same.
+- **2026-10-04 — a seventh community screenshot batch, and what a collage is worth.** 88 images
+  arrived in one evening, 75 distinct (13 were byte-identical copies), and many were collages or
+  threads holding two to six messages, so the unit of transcription is the message, not the file:
+  every bubble that is complete in the image becomes a row, a bubble cut off at the edge becomes
+  nothing. **79 rows** after redaction and text dedupe (63 provisional phishing, 10 legitimate,
+  6 spam; 61 templates), none already in `submissions.csv`; a text seen in several images is kept
+  once, with the sender and the month taken from whichever image shows them. Six images were not
+  transcribed and stay in the folder for the author to rule on: two Shopee in-app chats (not SMS),
+  two messages cut off mid-text, one with the brand blacked out by the person who posted it, one
+  too small to read. Three kinds of hand masking were needed beyond the rules: a recipient's or a
+  courier's name as `<NAME>`, a card holder's own spend and remaining limit as `<AMOUNT>` (the rules
+  mask a balance introduced by "số dư", not one introduced by "hạn mức còn lại"), and an
+  alphanumeric OTP as `<OTP>` (the rule expects digits). Same token conventions as the earlier
+  screenshot batches: participant `C-MIX`, provenance "same as the screenshot batches". The
+  working file was rebuilt over all of it: **2,151 contributed rows** (550 community, 1,601 author's
+  inbox), 1,940 templates, split 1,505/323/323; the community side now carries 101 provisional
+  phishing in 72 templates, against the ≥100-template floor of §2.
