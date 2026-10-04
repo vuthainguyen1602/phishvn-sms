@@ -31,7 +31,11 @@ them, and the agreement the paper reports can be checked rather than believed.
 
 1. `message_id` is unique.
 2. `text` contains no digit run of four or more outside a placeholder, a link or an amount, and
-   no `@`. Links and broadcast amounts are kept; personal data inside a link and the
+   no e-mail address: nothing shaped `name@domain.tld`, with or without spaces around the `@`
+   and the dots, and no `@` followed by a mail provider. A bare `@` used as a letter inside a
+   scrambled word (`th@nh`, `tay@ae`) is text and stays; before 2026-10-04 the rule banned every
+   `@`, and the pilot batch showed that threw away exactly the obfuscated messages the corpus
+   exists to keep. Links and broadcast amounts are kept; personal data inside a link and the
    contributor's own balance and account movements are masked (PROTOCOL §3). Redaction failures are
    the one defect that cannot be repaired after publication.
 3. `final_label` is never `uncertain` and never empty: a row outside the annotation queue

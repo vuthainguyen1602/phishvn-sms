@@ -17,7 +17,7 @@ Path & Size/count & Contents \\
 \texttt{LICENSE} & n/a & \FILL{corpus licence} text \\
 \texttt{MANIFEST.txt} & n/a & SHA-256 and byte size of every file \\
 \texttt{sms\_dataset.csv} & \FILL{N} rows & The contributed corpus (14 columns) \\
-\texttt{sms\_external\_qavn.csv} & 2{,}676 rows & The external benchmark, source labels (9 columns) \\
+\texttt{sms\_external\_qavn.csv} & 2{,}681 rows & The external benchmark, source labels (9 columns) \\
 \texttt{SCHEMA.md} & n/a & Column-level dictionary, validity rules, what is withheld \\
 \texttt{EXTERNAL\_QAVN.md} & n/a & Benchmark provenance, licence, citation, SHA-256 pin \\
 \bottomrule
@@ -92,7 +92,7 @@ test       & \FILL{} & \FILL{} & \FILL{} & \FILL{} & \FILL{} \\
 \textbf{contributed, total} & \FILL{N} & \FILL{T} & \FILL{} & \FILL{} & \FILL{} \\
 \midrule
  & Messages & Templates & \texttt{benign} & \texttt{scam} & \\
-external (QAVN) & 2{,}676 & \FILL{} & 1{,}907 & 769 & \\
+external (QAVN) & 2{,}681 & \FILL{} & 1{,}910 & 771 & \\
 \bottomrule
 \end{tabular}
 
@@ -126,7 +126,7 @@ were produced for it. \texttt{<NUMBER>} appears only in this file, as the mechan
 the source's \texttt{[NUMBER]} and \texttt{[POINT]} tokens, which collapsed phones, shortcodes
 and quantities into one; \texttt{has\_phone} stays 0 on such a row.
 
-\paragraph{Size.} 2{,}676 messages (1{,}907 \texttt{benign}, 769 \texttt{scam}), after 315 of
+\paragraph{Size.} 2{,}681 messages (1{,}910 \texttt{benign}, 771 \texttt{scam}), after 310 of
 the source's 2{,}991 rows were dropped by redaction rule (2); most carried an unmasked one-time
 code. Templates: \FILL{count at $\tau = 0.8$}. No external template coincides with any training
 template of the contributed corpus (checked by the grouping script).

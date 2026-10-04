@@ -209,7 +209,11 @@ var Core = (function () {
   function problems(text, c) {
     var p = [], rest = outside(text, c).text.replace(/<[A-Z_]+>/g, "");
     if (/\d{4,}/.test(rest)) p.push("Còn một dãy từ 4 chữ số trở lên chưa được che.");
-    if (/@/.test(text.replace(/<[A-Z_]+>/g, ""))) p.push("Còn ký tự @ (có thể là e-mail) chưa được che.");
+    // An e-mail address, with or without spaces around the @ and the dots, or an @ before a mail provider.
+    // A bare @ used as a letter inside a scrambled word is text and stays: the same expression as
+    // EMAILISH in sms_transcribe.py, so the two routes cannot drift.
+    var email = /[A-Za-z0-9._%+-]+\s?@\s?[A-Za-z0-9-]+(?:\s?\.\s?[A-Za-z0-9-]+)*\s?\.\s?[A-Za-z]{2,}|@\s?(?:gmail|yahoo|hotmail|outlook|icloud|live|email|mail)(?![A-Za-z])/i;
+    if (email.test(text.replace(/<[A-Z_]+>/g, ""))) p.push("Còn một địa chỉ e-mail (tên @ tên miền) chưa được che.");
     return p;
   }
   function hasLink(text, c) { return outside(text, c).links > 0; }

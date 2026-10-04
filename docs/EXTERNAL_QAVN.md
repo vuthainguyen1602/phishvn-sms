@@ -55,9 +55,12 @@ shasum -a 256 full_dataset.csv
 - **Maps** its placeholder tokens to this corpus's, mechanically, by the allowlist in
   `scripts/sms_import.py` (`[MONEY]`→`<AMOUNT>` and so on); `[TB]`/`[QC]` and brand prefixes are
   message text and are left alone.
-- **Drops** rows that still fail SCHEMA.md rule 2 after mapping — 315 of 2,991 in this copy, most
+- **Drops** rows that still fail SCHEMA.md rule 2 after mapping — 310 of 2,991 in this copy, most
   carrying an unmasked one-time code — counted, named by `sms_import.py`, never repaired. So the
-  benchmark loaded here is **2,676 rows** (1,907 `benign`, 769 `scam`).
+  benchmark loaded here is **2,681 rows** (1,910 `benign`, 771 `scam`). The count is a function of
+  rule 2 as written on the date of the run: under the rule's earlier wording, which banned every
+  `@`, it was 2,676 (315 dropped); the 2026-10-04 wording bans e-mail addresses, not a bare `@`
+  used as a letter, and five rows came back (PROTOCOL amendment of that date).
 - **Holds it out**: every row is `split = external`, never in train/validation/test; a
   template-grouping check confirms no external template coincides with a training template.
 

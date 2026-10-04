@@ -51,7 +51,7 @@ scheme as a correction of the source's two-class one; where the two schemes dive
 of its own; what it needs is honesty about provenance, so external rows carry `source = qavn`,
 `capture = imported`, `split = external`, no participant, and the source's placeholder tokens
 mapped mechanically to this corpus's. Rows that fail SCHEMA.md rule 2 after mapping are dropped
-and counted, not repaired: in the event, 315 of 2,991, most carrying a one-time code the source's
+and counted, not repaired: in the event, 310 of 2,991, most carrying a one-time code the source's
 anonymisation missed. The exact copy used — its authors, licence, citation and a SHA-256 that
 pins it to the byte — is recorded in `docs/EXTERNAL_QAVN.md`, so the benchmark number the paper
 reports can be reproduced against the same data.
@@ -244,7 +244,7 @@ The claim is made against what actually exists, stated precisely because a revie
   §4 calls an unsolicited promotion `spam` whoever sent it. That is a difference of scheme, and
   the paper frames it as one; it is also why the benchmark is scored against its own labels rather
   than merged. Second, its anonymisation missed what a mechanical check catches: mapping it in
-  (§1) dropped 315 of 2,991 rows for SCHEMA.md rule 2, most carrying an unmasked one-time code in
+  (§1) dropped 310 of 2,991 rows for SCHEMA.md rule 2, most carrying an unmasked one-time code in
   a bank message its README declares clean — what "quality-assured by hand" looks like beside a
   rule a script can hold. Neither point is a claim that the corpus is wrong; both are stated with
   its authors credited (`docs/EXTERNAL_QAVN.md`: names, licence, citation, and a SHA-256 pinning
@@ -262,4 +262,11 @@ two it is.
 
 ## Amendments (dated, append-only)
 
-*(none)*
+- **2026-10-04 — SCHEMA.md rule 2, the `@` clause.** The rule banned every `@` as a proxy for an
+  e-mail address. The first pilot batch from the author's inbox held 26 obfuscated gambling
+  messages that use `@` as a letter (`th@nh`, `tay@ae`), which the rule threw out: exactly the
+  obfuscating spellings §3 keeps on purpose. The clause now bans an e-mail address (`name@domain.tld`,
+  with or without spaces, or `@` before a mail provider) and nothing else, in `redact.html`,
+  `sms_transcribe.py` and the tests alike. Consequence for the external benchmark (§1, §7): five
+  source rows dropped under the old wording pass under the new one, so the benchmark is 2,681 rows
+  (1,910 benign, 771 scam; 310 dropped), not 2,676 (315 dropped). `EXTERNAL_QAVN.md` records both.

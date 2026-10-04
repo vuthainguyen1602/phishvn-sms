@@ -49,7 +49,11 @@ class Redaction(unittest.TestCase):
     def test_problems_catches_what_rule_2_forbids(self):
         rules = T.load_rules()
         self.assertTrue(T.problems("so 12345", rules))
-        self.assertTrue(T.problems("a@b", rules))
+        self.assertTrue(T.problems("a@b.com", rules))
+        self.assertTrue(T.problems("lien he ten @ gmail . com", rules))
+        self.assertTrue(T.problems("hop thu x@gmail", rules))
+        # A bare @ used as a letter in a scrambled word is text, not an address (rule 2, 2026-10-04).
+        self.assertEqual(T.problems("th@anh_dai tay@ae nhan ngay pc-a.biz/9mr", rules), [])
         self.assertEqual(T.problems("Tk <ACCOUNT> luc <TIME>", rules), [])
         # Digits inside a kept link are the link's, not a leak.
         self.assertEqual(T.problems("Xem https://x.top/2027/05/nhan?id=88213", rules), [])

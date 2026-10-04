@@ -27,7 +27,7 @@
 \node[tool,below=5mm of annot] (tmpl) {\texttt{sms\_templates.py}\\\scriptsize word 4-shingles, Jaccard $\tau=0.8$};
 \node[tool,below=5mm of tmpl] (split) {\texttt{sms\_split.py}\\\scriptsize 70/15/15 per template, seed 1602};
 \node[tool,below=5mm of split] (pub) {\texttt{sms\_publish.py}\\\scriptsize schema projection, rules checked};
-\node[tool,right=14mm of annot] (imp) {\texttt{sms\_import.py}\\\scriptsize tokens remapped, 315 rows dropped};
+\node[tool,right=14mm of annot] (imp) {\texttt{sms\_import.py}\\\scriptsize tokens remapped, 310 rows dropped};
 \node[fit=(ocr)(pub)(imp),draw=fgMuted,densely dotted,inner sep=7pt] (auth) {};
 \node[head,anchor=south west,fill=white,inner sep=1pt] at ([yshift=2.5mm]auth.north west) {Author's machine};
 

@@ -88,14 +88,22 @@ def _outside(text: str, rules: dict):
     return text, len(links), len(amounts)
 
 
+# SCHEMA.md rule 2's second clause: an e-mail address, with or without spaces around the @ and
+# the dots, or an @ followed by a mail provider. A bare @ used as a letter inside an obfuscated
+# word ("th@nh", "tay@ae") is text, not an address, and the pilot batch of 2026-10 showed that a
+# flat ban on @ threw away exactly the obfuscated messages the corpus exists to keep.
+EMAILISH = re.compile(r"[A-Za-z0-9._%+-]+\s?@\s?[A-Za-z0-9-]+(?:\s?\.\s?[A-Za-z0-9-]+)*\s?\.\s?[A-Za-z]{2,}"
+                      r"|@\s?(?:gmail|yahoo|hotmail|outlook|icloud|live|email|mail)(?![A-Za-z])", re.I)
+
+
 def problems(text: str, rules: dict) -> list:
     """SCHEMA.md rule 2, as Core.problems checks it: outside the links and amounts a text keeps."""
     rest = re.sub(r"<[A-Z_]+>", "", _outside(text, rules)[0])
     p = []
     if re.search(r"\d{4,}", rest):
         p.append("a digit run of four or more outside a link or an amount")
-    if "@" in re.sub(r"<[A-Z_]+>", "", text):
-        p.append("an @")
+    if EMAILISH.search(re.sub(r"<[A-Z_]+>", "", text)):
+        p.append("an e-mail-shaped @")
     return p
 
 

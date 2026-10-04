@@ -31,7 +31,7 @@ disagreements were adjudicated; both original labels ship unmodified with the ag
 reported. Messages are grouped into templates by a stated, reproducible computation, and a fixed
 70/15/15 split is template-disjoint. A published Vietnamese SMS corpus is shipped alongside,
 unchanged in label, as a held-out external benchmark. The corpus holds [FILL: N] messages in
-[FILL: T] templates; the benchmark holds 2,676. It is a pilot from one small group, not a sample
+[FILL: T] templates; the benchmark holds 2,681. It is a pilot from one small group, not a sample
 of Vietnamese smishing. Released under [FILL: corpus licence].
 
 *[FILL: trim to ≤ 150 words once counts are in.]*
@@ -164,7 +164,7 @@ It has no `final_label`, no annotator columns and no train split: none were prod
 `[POINT]` tokens, which collapsed phones, shortcodes and quantities into one; `has_phone` stays 0
 on such a row.
 
-**Size.** 2,676 messages (1,907 `benign`, 769 `scam`), after 315 of the source's 2,991 rows were
+**Size.** 2,681 messages (1,910 `benign`, 771 `scam`), after 310 of the source's 2,991 rows were
 dropped by the redaction rule (most carried an unmasked one-time code). Templates: [FILL: count
 at τ = 0.8]. No external template coincides with any training template of the contributed corpus
 (checked by the grouping script).
@@ -348,7 +348,7 @@ repository revision was recorded at download (2026-08), so the content hash is t
 Its placeholder tokens were mapped to this corpus's by an allowlist in the import script. Rows
 that still failed the redaction rule after mapping were dropped and counted, never repaired: 315
 of 2,991, most carrying an unmasked one-time code in a bank message. The loaded benchmark is
-therefore 2,676 rows (1,907 `benign`, 769 `scam`). Its labels are its own; this project does not
+therefore 2,681 rows (1,910 `benign`, 771 `scam`). Its labels are its own; this project does not
 re-annotate them and does not treat its three-class scheme as a correction of the source's
 two-class one.
 
@@ -397,7 +397,7 @@ route]. All scripts, the redaction page and the tests are in the repository at t
   `capture = paste`.
 - **The external benchmark inherits its source's biases**: its collection sources and period, and
   its heavy operator traffic. It tests generalization to a differently-collected corpus; it does
-  not remove bias. Its 315 dropped rows are not a random subset (most are bank messages with a
+  not remove bias. Its 310 dropped rows are not a random subset (most are bank messages with a
   one-time code), so the loaded benchmark is slightly skewed against that message type.
 - **Scheme divergence is measured, not resolved.** About [FILL] of the benchmark's `benign` rows
   are `spam` under this corpus's scheme; a model trained here will be penalised on them by the

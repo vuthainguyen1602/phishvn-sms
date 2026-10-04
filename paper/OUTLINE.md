@@ -58,7 +58,7 @@ not a sample of Vietnamese smishing. Close with the number of messages and the l
 - **Files.** `sms_dataset.csv` (the contributed corpus) and `sms_external_qavn.csv` (the external
   benchmark). Fields and types: reproduce the tables from `SCHEMA.md`.
 - **Size.** Contributed: [FILL: N messages], [FILL: T templates]; class balance [FILL: legitimate/
-  spam/phishing counts]. External benchmark: 2,676 messages (1,907 benign, 769 scam) after 315 of
+  spam/phishing counts]. External benchmark: 2,681 messages (1,910 benign, 771 scam) after 310 of
   2,991 dropped by the redaction rule (`EXTERNAL_QAVN.md`).
 - **Splits.** Fixed template-disjoint 70/15/15 (train/validation/test) over the contributed
   corpus; the benchmark is entirely `split = external`. Report per-split message and template
