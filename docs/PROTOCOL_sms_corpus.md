@@ -342,3 +342,28 @@ two it is.
   working file was rebuilt over all of it: **2,151 contributed rows** (550 community, 1,601 author's
   inbox), 1,940 templates, split 1,505/323/323; the community side now carries 101 provisional
   phishing in 72 templates, against the ≥100-template floor of §2.
+- **2026-10-05 — the author's-inbox batch given provisional labels, and what reading it found.**
+  The 1,601 `AUTHOR` rows were appended with `label_contributor` empty. On this date they were
+  labelled under §4 by the author's assistant (Claude), from the text and the sender, as a draft
+  for the author to confirm: **1,293 `spam`, 308 `legitimate`, 0 `phishing`**. The method was a
+  rule pass (codes, top-ups, balances, package confirmations, policy notices and public-sector
+  senders to `legitimate`; `[TB]`/`[QC]`, "soạn X gửi", offers, packages, loans and insurance to
+  `spam`) followed by a reading of every row the rules could not settle or settled on weak
+  grounds, which changed 125 of them. Decisions worth knowing: an advance-credit offer ("ứng
+  tiền", 1255/1256/5110/9070) is `spam`; a top-up or bonus confirmation with an offer attached is
+  `legitimate`, the transaction being the message; a charity appeal from a public body is
+  `legitimate` and borderline; a store-opening announcement sent as `(QC)` is `spam` and
+  borderline; the two obfuscated gambling texts from personal numbers are `spam` and unreadable.
+  The draft with its basis per row and a flag column is kept at
+  `data/private/author_inbox_draft_labels_2026-10-05.csv`; the labels went into the working file
+  and `submissions.csv`, and the backups of both carry the suffix `2026-10-05a`. Annotators still
+  label from the masked text alone (§5), so none of this reaches a final label.
+  **Reading found what the rules and the author's own review had missed**, ten rows: a WhatsApp
+  code written as two groups of three digits (the OTP rule expected one run of four or more — it
+  now takes `ddd-ddd` as well, with the case in `tests/redact_cases.json`); an account-provisioning
+  message carrying a password, masked `<PASSWORD>` by hand; the author's name in two job-site
+  messages, masked `<NAME>`; and six links whose path identifies the recipient (an invoice, a
+  survey, two vouchers, two job confirmations), the path masked `<ID>`, the domain kept.
+  **The split was recomputed** (`sms_split.py --assign`, same seed): it now balances against
+  2,151 provisional labels rather than 550, so 990 rows moved between train, validation and test;
+  the totals stay 1,505/323/323 and the template partition is unchanged.
