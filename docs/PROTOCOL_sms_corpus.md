@@ -140,6 +140,12 @@ author's own number, which fit both rows of the table as first written.)
 message for adjudication. **A message is not made `phishing` because it looks suspicious.**
 Evidence of deceptive intent is required, and where it is absent the message is `spam`.
 
+**Tie-break for scrambled text:** obfuscation by itself decides nothing. A gambling advert whose
+letters are swapped for look-alikes but which still reads as a casino offer is `spam`: it says
+what it is. A text scrambled past reading, carrying a link and nothing a reader can make out, is
+`phishing`: hiding what the message is *is* the deception, and the link is the ask. (Amendment of
+2026-10-05.)
+
 ## 5. Annotation, and what is reported about it
 
 **This section is about the contributed corpus only.** The external benchmark (§1, §7) keeps the
@@ -345,7 +351,8 @@ two it is.
 - **2026-10-05 — the author's-inbox batch given provisional labels, and what reading it found.**
   The 1,601 `AUTHOR` rows were appended with `label_contributor` empty. On this date they were
   labelled under §4 by the author's assistant (Claude), from the text and the sender, as a draft
-  for the author to confirm: **1,293 `spam`, 308 `legitimate`, 0 `phishing`**. The method was a
+  for the author to confirm, and corrected by the author the same day: **1,291 `spam`, 308
+  `legitimate`, 2 `phishing`**. The method was a
   rule pass (codes, top-ups, balances, package confirmations, policy notices and public-sector
   senders to `legitimate`; `[TB]`/`[QC]`, "soạn X gửi", offers, packages, loans and insurance to
   `spam`) followed by a reading of every row the rules could not settle or settled on weak
@@ -353,7 +360,17 @@ two it is.
   tiền", 1255/1256/5110/9070) is `spam`; a top-up or bonus confirmation with an offer attached is
   `legitimate`, the transaction being the message; a charity appeal from a public body is
   `legitimate` and borderline; a store-opening announcement sent as `(QC)` is `spam` and
-  borderline; the two obfuscated gambling texts from personal numbers are `spam` and unreadable.
+  borderline. The two texts from personal numbers, which the amendment above called obfuscated
+  gambling spam, were drafted `spam` on that reading; the author ruled them `phishing`: neither
+  can be read at all, each is a string of symbols around a link on an odd domain, and a message
+  that hides what it is has lied about what it is. §4 now carries that tie-break (scrambled past
+  reading, link and nothing else: `phishing`; scrambled but still a readable casino offer: `spam`),
+  as does the on-screen rule of `sms_annotate.py`. The community batch was then checked for the
+  same shape and four rows moved from the contributor's `spam` to `phishing`: one is the author's
+  own second text submitted earlier through the community route (the domain differs by a hyphen),
+  the other three are symbols or spaced digits with nothing a reader can make out. The community
+  side now holds 105 provisional phishing; the readable scrambled casino adverts, well over a
+  hundred of them, stay `spam`. The split was re-reported after the change: no row moves.
   The draft with its basis per row and a flag column is kept at
   `data/private/author_inbox_draft_labels_2026-10-05.csv`; the labels went into the working file
   and `submissions.csv`, and the backups of both carry the suffix `2026-10-05a`. Annotators still

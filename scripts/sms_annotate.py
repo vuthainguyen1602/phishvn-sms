@@ -47,7 +47,8 @@ W_FIELDS = (["message_id", "participant_id", "source"] + FIELDS
 LABELS = {"1": "legitimate", "2": "spam", "3": "phishing"}
 RULE = ("§4: not phishing because it looks suspicious — evidence of deceptive intent, or it is spam. "
         "One question: does the message lie to the recipient about what it is? A casino that says it is a "
-        "casino is spam, however illegal or obfuscated; anything that pretends to be a brand, a fine, a prize, "
+        "casino is spam, however illegal or obfuscated; scrambled past reading with only a link is phishing (hiding "
+        "what it is is the lie); anything that pretends to be a brand, a fine, a prize, "
         "a job or a login is phishing; a genuine brand advertising to its own customers is spam, "
         "legitimate is the service message (code, transaction, bill, notice); unreadable → uncertain, never a guess")
 
