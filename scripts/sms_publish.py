@@ -15,6 +15,10 @@ It refuses a working file with holes rather than publishing around them: every r
 final_label that is one of the three classes (`uncertain` never ships), a template_id and a
 split. A partially adjudicated corpus is not a publishable one, and the refusal names each row.
 
+The external benchmark (split=external) ships to its own file, and the template-grouping check
+of PROTOCOL §7 is performed here: an external row whose template also holds a contributed row is
+left out of the benchmark file and counted, so what ships is unseen by construction, not by claim.
+
 RUN:
   python3 scripts/sms_publish.py                        # working file -> data/sms_dataset.csv
   python3 scripts/sms_publish.py <working.csv> --out <dataset.csv>
@@ -105,13 +109,22 @@ def main() -> int:
           + (f"; {leftover} unannotated row(s) left out" if leftover else ""))
 
     if external:
+        # PROTOCOL §7: the benchmark is "genuinely unseen", so a template-grouping check runs here
+        # rather than being asserted. An external row whose template also holds a contributed row
+        # (a nationwide public notice both inboxes received, a scam both saw) is left out of the
+        # shipped benchmark and counted; nothing is relabelled.
+        seen = {r["template_id"] for r in primary}
+        shared = [r for r in external if r["template_id"] in seen]
+        external = [r for r in external if r["template_id"] not in seen]
         ext = [project(r, rules, EXT_FIELDS) for r in external]
         with open(a.ext_out, "w", newline="", encoding="utf-8") as fh:
             w = csv.DictWriter(fh, fieldnames=EXT_FIELDS)
             w.writeheader()
             w.writerows(ext)
         print(f"[+] {len(ext)} row(s) -> {os.path.relpath(a.ext_out, ROOT)} "
-              f"(external benchmark); source labels {dict(Counter(r['label_source'] for r in ext))}")
+              f"(external benchmark); source labels {dict(Counter(r['label_source'] for r in ext))}"
+              + (f"; {len(shared)} row(s) in {len({r['template_id'] for r in shared})} template(s) "
+                 f"shared with the contributed corpus left out" if shared else ""))
     return 0
 
 

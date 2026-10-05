@@ -61,8 +61,12 @@ shasum -a 256 full_dataset.csv
   rule 2 as written on the date of the run: under the rule's earlier wording, which banned every
   `@`, it was 2,676 (315 dropped); the 2026-10-04 wording bans e-mail addresses, not a bare `@`
   used as a letter, and five rows came back (PROTOCOL amendment of that date).
-- **Holds it out**: every row is `split = external`, never in train/validation/test; a
-  template-grouping check confirms no external template coincides with a training template.
+- **Holds it out**: every row is `split = external`, never in train/validation/test. A
+  template-grouping check runs when the benchmark file is written (`sms_publish.py`) and is
+  reported by `sms_split.py` after every rebuild: a row whose template also holds a contributed
+  row is left out of the shipped file and counted. On 2026-10-05 that was 59 of 2,681 rows in 33
+  templates (54 benign, 5 scam), nearly all nationwide public notices both inboxes received; the
+  shipped benchmark is therefore 2,622 rows until the working file changes.
 
 ## Reproduce
 

@@ -115,6 +115,12 @@ def main() -> int:
     if external:
         mix = dict(Counter(x for x in (label(rows[i]) for i in external) if x))
         print(f"{'external':6} {len(external):>4} {'':>6} {'':>9}  {mix}  (held out, PROTOCOL §7)")
+        # The §7 template-grouping check, reported here after every rebuild and enforced by
+        # sms_publish.py: external rows whose template also holds a contributed row.
+        shared = [i for i in external if rows[i]["template_id"] in by_tpl]
+        tpls = {rows[i]["template_id"] for i in shared}
+        print(f"{'':6} {len(shared):>4} external row(s) in {len(tpls)} template(s) shared with the "
+              f"contributed corpus: left out of the shipped benchmark by sms_publish.py")
 
     if not a.assign:
         return 0

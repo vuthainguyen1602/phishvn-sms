@@ -260,13 +260,20 @@ class Publish(unittest.TestCase):
                 {f: "" for f in A.W_FIELDS} | {"message_id": "QAV_COM_1",
                     "text": "Soan KM gui <NUMBER>", "source": "qavn", "capture": "imported",
                     "sender_type": "unknown", "label_source": "benign",
-                    "template_id": "T099", "split": "external", "queued": "0"}])
+                    "template_id": "T099", "split": "external", "queued": "0"},
+                # same template as the contributed SMS_00001: PROTOCOL §7's template-grouping
+                # check leaves it out of the shipped benchmark, counted, not relabelled
+                {f: "" for f in A.W_FIELDS} | {"message_id": "QAV_COM_2",
+                    "text": "Ma OTP la <NUMBER>", "source": "qavn", "capture": "imported",
+                    "sender_type": "unknown", "label_source": "scam",
+                    "template_id": "T001", "split": "external", "queued": "0"}])
             with mock.patch.object(sys, "argv", ["x", w, "--out", out, "--ext-out", ext]):
-                _quiet(P.main)
+                msg = _quiet(P.main)
             prim, extrows = _read(out), _read(ext)
             self.assertEqual([r["message_id"] for r in prim], ["SMS_00001"])  # external excluded
             self.assertEqual(list(prim[0]), P.PUB_FIELDS)
-            self.assertEqual([r["message_id"] for r in extrows], ["QAV_COM_1"])
+            self.assertEqual([r["message_id"] for r in extrows], ["QAV_COM_1"])  # QAV_COM_2 shared
+            self.assertIn("1 row(s) in 1 template(s) shared", msg)
             self.assertEqual(list(extrows[0]), P.EXT_FIELDS)  # its own columns, label_source kept
             self.assertEqual(extrows[0]["label_source"], "benign")
 

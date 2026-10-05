@@ -214,8 +214,12 @@ relabel them. It also reports, once, **how far the two label schemes diverge** �
 model-assisted pass, about half the source's benign rows fall under `spam` in the three-class
 sense (the operator promotions of §9), while its scam rows almost never read as `legitimate`.
 That divergence is the reason the two are kept apart rather than merged: a single pooled label
-column would bury it. A template-grouping check confirms **no external template coincides with a
-training template**, so the benchmark is genuinely unseen.
+column would bury it. A template-grouping check runs at publication (`sms_publish.py`) and is
+reported after every rebuild (`sms_split.py`): **an external row whose template also holds a
+contributed row is left out of the shipped benchmark and counted**, so what ships is unseen by
+construction. The count is reported, not hidden: on 2026-10-05 it was 59 of 2,681 rows in 33
+templates, almost all nationwide public notices (police, anti-drug, telecoms-law reminders) that
+the author's inbox and the source's contributors received alike (amendment of that date).
 
 ## 8. What ships, and what does not
 
@@ -371,6 +375,15 @@ two it is.
   the other three are symbols or spaced digits with nothing a reader can make out. The community
   side now holds 105 provisional phishing; the readable scrambled casino adverts, well over a
   hundred of them, stay `spam`. The split was re-reported after the change: no row moves.
+  **The §7 claim that no external template coincides with a training template was true when
+  written and false after the author's-inbox batch:** counting templates on this date found 33
+  shared between the benchmark and the contributed corpus, 59 external rows (54 benign, 5 scam),
+  30 of the 33 on the author's side — nationwide public notices from the police, the anti-drug
+  campaign, the telecoms-law reminder, an MTTQ appeal, a Google code, three MobiFone texts — and
+  three community scams (two traffic-fine templates, one scrambled gambling text). The claim is
+  replaced by a check: `sms_publish.py` leaves such rows out of the shipped benchmark and reports
+  the count, `sms_split.py` reports it after every rebuild, and §7 and `EXTERNAL_QAVN.md` now say
+  so. Nothing is relabelled and no row leaves the working file.
   The draft with its basis per row and a flag column is kept at
   `data/private/author_inbox_draft_labels_2026-10-05.csv`; the labels went into the working file
   and `submissions.csv`, and the backups of both carry the suffix `2026-10-05a`. Annotators still
