@@ -223,24 +223,12 @@ the author's inbox and the source's contributors received alike (amendment of th
 
 ## 8. What ships, and what does not
 
-`sms_dataset.csv` (the contributed corpus): `message_id`, `text` (redacted), `source`, `capture`,
-`final_label`, `label_annotator_1`, `label_annotator_2`, `template_id`, `sender_type`, `has_url`,
-`has_phone`, `has_otp`, `has_money`, `split`. The derived flags are produced by a published
-regular expression, not by eye.
-
-`sms_external_qavn.csv` (the external benchmark) ships **separately**, with the source corpus's
-own label and nothing this project added to it: `message_id` (a `QAV_` id that traces to the
-original), `text` (tokens remapped), `label_source`, `template_id`, `sender_type` and the derived
-flags. It carries no `final_label`, no annotator columns and no train split, because none of
-those were produced for it (§5, §7).
-
-**`participant_id` does not ship.** With a handful of contributors it is pseudonymisation rather
-than anonymisation: anyone who knows the group could read off which bank or which school each of
-them uses. It is kept privately so the leave-one-contributor-out result can be computed, and the
-paper reports that result without the mapping.
-
-Raw, unredacted text and screenshots never ship. Screenshots are deleted once transcribed and
-checked; everything else unredacted is deleted once the redacted corpus is fixed.
+**Nothing ships** (amendment of 2026-10-17). The contributed corpus, the community batch and the
+author's inbox are never published, as files, as quotations or as per-message outputs. They are
+used to score models in the author's studies, and only aggregate numbers (counts, rates,
+intervals, agreement statistics) are reported. The external benchmark keeps the licence of its
+source and is not redistributed from here either; a reader obtains it from its publisher. The
+list of files this section used to promise is in the repository history.
 
 ## 9. What the paper may claim
 
@@ -432,4 +420,16 @@ two it is.
   not claim:** that the batch has informed consent in the sense of the consent form; it does not,
   and the paper that scores it says so in those words. The decision is the author's, taken on this
   date and recorded here before any model is applied to the batch.
-
+- **2026-10-17 — the corpus will not be published; it is an evaluation set.** The author decided
+  that no part of the collected data will be released. Everything collected, under this protocol
+  or before it, is used only to score models in the author's studies, with aggregate numbers
+  reported and no message text, quotation or per-message output leaving the author's machine.
+  What changes: §8 now says nothing ships; the consent form (both languages) no longer says the
+  data will be published permanently or names a publication date, and says instead that the
+  messages test models and only aggregate numbers are reported; the data article in `paper/` is
+  stopped (`paper/STATUS.md`). What does not change: the protocol's other rules (what is
+  collected, redaction on the device, two independent annotators, templates, splits), the draft
+  status, and the gate that refuses collection until ethics approval exists and the consent form
+  has no blank. The amendment of the same date that lets another study score the community batch
+  now reads as a case of this rule rather than an exception to §8. Sections 1 and 9 still mention a
+  data article; they describe the design as first written and are read under this amendment.

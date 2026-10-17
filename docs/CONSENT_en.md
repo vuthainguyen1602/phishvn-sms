@@ -43,7 +43,7 @@ There are two ways to send. You may use either, or both.
 **Way 1 — copy and paste (preferred).**
 
 1. You run a tool **on your own device**. It automatically masks phone numbers, e-mail addresses,
-   long account-like digit runs, your balance and account movements, and names you mark. **Links in a message are kept and published**,
+   long account-like digit runs, your balance and account movements, and names you mark. **Links in a message are kept**,
    because they are the most important trace a scam message leaves; only a phone number, e-mail
    address or name inside a link is masked.
 2. You **review each message after masking** and then decide whether to send it. If you are unsure
@@ -57,28 +57,24 @@ There are two ways to send. You may use either, or both.
 2. You review each image before sending it. If you are unsure about an image, drop it.
 3. **With this way, the researcher sees the image exactly as you sent it**, including anything you
    did not black out. The researcher turns the image into text, masks the text, and **deletes the
-   image** as soon as it has been checked, before the publication date. Images are never published
-   or shared.
+   image** as soon as it has been checked. Images are never published or shared.
 
 We store the **masked** message text, the sender name or shortcode as displayed, the month
 received, and the label you assign. We do **not** store your number, your name, your class, or
 anything identifying you.
 
-The published dataset also carries **no column saying which message came from whom**. The group
-of contributors is small, so even a column of codes rather than names could let someone who knows
-the group guess — we therefore do not release it.
+The data also carry **no column saying which message came from whom**.
 
 ## Where this data goes
 
-The dataset will be **published openly** alongside a data article describing it, so that other
-research groups can reuse it. That means the messages you send, after masking, will be
-**public permanently**.
+The messages you send are **not published**. They stay on the researcher's machine and are used
+only to **test scam-detection models**: a model is run on them, and only **aggregate numbers** (the
+share of scam messages caught, the share of legitimate messages flagged by mistake) go into a
+paper. No paper quotes the text of your messages.
 
-**This means that** once the dataset is published we **cannot remove your messages** — because we
-do not know which ones are yours. You can withdraw **before** the publication date; after it, you
-cannot. We say this plainly rather than promising something we cannot do.
-
-Planned publication date: `[…]`
+**Withdrawal:** because we do not know which messages are yours, once you have sent them we cannot
+remove yours on their own. You decide before sending, and if you are unsure about a message, leave
+it out. We say this plainly rather than promising something we cannot do.
 
 ## Risks
 
@@ -103,8 +99,8 @@ Ethics approval reference: `[…]`
 ## Confirmation
 
 By sending messages through the tool described above, you confirm that you have read this
-information, that you understand the data will be published openly and cannot be withdrawn after
-the publication date, and that you are taking part voluntarily.
+information, that you understand the data are used only to test models, are not published, and cannot be
+removed individually once sent, and that you are taking part voluntarily.
 
 **No signature is asked for.** We deliberately collect none: a signature would turn an anonymous
 submission into an identified one.

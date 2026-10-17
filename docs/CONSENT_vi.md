@@ -37,8 +37,8 @@ Có hai cách gửi. Bạn chọn cách nào cũng được, và dùng cả hai 
 **Cách 1 — sao chép và dán (nên dùng).**
 
 1. Bạn chạy một công cụ **trên máy của bạn**. Nó tự động che số điện thoại, địa chỉ e-mail, dãy số
-   dài giống số tài khoản, số dư và tiền vào/ra tài khoản của bạn, và tên riêng mà bạn đánh dấu. **Đường link trong tin được giữ nguyên và
-   công bố**, vì đó là dấu vết quan trọng nhất của tin lừa đảo; chỉ số điện thoại, e-mail hay tên
+   dài giống số tài khoản, số dư và tiền vào/ra tài khoản của bạn, và tên riêng mà bạn đánh dấu. **Đường link trong tin được giữ nguyên**,
+   vì đó là dấu vết quan trọng nhất của tin lừa đảo; chỉ số điện thoại, e-mail hay tên
    nằm bên trong link là bị che.
 2. Bạn **xem lại từng tin sau khi che** rồi mới quyết định gửi. Tin nào bạn còn phân vân thì bỏ.
 3. Bản gốc chưa che **không bao giờ rời khỏi máy bạn**.
@@ -49,25 +49,23 @@ Có hai cách gửi. Bạn chọn cách nào cũng được, và dùng cả hai 
 2. Bạn xem lại từng ảnh rồi mới gửi. Ảnh nào còn phân vân thì bỏ.
 3. **Với cách này, nghiên cứu viên sẽ nhìn thấy ảnh đúng như bạn gửi**, kể cả những gì bạn chưa tô
    hết. Nghiên cứu viên chuyển ảnh thành chữ, che thông tin trên phần chữ, và **xoá ảnh** ngay sau
-   khi kiểm tra xong, trước ngày công bố. Ảnh không bao giờ được công bố hay chia sẻ.
+   khi kiểm tra xong. Ảnh không bao giờ được công bố hay chia sẻ.
 
 Chúng tôi lưu: nội dung tin **đã che**, tên/đầu số người gửi như hiển thị, tháng nhận, và nhãn bạn
 gán. Chúng tôi **không** lưu số máy bạn, tên bạn, lớp bạn, hay bất cứ thứ gì chỉ ra đó là bạn.
 
-Bộ dữ liệu công bố cũng **không có cột nào cho biết tin nào là của ai**. Vì nhóm tham gia rất nhỏ,
-một cột như vậy tuy ghi mã số thay cho tên nhưng người quen vẫn có thể đoán ra — nên chúng tôi
-không phát hành nó.
+Dữ liệu cũng **không có cột nào cho biết tin nào là của ai**.
 
 ## Dữ liệu này sẽ đi đâu
 
-Bộ dữ liệu sẽ được **công bố công khai** kèm một bài báo mô tả dữ liệu, để các nhóm nghiên cứu
-khác dùng lại. Nghĩa là tin nhắn bạn gửi (đã che) sẽ **công khai vĩnh viễn**.
+Tin nhắn bạn gửi **không được công bố**. Chúng chỉ nằm trên máy của nghiên cứu viên và chỉ dùng để
+**kiểm tra các mô hình phát hiện lừa đảo**: mô hình được chạy trên các tin này, và chỉ những **con số
+tổng hợp** (bao nhiêu phần trăm tin lừa đảo bị bắt, bao nhiêu tin hợp lệ bị báo nhầm) được đưa vào
+bài báo. Không bài báo nào trích lại nội dung tin của bạn.
 
-**Điều này có nghĩa là:** sau khi bộ dữ liệu được công bố, chúng tôi **không thể gỡ tin của bạn ra
-được nữa** — vì chúng tôi không biết tin nào là của bạn. Bạn rút lui được **trước** ngày công bố;
-sau đó thì không. Chúng tôi nói thẳng điều này thay vì hứa một việc chúng tôi không làm được.
-
-Ngày dự kiến công bố: `[…]`
+**Rút lui:** vì chúng tôi không biết tin nào là của bạn, sau khi gửi thì chúng tôi không gỡ riêng
+tin của bạn ra được. Bạn quyết định trước khi gửi, và tin nào còn phân vân thì đừng gửi. Chúng tôi
+nói thẳng điều này thay vì hứa một việc chúng tôi không làm được.
 
 ## Rủi ro
 
@@ -92,8 +90,8 @@ Mã chấp thuận đạo đức: `[…]`
 ## Xác nhận
 
 Bằng việc gửi tin nhắn qua công cụ nói trên, bạn xác nhận rằng bạn đã đọc phiếu này, hiểu rằng dữ
-liệu sẽ được công bố công khai và không thể gỡ lại sau ngày công bố, và bạn tham gia một cách tự
-nguyện.
+liệu chỉ dùng để kiểm tra mô hình, không được công bố, và không gỡ riêng được sau khi gửi, và bạn
+tham gia một cách tự nguyện.
 
 Bạn **không cần ký tên**. Chúng tôi cố ý không thu chữ ký, vì chữ ký sẽ biến việc gửi ẩn danh
 thành việc định danh.

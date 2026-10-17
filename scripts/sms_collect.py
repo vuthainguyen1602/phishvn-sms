@@ -82,7 +82,7 @@ def gates() -> list:
             bad.append("the consent form still carries its draft banner")
         if holes:
             bad.append(f"the consent form has {holes} unfilled placeholder(s): the researcher, "
-                       "the ethics contact, the approval number and the publication date")
+                       "the ethics contact and the approval number")
     # The English text is a translation, and a translation drifts silently: the operative form
     # gets filled in and the copy a reviewer reads keeps the blanks, or vice versa. Nobody would
     # notice, because the two are read by different people. Hold them to the same count.

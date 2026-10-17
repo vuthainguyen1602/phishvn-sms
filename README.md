@@ -2,7 +2,14 @@
 
 [![tests](https://github.com/vuthainguyen1602/phishvn-sms/actions/workflows/tests.yml/badge.svg)](https://github.com/vuthainguyen1602/phishvn-sms/actions/workflows/tests.yml)
 
-A Vietnamese SMS corpus of scam messages, contributed by consenting students.
+Tools and a protocol for a **private** Vietnamese SMS corpus of scam and machine-sent messages,
+used only to evaluate scam-detection models.
+
+**The data are not published (2026-10-17).** No message collected here, under the protocol or
+before it, is released as a file, a quotation or a per-message output. The corpus is an evaluation
+set: models are scored on it and only aggregate numbers are reported (protocol §8 and the
+amendment of that date). The documents, the redaction tools and the tests are public so that how
+the data were gathered and handled can be checked.
 
 ## Nothing has been collected under the protocol
 
@@ -19,7 +26,7 @@ $ python3 scripts/sms_collect.py --check
     "the protocol still carries its DRAFT status line",
     "the protocol has 1 unfilled 'TO SET' field(s) ...",
     "the consent form still carries its draft banner",
-    "the consent form has 3 unfilled placeholder(s) ..."
+    "the consent form has 2 unfilled placeholder(s) ..."
   ]
 }
 ```
@@ -35,7 +42,8 @@ model on it and report aggregate numbers only, never its text (protocol, amendme
 
 ## Why the documents are public before the data
 
-A data article's ethics statement is a claim about the order events happened in: that the
+Since 2026-10-17 the data themselves will never be published, and the documents stay public for
+the reason below, which still holds for the studies that score models on the data. A data article's ethics statement is a claim about the order events happened in: that the
 protocol and the consent form existed *before* the first message, not after. Publishing them now
 makes that checkable by anyone, with a timestamp nobody has to take on trust — the same reason a
 pre-specification is committed before its analysis. The emptiness of `data/` is the point, not an
@@ -91,14 +99,14 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `docs/SCHEMA_raw.md` | the two files that come before it and never ship, and the exact columns dropped to produce the published one |
 | `docs/FORM_community_vi.md` | the Google Form the community batch came through, verbatim, with an English gloss and what it does and does not promise beside the consent form |
 | `docs/EXTERNAL_QAVN.md` | the external benchmark's provenance: its authors, licence, citation, and a SHA-256 pinning the exact copy evaluated |
-| `paper/` | the data article, laid out like the sibling repositories' `papers/`: `main.tex` + `sections/` (*Data in Brief* structure), the pipeline figure, `OUTLINE.md` and the prose `DRAFT.md` it was typeset from; every number that depends on collection, annotation or approval is a red `\FILL`, and `paper/HOW_TO_RUN.md` says where each will come from |
+| `paper/` | **stopped 2026-10-17** (`paper/STATUS.md`): the data article, laid out like the sibling repositories' `papers/`: `main.tex` + `sections/` (*Data in Brief* structure), the pipeline figure, `OUTLINE.md` and the prose `DRAFT.md` it was typeset from; every number that depends on collection, annotation or approval is a red `\FILL`, and `paper/HOW_TO_RUN.md` says where each will come from |
 | `scripts/redact.html` | the redaction page contributors open on their phone; one offline file, no network access, holds the redaction rules |
 | `scripts/sms_transcribe.py` | the author's side of the screenshot route: re-encodes images, OCRs them, redacts by the page's rules, deletes the images |
 | `scripts/sms_collect.py` | the collector; refuses everything but `--check` until both documents are real |
 | `scripts/sms_annotate.py` | the working file and its labels: blind labelling by two annotators, adjudication with a recorded note, and the agreement report |
 | `scripts/sms_templates.py` | template grouping on a normalized view of the text, per protocol §6 |
 | `scripts/sms_split.py` | the fixed template-disjoint 70/15/15 split, per protocol §7 |
-| `scripts/sms_publish.py` | the projection of SCHEMA_raw §3: `sms_dataset.csv` (contributed) and `sms_external_qavn.csv` (the benchmark), by dropping columns; refuses to ship a split row with holes |
+| `scripts/sms_publish.py` | **not used since 2026-10-17, nothing ships**; the projection of SCHEMA_raw §3: `sms_dataset.csv` (contributed) and `sms_external_qavn.csv` (the benchmark), by dropping columns; refuses to ship a split row with holes |
 | `scripts/sms_import.py` | the external benchmark: a published corpus's rows mapped into the working file, held out (`split=external`), never annotated, its own label kept |
 | `scripts/README.md` | the pipeline in the order it runs, and what each stage refuses |
 | `tests/` | the redaction routes held to one list of cases, and the later stages to their invariants — template-disjointness, seeded reproducibility, the projection's exact columns: `python3 -m unittest discover tests` |
