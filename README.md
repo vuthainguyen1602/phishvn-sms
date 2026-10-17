@@ -63,8 +63,9 @@ whatever it says.
 Beside the contributed corpus sits an **external benchmark** (protocol §1, §7): the rows of a
 published Vietnamese SMS corpus, taken under its CC BY 4.0 licence and held out as an independent
 test set. It is **not** merged in and **not** re-labelled — it keeps the source's own labels, a
-model trained here is scored on it, and the paper reports how far the two label schemes diverge
-rather than correcting theirs. It ships as its own file, `sms_external_qavn.csv`.
+model trained here is scored on it, and how far the two label schemes diverge is reported rather
+than their labels corrected. Like everything else here it is not redistributed: a reader obtains
+it from its publisher.
 
 **Redaction happens on the contributor's device.** The contributor copies each message into an
 offline page on their own phone, reviews the redacted text, and sends only that; the raw text never
