@@ -397,3 +397,18 @@ two it is.
   **The split was recomputed** (`sms_split.py --assign`, same seed): it now balances against
   2,151 provisional labels rather than 550, so 990 rows moved between train, validation and test;
   the totals stay 1,505/323/323 and the template partition is unchanged.
+- **2026-10-07 — an eighth community screenshot batch, four images.** Four distinct files, no
+  byte-identical copies. **2 rows**, both provisional phishing, both with a template of their own
+  at τ = 0.8: a debt-collection threat from a mobile number (the recipient's name blacked out by
+  the person who posted it, masked `<NAME>`; the collector's account masked `<ACCOUNT>` by the
+  rules), and a loan-app "payment due" text from a `CTY STELLAR` brandname with a `bit.ly` link,
+  the fifth variant of that family. One image repeated, word for word, a `VI VAY` text already in
+  `submissions.csv` from the third batch (different brandname, same text) and was not added. One
+  image, a fake court-and-police summons from 2020 naming the recipient and two relatives, ended
+  in the app's "Thêm" truncation and was ruled out under the seventh batch's rule: a message cut
+  off mid-text becomes nothing. Three images showed only "Hôm nay"/"Hôm qua", so `received_month`
+  is empty. Same conventions as the earlier screenshot batches: participant `C-MIX`, provenance
+  "same as the screenshot batches". The working file was rebuilt: **2,153 contributed rows**
+  (552 community, 1,601 author's inbox), 1,942 templates, split 1,507/323/323; 109 provisional
+  phishing in 79 templates, against the ≥100-template floor of §2. The 33 shared external
+  templates (59 rows) are unchanged. Backups of both files carry the suffix `2026-10-07a`.
