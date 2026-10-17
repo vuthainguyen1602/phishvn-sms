@@ -157,4 +157,4 @@ Ví dụ một ảnh đạt yêu cầu: phía trên là `VCB-Bank`, bên dưới
 | Ứng dụng tin nhắn không cho sao chép | Dùng cách 2 (mục 6). Đừng gõ lại. |
 | Tin quá dài, bị chia thành nhiều phần | Sao chép từng phần rồi dán nối tiếp vào cùng một ô, theo đúng thứ tự. |
 | Không chắc tin đến từ số cá nhân hay đầu số dịch vụ | Bỏ tin đó. |
-| Lỡ gửi một tin chưa che kỹ | Liên hệ `[…]` trước ngày công bố ghi trong phiếu đồng ý và mô tả nội dung tin; bạn không cần nói mình là ai. |
+| Lỡ gửi một tin chưa che kỹ | Liên hệ `[…]` càng sớm càng tốt và mô tả nội dung tin để nghiên cứu viên tìm và xoá; bạn không cần nói mình là ai. |

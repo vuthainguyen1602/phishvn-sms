@@ -96,8 +96,8 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `docs/CONTRIBUTE_vi.md` | how a contributor sends messages, step by step: copy and paste, or screenshots in a `.zip` |
 | `docs/CONTRIBUTE_en.md` | its English translation, for the same reason as the consent form's; the Vietnamese governs |
 | `docs/CONSENT_en.md` | its English translation, so a reviewer who does not read Vietnamese can check what contributors were told; the Vietnamese governs |
-| `docs/SCHEMA.md` | the published file's fields, the rules a valid file satisfies, and what is withheld |
-| `docs/SCHEMA_raw.md` | the two files that come before it and never ship, and the exact columns dropped to produce the published one |
+| `docs/SCHEMA.md` | the corpus file's fields and the rules a valid row satisfies (redaction rule 2 among them); written for a publication that will not happen, kept because the pipeline enforces its rules |
+| `docs/SCHEMA_raw.md` | the submissions file and the working file, the two files the pipeline actually keeps |
 | `docs/FORM_community_vi.md` | the Google Form the community batch came through, verbatim, with an English gloss and what it does and does not promise beside the consent form |
 | `docs/EXTERNAL_QAVN.md` | the external benchmark's provenance: its authors, licence, citation, and a SHA-256 pinning the exact copy evaluated |
 | `scripts/redact.html` | the redaction page contributors open on their phone; one offline file, no network access, holds the redaction rules |
@@ -106,7 +106,6 @@ The written documents live in `docs/`, the code in `scripts/`, and the invented 
 | `scripts/sms_annotate.py` | the working file and its labels: blind labelling by two annotators, adjudication with a recorded note, and the agreement report |
 | `scripts/sms_templates.py` | template grouping on a normalized view of the text, per protocol §6 |
 | `scripts/sms_split.py` | the fixed template-disjoint 70/15/15 split, per protocol §7 |
-| `scripts/sms_publish.py` | **not used since 2026-10-17, nothing ships**; the projection of SCHEMA_raw §3: `sms_dataset.csv` (contributed) and `sms_external_qavn.csv` (the benchmark), by dropping columns; refuses to ship a split row with holes |
 | `scripts/sms_import.py` | the external benchmark: a published corpus's rows mapped into the working file, held out (`split=external`), never annotated, its own label kept |
 | `scripts/README.md` | the pipeline in the order it runs, and what each stage refuses |
 | `tests/` | the redaction routes held to one list of cases, and the later stages to their invariants — template-disjointness, seeded reproducibility, the projection's exact columns: `python3 -m unittest discover tests` |

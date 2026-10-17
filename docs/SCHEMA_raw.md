@@ -108,8 +108,8 @@ knows the group could use it to work out whose messages they are reading.
 Invented, as in `SCHEMA.md`. Nobody sent these. They are the same messages as
 `examples/EXAMPLE_synthetic.csv`, one stage earlier: `examples/EXAMPLE_submission_synthetic.csv`
 holds the six contributed ones as a submission file (the imported row never was a submission),
-`examples/EXAMPLE_working_synthetic.csv` holds all seven as the working file, and the published
-example is produced from it by `scripts/sms_publish.py`, not by hand.
+`examples/EXAMPLE_working_synthetic.csv` holds all seven as the working file, and
+`examples/EXAMPLE_synthetic.csv` shows the columns a published file would have had.
 
 **A submission file** (first two rows):
 

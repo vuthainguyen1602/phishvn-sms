@@ -62,11 +62,10 @@ shasum -a 256 full_dataset.csv
   `@`, it was 2,676 (315 dropped); the 2026-10-04 wording bans e-mail addresses, not a bare `@`
   used as a letter, and five rows came back (PROTOCOL amendment of that date).
 - **Holds it out**: every row is `split = external`, never in train/validation/test. A
-  template-grouping check runs when the benchmark file is written (`sms_publish.py`) and is
-  reported by `sms_split.py` after every rebuild: a row whose template also holds a contributed
-  row is left out of the shipped file and counted. On 2026-10-05 that was 59 of 2,681 rows in 33
+  template-grouping check is reported by `sms_split.py` after every rebuild: a row whose template
+  also holds a contributed row is left out of any score on the benchmark and counted. On 2026-10-05 that was 59 of 2,681 rows in 33
   templates (54 benign, 5 scam), nearly all nationwide public notices both inboxes received; the
-  shipped benchmark is therefore 2,622 rows until the working file changes.
+  scored benchmark is therefore 2,622 rows until the working file changes.
 
 ## Reproduce
 
@@ -75,5 +74,4 @@ python3 scripts/sms_annotate.py init --map data/private/participants.csv
 python3 scripts/sms_import.py <path>/full_dataset.csv   # the file whose SHA-256 matches above
 python3 scripts/sms_templates.py --assign data/private/sms_working.csv
 python3 scripts/sms_split.py --assign data/private/sms_working.csv
-python3 scripts/sms_publish.py            # -> data/sms_external_qavn.csv
 ```

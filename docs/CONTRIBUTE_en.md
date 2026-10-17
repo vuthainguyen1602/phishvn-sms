@@ -169,4 +169,4 @@ An example of an acceptable image: `VCB-Bank` at the top, one message bubble bel
 | The messaging app will not let you copy | Use way 2 (section 6). Do not retype it. |
 | A long message arrived split into parts | Copy each part and paste them into the same field, in order. |
 | Unsure whether the sender is a personal number or a service | Leave the message out. |
-| You sent a message you had not redacted well | Contact `[…]` before the publication date in the consent form and describe the message; you need not say who you are. |
+| You sent a message you had not redacted well | Contact `[…]` as soon as you can and describe the message so the researcher can find and delete it; you need not say who you are. |

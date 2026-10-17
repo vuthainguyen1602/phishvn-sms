@@ -11,7 +11,6 @@ REPO = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(REPO, "scripts"))
 import sms_annotate as A    # noqa: E402
 import sms_import as I      # noqa: E402
-import sms_publish as P     # noqa: E402
 import sms_split as S       # noqa: E402
 import sms_templates as T   # noqa: E402
 
@@ -214,68 +213,6 @@ class Import(unittest.TestCase):
             with mock.patch.object(I, "WORKING", w), \
                  mock.patch.object(sys, "argv", ["x", src]), self.assertRaises(SystemExit):
                 _quiet(I.main)  # appending twice would duplicate the subset
-
-
-class Publish(unittest.TestCase):
-    def _row(self, i, text, **kw):
-        return ({f: "" for f in A.W_FIELDS}
-                | {"message_id": f"SMS_0000{i}", "text": text, "capture": "paste",
-                   "sender_type": "unknown", "final_label": "phishing",
-                   "label_annotator_1": "phishing", "label_annotator_2": "phishing",
-                   "template_id": f"T00{i}", "split": "train"} | kw)
-
-    def test_projection_and_derived_flags(self):
-        with tempfile.TemporaryDirectory() as d:
-            w, out = os.path.join(d, "w.csv"), os.path.join(d, "out.csv")
-            _write(w, A.W_FIELDS, [
-                self._row(1, "Ma OTP la <OTP>. Xem tai http://x.example/a"),
-                self._row(2, "Goi <PHONE> nhan ngay 1.880.000 VND", final_label="spam",
-                          label_annotator_1="spam", label_annotator_2="spam", split="test")])
-            with mock.patch.object(sys, "argv", ["x", w, "--out", out]):
-                _quiet(P.main)
-            rows = _read(out)
-            self.assertEqual(list(rows[0]), P.PUB_FIELDS)  # nothing else ships
-            self.assertEqual([rows[0][f] for f in ("has_url", "has_otp", "has_phone", "has_money")],
-                             ["1", "1", "0", "0"])
-            self.assertEqual([rows[1][f] for f in ("has_url", "has_otp", "has_phone", "has_money")],
-                             ["0", "0", "1", "1"])
-
-    def test_refuses_holes(self):
-        # a row that IS in the train/val/test split but incomplete must block publication
-        for hole in ({"final_label": "uncertain"}, {"template_id": ""},
-                     {"sender_type": "0912345678"}):
-            with tempfile.TemporaryDirectory() as d:
-                w, out = os.path.join(d, "w.csv"), os.path.join(d, "out.csv")
-                _write(w, A.W_FIELDS, [self._row(1, "t", **hole)])
-                with mock.patch.object(sys, "argv", ["x", w, "--out", out]), \
-                     self.assertRaises(SystemExit):
-                    _quiet(P.main)
-                self.assertFalse(os.path.exists(out), f"published despite {hole}")
-
-    def test_external_ships_separately(self):
-        with tempfile.TemporaryDirectory() as d:
-            w, out, ext = (os.path.join(d, x) for x in ("w.csv", "out.csv", "ext.csv"))
-            _write(w, A.W_FIELDS, [
-                self._row(1, "Ma OTP la <OTP>"),
-                {f: "" for f in A.W_FIELDS} | {"message_id": "QAV_COM_1",
-                    "text": "Soan KM gui <NUMBER>", "source": "qavn", "capture": "imported",
-                    "sender_type": "unknown", "label_source": "benign",
-                    "template_id": "T099", "split": "external", "queued": "0"},
-                # same template as the contributed SMS_00001: PROTOCOL §7's template-grouping
-                # check leaves it out of the shipped benchmark, counted, not relabelled
-                {f: "" for f in A.W_FIELDS} | {"message_id": "QAV_COM_2",
-                    "text": "Ma OTP la <NUMBER>", "source": "qavn", "capture": "imported",
-                    "sender_type": "unknown", "label_source": "scam",
-                    "template_id": "T001", "split": "external", "queued": "0"}])
-            with mock.patch.object(sys, "argv", ["x", w, "--out", out, "--ext-out", ext]):
-                msg = _quiet(P.main)
-            prim, extrows = _read(out), _read(ext)
-            self.assertEqual([r["message_id"] for r in prim], ["SMS_00001"])  # external excluded
-            self.assertEqual(list(prim[0]), P.PUB_FIELDS)
-            self.assertEqual([r["message_id"] for r in extrows], ["QAV_COM_1"])  # QAV_COM_2 shared
-            self.assertIn("1 row(s) in 1 template(s) shared", msg)
-            self.assertEqual(list(extrows[0]), P.EXT_FIELDS)  # its own columns, label_source kept
-            self.assertEqual(extrows[0]["label_source"], "benign")
 
 
 if __name__ == "__main__":

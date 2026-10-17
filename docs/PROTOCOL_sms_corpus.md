@@ -214,9 +214,9 @@ relabel them. It also reports, once, **how far the two label schemes diverge** �
 model-assisted pass, about half the source's benign rows fall under `spam` in the three-class
 sense (the operator promotions of §9), while its scam rows almost never read as `legitimate`.
 That divergence is the reason the two are kept apart rather than merged: a single pooled label
-column would bury it. A template-grouping check runs at publication (`sms_publish.py`) and is
-reported after every rebuild (`sms_split.py`): **an external row whose template also holds a
-contributed row is left out of the shipped benchmark and counted**, so what ships is unseen by
+column would bury it. A template-grouping check is reported after every rebuild (`sms_split.py`): **an external row
+whose template also holds a contributed row is left out of any score on the benchmark and
+counted**, so what is scored is unseen by
 construction. The count is reported, not hidden: on 2026-10-05 it was 59 of 2,681 rows in 33
 templates, almost all nationwide public notices (police, anti-drug, telecoms-law reminders) that
 the author's inbox and the source's contributors received alike (amendment of that date).
@@ -452,4 +452,9 @@ two it is.
   preview of the consent form that still described permanent publication) are deleted from the
   repository; both remain in its history. The amendment above that names `paper/STATUS.md` refers
   to a file that no longer exists for that reason.
+- **2026-10-17 — the publication stage is removed.** `scripts/sms_publish.py` and its tests are
+  deleted, since nothing ships (§8). The template-grouping check it enforced stays, reported by
+  `sms_split.py` after every rebuild, and now governs what is *scored* on the external benchmark
+  rather than what ships. §7 and `docs/EXTERNAL_QAVN.md` say so. Amendments above that name
+  `sms_publish.py` describe the design as it was on their dates.
 
