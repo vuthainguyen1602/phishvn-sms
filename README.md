@@ -30,7 +30,8 @@ author's own inbox, with nothing kept about any contributor (protocol, amendment
 It is held only on the author's machine, never committed, redacted and ingested by the same
 pipeline, and used to exercise it end to end. It is not the corpus: whether any of it may enter
 the corpus is a question the ethics application asks explicitly, and until then it counts for
-having run the pipeline and for what it taught (the rule-2 amendment of the same date).
+having run the pipeline and for what it taught (the rule-2 amendment of the same date). Since 2026-10-17 one narrower use is allowed: another study may score a
+model on it and report aggregate numbers only, never its text (protocol, amendment of that date).
 
 ## Why the documents are public before the data
 

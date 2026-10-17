@@ -412,3 +412,24 @@ two it is.
   (552 community, 1,601 author's inbox), 1,942 templates, split 1,507/323/323; 109 provisional
   phishing in 79 templates, against the ≥100-template floor of §2. The 33 shared external
   templates (59 rows) are unchanged. Backups of both files carry the suffix `2026-10-07a`.
+- **2026-10-17 — the community batch may be scored by another study, as aggregates only.** Until
+  now the community batch of 2026-10-04 was held out of every use but exercising the pipeline,
+  pending the ethics application (§10). This amendment opens one narrow use and leaves the rest
+  where it was. **What is allowed:** a model trained elsewhere may be *scored* on the batch's
+  messages, and only aggregate numbers (counts, rates, intervals) may be reported; no message text,
+  no quotation and no per-message output leaves the author's machine. The first such use is the
+  author's study of detectors trained on LLM-generated SMS (its Amendment 1, check 2). **What is
+  not changed:** whether the batch enters the published corpus, as text, is still the question
+  §10 puts to the ethics application, and the batch still contributes nothing to
+  leave-one-contributor-out. **Why this use and not publication.** (1) The messages that matter
+  for scoring are scam and spam, written by whoever broadcast them to strangers, with no privacy
+  interest of their own (§1). (2) The Google Form told respondents their messages would serve
+  academic purposes, anonymised (`docs/FORM_community_vi.md`); aggregate scoring in a research
+  paper is narrower than the dataset publication the form left unstated. (3) The screenshots came
+  from posts their authors had made public, or from people who sent them knowing they were for
+  this research; neither group's identity was kept. (4) Every message was redacted by the same
+  rules as every other route, and the screenshots were deleted once transcribed. **What this does
+  not claim:** that the batch has informed consent in the sense of the consent form; it does not,
+  and the paper that scores it says so in those words. The decision is the author's, taken on this
+  date and recorded here before any model is applied to the batch.
+
