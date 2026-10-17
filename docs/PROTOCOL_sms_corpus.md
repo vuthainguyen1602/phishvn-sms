@@ -433,3 +433,18 @@ two it is.
   has no blank. The amendment of the same date that lets another study score the community batch
   now reads as a case of this rule rather than an exception to §8. Sections 1 and 9 still mention a
   data article; they describe the design as first written and are read under this amendment.
+- **2026-10-17 — a ninth community screenshot batch, three images, one message.** Screenshots of
+  scam SMS that a recipient had posted publicly; this batch records its source per message (public
+  post), which the earlier screenshot batches could not. Two images showed the top and the bottom of
+  one bubble from the same sender and were joined into **1 row**, provisional phishing: a fake
+  Vietnam Post notice that a cargo-insurance package has been bought and that 5,200,000 VND will be
+  charged every month unless the recipient calls a 1900 number or writes to a Facebook page. The
+  recipient's name was masked `<NAME>` by hand and the rules masked the rest. The third image, the
+  same scam with a different text, was not transcribed: its bubble runs off the top of the image
+  (the seventh batch's rule). The images showed only "Hôm nay", so `received_month` is empty. The
+  images were deleted once transcribed. Same conventions as the earlier screenshot batches
+  (`C-MIX`, sender `+84-mobile`). The working file now holds **2,154 contributed rows** (553
+  community, 1,601 author's inbox); templates and the split were recomputed with the same tools and
+  seed. Backups carry the suffix `2026-10-17a`. The row falls under the amendments of this date:
+  it may be scored, it is never published.
+
