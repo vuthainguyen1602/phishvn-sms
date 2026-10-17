@@ -447,4 +447,9 @@ two it is.
   community, 1,601 author's inbox); templates and the split were recomputed with the same tools and
   seed. Backups carry the suffix `2026-10-17a`. The row falls under the amendments of this date:
   it may be scored, it is never published.
+- **2026-10-17 — the stopped data article and the consent-form preview are removed.** `paper/`
+  (the data article stopped earlier on this date) and `docs/CONSENT_vi.PREVIEW.md` (a filled-in
+  preview of the consent form that still described permanent publication) are deleted from the
+  repository; both remain in its history. The amendment above that names `paper/STATUS.md` refers
+  to a file that no longer exists for that reason.
 
